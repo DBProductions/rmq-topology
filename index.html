@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="./all.min.css" rel="stylesheet">
+    <link href="./style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="headrow flex">
+        <div class="left">
+            <h2>RMQ Topology</h2>
+        </div>
+        <div class="center">
+            <select id="newComponent" class="headerSelect">
+                <option>Add component</option>
+                <option>Producer</option>
+                <option>Consumer</option>
+                <option>Exchange</option>
+                <option>Queue</option>
+                <option>Binding</option>
+            </select>
+            <select id="exampleTopology" class="headerSelect">
+                <option>Examples</option>
+                <option>Direct</option>
+                <option>Fanout</option>
+                <option>Topic</option>
+                <option>Queue-Ttl</option>                
+                <option>Queue-Max-Length</option>
+                <option>Dlx</option>
+                <option>Retry</option>
+            </select>            
+            <button id="animate" class="myButton"><i class="fas fa-play"></i> Start</button>
+            <button id="export" class="myButton"><i class="fas fa-file-export"></i> Export</button>
+            <div class="dropdown">
+                <button class="dropbtn"><i class="fa fa-spinner fa-1x"></i> Generate
+                  <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-content">
+                  <a href="#" id="generateCurl">Curl</a>
+                  <a href="#" id="generateRabbitmqadmin">Rabbitmqadmin</a>                  
+                  <a href="#" id="generateTerraform">Terraform</a>
+                </div>
+            </div>            
+        </div>
+        <div class="right">
+            <a href="#" id="helpLink" class="hidden"><i class="fa fa-question-circle fa-1x"></i></a>
+            <a href="https://github.com/DBProductions/rmq-topology" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+            <a href="https://twitter.com/Dbcodes" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>            
+        </div>
+    </div>
+    <div>
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <div id="producerPanel" class="panel-wrap">
+            <div class="panel">
+                <form id="producerForm" action="#">
+                    <h3>Producer</h3>
+                    <input type="hidden" id="producerIdField">
+                    <div>
+                        <input type="text" id="producerNameField" placeholder="Producer Name">
+                    </div>
+                    <div>
+                        <input type="text" id="producerRoutingKeyField" placeholder="Routing Key">
+                    </div>                    
+                    <div>
+                        <select id="producerPublishToSelect">
+                            <option>---</option>
+                        </select>
+                    </div>
+                    <div id="producerPublishTo"></div>
+                    <div class="btnFooter">
+                        <button id="sendProducerForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="cancelProducerForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                        <button id="deleteProducerForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="consumerPanel" class="panel-wrap">
+            <div class="panel">
+                <form id="consumerForm" action="#">
+                    <h3>Consumer</h3>
+                    <input type="hidden" id="consumerIdField">
+                    <div>
+                        <input type="text" id="consumerNameField" placeholder="Consumer Name">
+                    </div>
+                    <div>
+                        <input type="radio" name="consumerMode" value="ack"> ack
+                        <input type="radio" name="consumerMode" value="reject"> reject
+                    </div>                    
+                    <div>
+                        <select id="consumerConsumesFromSelect">
+                            <option>---</option>
+                        </select>
+                    </div>
+                    <div id="consumerConsumesFrom"></div>
+                    <div class="btnFooter">
+                        <button id="sendConsumerForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="cancelConsumerForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                        <button id="deleteConsumerForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="exchangePanel" class="panel-wrap">
+            <div class="panel">
+                <form id="exchangeForm" action="#">
+                    <h3>Exchange</h3>
+                    <input type="hidden" id="exchangeIdField">
+                    <div>
+                        <input type="text" id="exchangeNameField" placeholder="Exchange Name*">
+                    </div>
+                    <div>
+                        <select id="exchangeTypeSelect">
+                            <option>direct</option>
+                            <option>fanout</option>
+                            <option>topic</option>
+                        </select>
+                    </div>
+                    <div class="btnFooter">
+                        <button id="sendExchangeForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="cancelExchangeForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                        <button id="deleteExchangeForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
+                    </div>
+                    <div id="exchangeErr" class="error"></div>
+                </form>
+            </div>
+        </div>
+        <div id="queuePanel" class="panel-wrap">
+            <div class="panel">
+                <form id="queueForm" action="#">
+                    <h3>Queue</h3>
+                    <input type="hidden" id="queueIdField">
+                    <div>
+                        <input type="text" id="queueNameField" placeholder="Queue Name*">
+                    </div>
+                    <div>
+                        <input type="text" id="queueMsgTtlField" placeholder="Message Time to Life">
+                    </div>
+                    <div>
+                        <input type="text" id="queueMaxLengthField" placeholder="Max Length">
+                    </div>
+                    <div>
+                        <select id="queueDlxSelect">
+                            <option>---</option>
+                        </select>
+                    </div>
+                    <div class="btnFooter">
+                        <button id="sendQueueForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="cancelQueueForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                        <button id="deleteQueueForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
+                    </div>
+                    <div id="queueErr" class="error"></div>
+                </form>
+            </div>
+        </div>
+        <div id="bindingPanel" class="panel-wrap">
+            <div class="panel">
+                <form id="bindingForm" action="#">
+                    <h3>Binding</h3>
+                    <input type="hidden" id="bindingIdField">
+                    <div>
+                        <input type="text" id="bindingRoutingKeyField" placeholder="Routing Key">
+                    </div>
+                    <div>
+                        <select id="bindingSource">
+                            <option>---</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="bindingDestination">
+                            <option>---</option>
+                        </select>
+                    </div>
+                    <div class="btnFooter">
+                        <button id="sendBindingForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="cancelBindingForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                        <button id="deleteBindingForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>                  
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="imexportPanel" class="panel-wrap">
+            <div class="panel">
+                <form id="imexportForm" action="#">
+                    <textarea id="ImExport"></textarea>
+                    <button id="copyBtn" class="myButton"><i class="fa fa-copy fa-1x"></i> Copy</button>                    
+                    <button id="cancelBtn" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                    <button id="importBtn" class="myButton"><i class="fas fa-file-export"></i> Import</button>
+                    <div id="imexportErr" class="error"></div>
+                </form>                
+            </div>
+        </div>        
+    </div>
+    <script src="./script.min.js"></script>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K4L6TZX589"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K4L6TZX589');
+    </script>
+
+</body>
+</html>

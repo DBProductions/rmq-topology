@@ -1,0 +1,22 @@
+{
+    "source": {
+        "include": ["src"],
+        "exclude": [],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "template": "templates/default",
+        "encoding": "utf8",             
+        "destination": "./doc/"
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "default": {
+            "includeDate": false,
+            "useLongnameInNav": true,
+            "outputSourceFiles": true
+        }
+    }
+}
