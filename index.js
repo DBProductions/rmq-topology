@@ -1,7 +1,7 @@
 const http = require('http')
 const static = require('node-static')
 
-const file = new static.Server(__dirname)
+const file = new static.Server('public')
 
 http
   .createServer((req, res) => {
