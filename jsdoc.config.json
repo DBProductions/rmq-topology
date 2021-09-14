@@ -6,9 +6,13 @@
         "excludePattern": "(^|\\/|\\\\)_"
     },
     "opts": {
-        "template": "templates/default",
+        "template": "node_modules/clean-jsdoc-theme",
         "encoding": "utf8",             
-        "destination": "./public/doc/"
+        "destination": "./public/doc/",
+        "theme_opts": {
+            "theme": "light",
+            "title": "rmq-technology"
+        }
     },
     "templates": {
         "cleverLinks": false,
