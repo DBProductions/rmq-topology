@@ -4,30 +4,43 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run run:cypress",
     "start:cypress": "npx cypress open",
+    "run:cypress": "npx cypress run --headless --config video=false -b chrome",
     "lint": "npx eslint ./src",
     "format": "npx prettier --write \"{,!(node_modules)/**/}*.{js,ts}\"",
     "bundle": "npx rollup -c",
-    "release": "npm run format && npm run lint && npm run bundle",
+    "release": "npm run format && npm run lint && npm run run:cypress && npm run bundle",
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "Dbcodes",
+  "keywords": [
+    "rabbitmq",
+    "topology",
+    "rollup",
+    "eslint",
+    "prettier",
+    "jsdoc"
+  ],
+  "author": "DBProductions",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/DBProductions/rmq-topology"
+  },
   "license": "ISC",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.3",
-    "@typescript-eslint/parser": "^4.29.3",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
     "clean-jsdoc-theme": "^3.2.8",
-    "cypress": "^8.3.0",
-    "eslint": "^7.32.0",
+    "cypress": "^8.6.0",
+    "eslint": "^8.0.1",
     "eslint-config-standard": "^16.0.2",
-    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-standard": "^5.0.0",
-    "prettier": "^2.2.1",
-    "rollup-plugin-jsdoc": "^0.1.2"
+    "prettier": "^2.4.1",
+    "rollup-plugin-jsdoc": "^0.1.2",
+    "typescript": "^4.4.4"
   },
   "dependencies": {
     "node-static": "^0.7.11"

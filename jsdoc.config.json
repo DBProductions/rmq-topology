@@ -5,6 +5,8 @@
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
     },
+    "create_style": "nav{background: yellow}",
+    "add_scripts": "function foo(){console.log('foo')}",
     "opts": {
         "template": "node_modules/clean-jsdoc-theme",
         "encoding": "utf8",             

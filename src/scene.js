@@ -1,6 +1,6 @@
 class Scene {
   /**
-   * The scene with actors to call their update and render methods to simulate.
+   * The scene includes the actors and call their update and render methods.
    * @param {*} ctx - context of the canvas
    * @param {number} width - width of the canvas
    * @param {number} height - height of the canvas
@@ -21,6 +21,7 @@ class Scene {
   /**
    * Get DOM offset from givven element.
    * @param {Object} el - HTML DOM element
+   * @returns {object} - x and y position
    */
   DOMOffset(el) {
     let ele = el
@@ -87,12 +88,20 @@ class Scene {
     this.actors = []
   }
 
+  /**
+   * Iterates over the actors and call their update method.
+   * @param {number} dt
+   */
   update(dt) {
     for (let i = 0; i < this.actors.length; i += 1) {
       this.actors[i].update(dt)
     }
   }
 
+  /**
+   * It renders first the binding and then the rest for a better visual effect.
+   * @param {number} dt
+   */
   render(dt) {
     this.ctx.clearRect(0, 0, this.width, this.height)
 
@@ -104,21 +113,24 @@ class Scene {
     this.ctx.font = '12px Arial'
     this.ctx.fillText(this.description, 50, this.height - 20)
 
-    const allBindings = this.actors.filter(
-      (s) => s.constructor.name === 'Binding'
+    const allBindings = []
+    const noneBindings = []
+    const myFilter = (s) => s.constructor.name === 'Binding'
+    this.actors.forEach((e, idx, arr) =>
+      (myFilter(e, idx, arr) ? allBindings : noneBindings).push(e)
     )
     allBindings.forEach((val) => {
       val.render(dt)
     })
-
-    const notBinding = this.actors.filter(
-      (s) => s.constructor.name !== 'Binding'
-    )
-    notBinding.forEach((val) => {
+    noneBindings.forEach((val) => {
       val.render(dt)
     })
   }
 
+  /**
+   * It renders first the binding and then the rest for a better visual effect.
+   * @param {number} dt
+   */
   renderOnce(dt) {
     this.ctx.clearRect(0, 0, this.width, this.height)
 
@@ -130,17 +142,16 @@ class Scene {
     this.ctx.font = '12px Arial'
     this.ctx.fillText(this.description, 50, this.height - 20)
 
-    const allBindings = this.actors.filter(
-      (s) => s.constructor.name === 'Binding'
+    const allBindings = []
+    const noneBindings = []
+    const myFilter = (s) => s.constructor.name === 'Binding'
+    this.actors.forEach((e, idx, arr) =>
+      (myFilter(e, idx, arr) ? allBindings : noneBindings).push(e)
     )
     allBindings.forEach((val) => {
       val.render(dt)
     })
-
-    const notBinding = this.actors.filter(
-      (s) => s.constructor.name !== 'Binding'
-    )
-    notBinding.forEach((val) => {
+    noneBindings.forEach((val) => {
       val.render(dt)
     })
   }

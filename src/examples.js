@@ -76,7 +76,7 @@ const Examples = {
     queues: [
       { x: 650, y: 80, name: 'Queue 1' },
       { x: 650, y: 170, name: 'Queue 2' },
-      { x: 650, y: 320, name: 'Queue 3' }
+      { x: 650, y: 260, name: 'Queue 3' }
     ],
     bindings: [
       { exchange: 0, queue: 0, routingKey: '' },

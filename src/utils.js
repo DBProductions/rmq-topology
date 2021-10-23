@@ -6,9 +6,16 @@ import Binding from './binding'
 import Scene from './scene'
 import Timer from './timer'
 
-// calculate the point on the line that's nearest to the mouse position
-// https://stackoverflow.com/questions/24043967/detect-if-mouse-is-over-an-object-inside-canvas
-function linepointNearestMouse(line, x, y) {
+/**
+ * Calculates the point on the line that's nearest to the mouse position.
+ *
+ * https://stackoverflow.com/questions/24043967/detect-if-mouse-is-over-an-object-inside-canvas
+ * @param {object} line - line with start and end point (x1,y1,x2,y2)
+ * @param {number} x - x position
+ * @param {number} y - y position
+ * @returns {object}
+ */
+const linepointNearestMouse = (line, x, y) => {
   const lerp = (a, b, c) => a + c * (b - a)
   const dx = line.x1 - line.x0
   const dy = line.y1 - line.y0
@@ -22,7 +29,7 @@ function linepointNearestMouse(line, x, y) {
 }
 
 /**
- * Create the topology shown on the canvas.
+ * Creates the topology shown on the canvas.
  * @param {object} ctx - canvas context
  * @param {object} conf - configuration as JSON
  */
@@ -38,19 +45,19 @@ const createTopology = (ctx, conf) => {
 
   if (conf.exchanges) {
     conf.exchanges.forEach((exchange) => {
-      const Exchange1 = new Exchange(
+      const newExchange = new Exchange(
         exchange.x,
         exchange.y,
         exchange.name,
         exchange.type
       )
-      Exchange1.addToScene(window.scene)
-      exchanges.push(Exchange1)
+      newExchange.addToScene(window.scene)
+      exchanges.push(newExchange)
     })
   }
   if (conf.queues) {
     conf.queues.forEach((queue) => {
-      const Queue1 = new Queue(
+      const newQueue = new Queue(
         queue.x,
         queue.y,
         queue.name,
@@ -58,13 +65,13 @@ const createTopology = (ctx, conf) => {
         exchanges[queue.dlx],
         queue.maxLength
       )
-      Queue1.addToScene(window.scene)
-      queues.push(Queue1)
+      newQueue.addToScene(window.scene)
+      queues.push(newQueue)
     })
   }
   if (conf.producers) {
     conf.producers.forEach((producer) => {
-      const Producer1 = new Producer(
+      const newProducer = new Producer(
         producer.x,
         producer.y,
         producer.name,
@@ -72,14 +79,14 @@ const createTopology = (ctx, conf) => {
         producer.routingKey
       )
       producer.publishes.forEach((val) => {
-        Producer1.addExchange(exchanges[val])
+        newProducer.addExchange(exchanges[val])
       })
-      Producer1.addToScene(window.scene)
+      newProducer.addToScene(window.scene)
     })
   }
   if (conf.consumers) {
     conf.consumers.forEach((consumer) => {
-      const Consumer1 = new Consumer(
+      const newConsumer = new Consumer(
         consumer.x,
         consumer.y,
         consumer.name,
@@ -87,19 +94,19 @@ const createTopology = (ctx, conf) => {
         consumer.mode
       )
       consumer.consumes.forEach((val) => {
-        Consumer1.addQueue(queues[val])
+        newConsumer.addQueue(queues[val])
       })
-      Consumer1.addToScene(window.scene)
+      newConsumer.addToScene(window.scene)
     })
   }
   if (conf.bindings) {
     conf.bindings.forEach((binding) => {
-      const Binding1 = new Binding(
+      const newBinding = new Binding(
         exchanges[binding.exchange],
         queues[binding.queue],
         binding.routingKey
       )
-      Binding1.addToScene(window.scene)
+      newBinding.addToScene(window.scene)
     })
   }
 
@@ -125,7 +132,7 @@ const displayForm = (form) => {
 }
 
 /**
- * Display the form to create or edit producer object.
+ * Display the form to create or edit a producer component.
  * @param {Producer} producer - Producer object
  */
 const displayProducer = (producer) => {
@@ -186,7 +193,7 @@ const displayProducer = (producer) => {
 }
 
 /**
- *
+ * Sends the form to create or edit a producer component.
  * @param {object} e - Event object
  */
 const sendProducerForm = (e) => {
@@ -239,7 +246,7 @@ const sendProducerForm = (e) => {
 }
 
 /**
- * Reset form values and remove CSS class from the panel.
+ * Reset form values and remove CSS class from the producer panel.
  * @param {object} e - Event object
  */
 const hideProducer = (e) => {
@@ -252,7 +259,7 @@ const hideProducer = (e) => {
 }
 
 /**
- * Remove producer from the scene, render and remove CSS class from the panel.
+ * Remove producer from the scene, render and remove CSS class from the producer panel.
  * @param {object} e - Event object
  */
 const deleteProducerForm = (e) => {
@@ -266,7 +273,7 @@ const deleteProducerForm = (e) => {
 }
 
 /**
- * Display the form to create or edit consumer object.
+ * Display the form to create or edit consumer component.
  * @param {Consumer} consumer - Consumer object
  */
 const displayConsumer = (consumer) => {
@@ -333,7 +340,7 @@ const displayConsumer = (consumer) => {
 }
 
 /**
- * Reset form values and remove CSS class from the panel.
+ * Reset form values and remove CSS class from the consumer panel.
  * @param {object} e - Event object
  */
 const hideConsumer = (e) => {
@@ -345,7 +352,7 @@ const hideConsumer = (e) => {
 }
 
 /**
- *
+ * Sends the form to create or edit a consumer component.
  * @param {object} e - Event object
  */
 const sendConsumerForm = (e) => {
@@ -407,7 +414,7 @@ const sendConsumerForm = (e) => {
 }
 
 /**
- *
+ * Remove consumer from the scene, render and remove CSS class from the consumer panel.
  * @param {object} e - Event object
  */
 const deleteConsumerForm = (e) => {
@@ -426,7 +433,7 @@ const deleteConsumerForm = (e) => {
 }
 
 /**
- * Display the form to create or edit exchange object.
+ * Display the form to create or edit exchange component.
  * @param {Exchange} exchange - Exchange object
  */
 const displayExchange = (exchange) => {
@@ -446,7 +453,7 @@ const displayExchange = (exchange) => {
 }
 
 /**
- *
+ * Sends the form to create or edit an exchange component.
  * @param {object} e - Event object
  */
 const sendExchangeForm = (e) => {
@@ -495,7 +502,7 @@ const sendExchangeForm = (e) => {
 }
 
 /**
- * Reset form values and remove CSS class from the panel.
+ * Reset form values and remove CSS class from the exchange panel.
  * @param {object} e - Event object
  */
 const hideExchange = (e) => {
@@ -508,7 +515,7 @@ const hideExchange = (e) => {
 }
 
 /**
- *
+ * Remove exchange from the scene, render and remove CSS class from the exchange panel.
  * @param {object} e - Event object
  */
 const deleteExchangeForm = (e) => {
@@ -522,7 +529,7 @@ const deleteExchangeForm = (e) => {
 }
 
 /**
- * Display the form to create or edit queue object.
+ * Display the form to create or edit queue component.
  * @param {Queue} queue - Queue object
  */
 const displayQueue = (queue) => {
@@ -621,7 +628,7 @@ const sendQueueForm = (e) => {
 }
 
 /**
- * Reset form values and remove CSS class from the panel.
+ * Reset form values and remove CSS class from the queue panel.
  * @param {object} e - Event object
  */
 const hideQueue = (e) => {
@@ -659,7 +666,7 @@ const deleteQueueForm = (e) => {
 }
 
 /**
- * Display the form to create or edit binding object.
+ * Display the form to create or edit binding component.
  * @param {Binding} binding - Binding object
  */
 const displayBinding = (binding) => {
@@ -719,7 +726,45 @@ const displayBinding = (binding) => {
 }
 
 /**
- * Reset form values and remove CSS class from the panel.
+ * @param {object} e - Event object
+ */
+const sendBindingForm = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  const id = document.querySelector('#bindingIdField').value
+  const routingKey = document.querySelector('#bindingRoutingKeyField').value
+
+  const selectSource = document.getElementById('bindingSource').value
+  const selectDestination = document.getElementById('bindingDestination').value
+
+  const ex = window.scene.actors.find((exc) => exc.id === selectSource)
+  const qu = window.scene.actors.find((q) => q.id === selectDestination)
+
+  if (id) {
+    const binding = window.scene.getIdInScene(id)
+    binding.routingKey = routingKey
+
+    binding.source = ex
+    binding.destination = qu
+    binding.setCoords()
+  } else {
+    // let e = window.scene.actors.find(e => e.id === selectSource);
+    // let q = window.scene.actors.find(q => q.id === selectDestination);
+    const Binding1 = new Binding(ex, qu, routingKey)
+    Binding1.addToScene(window.scene)
+  }
+
+  window.scene.renderOnce()
+
+  document.querySelector('#bindingIdField').value = ''
+  document.querySelector('#bindingRoutingKeyField').value = ''
+  document.getElementById('bindingSource').value = ''
+  document.getElementById('bindingDestination').value = ''
+  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
+}
+
+/**
+ * Reset form values and remove CSS class from the binding panel.
  * @param {object} e - Event object
  */
 const hideBinding = (e) => {
@@ -729,6 +774,20 @@ const hideBinding = (e) => {
   document.querySelector('#bindingRoutingKeyField').value = ''
   document.getElementById('bindingSource').value = ''
   document.getElementById('bindingDestination').value = ''
+  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
+}
+
+/**
+ * @param {object} e - Event object
+ */
+const deleteBindingForm = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  const id = document.querySelector('#bindingIdField').value
+  const actor = window.scene.getIdInScene(id)
+  actor.source.removeBinding(actor)
+  window.scene.removeActor(actor)
+  window.scene.renderOnce()
   document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
 }
 
@@ -753,5 +812,7 @@ export {
   hideQueue,
   deleteQueueForm,
   displayBinding,
-  hideBinding
+  sendBindingForm,
+  hideBinding,
+  deleteBindingForm
 }

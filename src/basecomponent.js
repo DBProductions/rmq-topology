@@ -2,7 +2,7 @@ import Base from './base'
 
 class BaseComponent extends Base {
   /**
-   * Base class for other components.
+   * Base component class for other components.
    * @param {number} x - x position
    * @param {number} y - y position
    * @extends Base

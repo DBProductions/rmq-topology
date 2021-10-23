@@ -3,26 +3,14 @@ import {
   createTopology,
   displayForm,
   displayProducer,
-  sendProducerForm,
-  hideProducer,
-  deleteProducerForm,
   displayConsumer,
-  sendConsumerForm,
-  hideConsumer,
-  deleteConsumerForm,
   displayExchange,
-  sendExchangeForm,
-  hideExchange,
-  deleteExchangeForm,
   displayQueue,
-  sendQueueForm,
-  hideQueue,
-  deleteQueueForm,
   displayBinding,
-  hideBinding
 } from './utils'
-import Binding from './binding'
+
 import { Examples } from './examples'
+import {} from './listener'
 
 const brokerSettings = {
   host: 'http://localhost:15672',
@@ -31,7 +19,7 @@ const brokerSettings = {
   password: 'guest'
 }
 const config = {
-  description: 'RMQ Topology helps to simulate and see the message flow.',
+  description: 'RMQ Topology helps to simulate and visualize the message flow.',
   producers: [],
   consumers: [],
   exchanges: [],
@@ -95,124 +83,15 @@ document.querySelector('#newComponent').addEventListener('change', (e) => {
   e.target.selectedIndex = 0
 })
 
-document.querySelector('#helpLink').addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  console.log('help')
-})
-
-// --- Producer Start ---
-document
-  .querySelector('#sendProducerForm')
-  .addEventListener('click', sendProducerForm)
-
-document
-  .querySelector('#cancelProducerForm')
-  .addEventListener('click', hideProducer)
-
-document
-  .querySelector('#deleteProducerForm')
-  .addEventListener('click', deleteProducerForm)
-// --- Producer End ---
-
-// --- Consumer Start ---
-document
-  .querySelector('#sendConsumerForm')
-  .addEventListener('click', sendConsumerForm)
-
-document
-  .querySelector('#cancelConsumerForm')
-  .addEventListener('click', hideConsumer)
-
-document
-  .querySelector('#deleteConsumerForm')
-  .addEventListener('click', deleteConsumerForm)
-// --- Consumer End ---
-
-// --- Exchange Start ---
-document
-  .querySelector('#sendExchangeForm')
-  .addEventListener('click', sendExchangeForm)
-
-document
-  .querySelector('#cancelExchangeForm')
-  .addEventListener('click', hideExchange)
-
-document
-  .querySelector('#deleteExchangeForm')
-  .addEventListener('click', deleteExchangeForm)
-// --- Exchange End ---
-
-// --- Queue Start ---
-document
-  .querySelector('#sendQueueForm')
-  .addEventListener('click', sendQueueForm)
-
-document.querySelector('#cancelQueueForm').addEventListener('click', hideQueue)
-
-document
-  .querySelector('#deleteQueueForm')
-  .addEventListener('click', deleteQueueForm)
-// --- Queue End ---
-
-document.querySelector('#sendBindingForm').addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  const id = document.querySelector('#bindingIdField').value
-  const routingKey = document.querySelector('#bindingRoutingKeyField').value
-
-  const selectSource = document.getElementById('bindingSource').value
-  const selectDestination = document.getElementById('bindingDestination').value
-
-  const ex = window.scene.actors.find((exc) => exc.id === selectSource)
-  const qu = window.scene.actors.find((q) => q.id === selectDestination)
-
-  if (id) {
-    const binding = window.scene.getIdInScene(id)
-    binding.routingKey = routingKey
-
-    binding.source = ex
-    binding.destination = qu
-    binding.setCoords()
-  } else {
-    // let e = window.scene.actors.find(e => e.id === selectSource);
-    // let q = window.scene.actors.find(q => q.id === selectDestination);
-    const Binding1 = new Binding(ex, qu, routingKey)
-    Binding1.addToScene(window.scene)
-  }
-
-  window.scene.renderOnce()
-
-  document.querySelector('#bindingIdField').value = ''
-  document.querySelector('#bindingRoutingKeyField').value = ''
-  document.getElementById('bindingSource').value = ''
-  document.getElementById('bindingDestination').value = ''
-  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
-})
-
-document
-  .querySelector('#cancelBindingForm')
-  .addEventListener('click', hideBinding)
-
-document.querySelector('#deleteBindingForm').addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  const id = document.querySelector('#bindingIdField').value
-  const actor = window.scene.getIdInScene(id)
-  actor.source.removeBinding(actor)
-  window.scene.removeActor(actor)
-  window.scene.renderOnce()
-  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
-})
-
 /**
- *
+ * Current mouse position inside of a cirle.
  * @param {object} val - can be Exchange or Queue object
  * @param {number} mx - x position of the mouse
  * @param {number} my - y position of the mouse
+ * @returns {object}
  */
 const findCircle = (val, mx, my) => {
-  let found = false
+  let found
   if (val.constructor.name === 'Exchange' || val.constructor.name === 'Queue') {
     const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2))
     if (d <= val.radius) {
@@ -223,13 +102,14 @@ const findCircle = (val, mx, my) => {
 }
 
 /**
- *
+ * Current mouse position inside of a square.
  * @param {object} val - can be Producer or Consumer object
  * @param {number} mx - x position of the mouse
  * @param {number} my - y position of the mouse
+ * @returns {object}
  */
 const findSquare = (val, mx, my) => {
-  let found = false
+  let found
   if (
     val.constructor.name === 'Producer' ||
     val.constructor.name === 'Consumer'
@@ -247,13 +127,14 @@ const findSquare = (val, mx, my) => {
 }
 
 /**
- *
+ * Current mouse position over a line.
  * @param {Binding} val - Binding object
  * @param {number} mx - x position of the mouse
  * @param {number} my - y position of the mouse
+ * @returns {object}
  */
 const findLine = (val, mx, my) => {
-  let found = false
+  let found
   const line = {
     x0: val.x1,
     x1: val.x2,
@@ -286,9 +167,10 @@ const findLine = (val, mx, my) => {
 }
 
 /**
- *
- * @param {*} e
+ * Find the actor in the scene from the current mouse position.
+ * @param {object} e - Event object
  * @param {*} line
+ * @returns {object} - undefined or the found actor in scene
  */
 const findPosition = (e, line = false) => {
   const mx = e.clientX - e.target.offsetLeft
@@ -524,8 +406,7 @@ exportBtn.addEventListener('click', (e) => {
   document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
 })
 
-const copyBtn = document.querySelector('#copyBtn')
-copyBtn.addEventListener('click', (e) => {
+document.querySelector('#copyBtn').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   document.querySelector('#ImExport').select()

@@ -4,7 +4,7 @@ import QueueMessage from './queuemessage'
 
 class Queue extends BaseComponent {
   /**
-   *
+   * Queue class represents a component which keeps the messages until they are consumed.
    * @param {number} x - x position of the queue
    * @param {number} y - y position of the queue
    * @param {string} name - optional identifier
@@ -27,6 +27,7 @@ class Queue extends BaseComponent {
   }
 
   /**
+   * Adds a consumer to the queue.
    * @param {Consumer} consumer - Consumer object
    */
   addConsumer(consumer) {
@@ -43,6 +44,7 @@ class Queue extends BaseComponent {
   }
 
   /**
+   * Removes a consumer from the queue.
    * @param {Consumer} consumer - Consumer object
    */
   removeConsumer(consumer) {
@@ -155,6 +157,14 @@ class Queue extends BaseComponent {
         gradient.addColorStop(1, 'darkgray');
         */
 
+    // shadow
+    this.ctx.globalAlpha = 0.4;
+    this.ctx.beginPath()
+    this.ctx.fillStyle = '#000'
+    this.ctx.arc(this.x + 2, this.y + 2, this.radius, 0, 2 * Math.PI)
+    this.ctx.fill()
+
+    this.ctx.globalAlpha = 1.0;
     this.ctx.beginPath()
     // this.ctx.fillStyle = gradient;
     this.ctx.fillStyle = '#ccc'

@@ -2,7 +2,7 @@ import Base from './base'
 
 class BaseMessage extends Base {
   /**
-   * Base class for other messages.
+   * Base message class for other messages.
    * @param {number} x - x position
    * @param {number} y - y position
    * @param {integer} radius - radius of the circle
@@ -14,8 +14,8 @@ class BaseMessage extends Base {
     this.id = this.createUUID()
     this.x = x
     this.y = y
-    this.fillStyle = fillStyle || '#c82124'
     this.radius = radius || 3
+    this.fillStyle = fillStyle || '#c82124'
     this.dist = null
     this.rad = null
     this.angle = null

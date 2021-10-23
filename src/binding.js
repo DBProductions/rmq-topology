@@ -2,7 +2,7 @@ import BaseComponent from './basecomponent'
 
 class Binding extends BaseComponent {
   /**
-   *
+   * Binging class represents the binding between an exchange and a queue.
    * @param {object} source
    * @param {object} destination
    * @param {string} routingKey - used routing key

@@ -3,11 +3,11 @@ import ExchangeMessage from './exchangemessage'
 
 class Producer extends BaseComponent {
   /**
-   *
+   * Producer class represents a component to publish against exchanges.
    * @param {number} x - x position of the producer
    * @param {number} y - y position of the producer
    * @param {string} name - optional identifier
-   * @param {*} publishes - list of exchanges to publish to
+   * @param {(object|Array)} publishes - list of exchanges to publish to
    * @param {string} routingKey - used routing key
    * @extends BaseComponent
    */
@@ -57,6 +57,10 @@ class Producer extends BaseComponent {
     }
   }
 
+  /**
+   * Determines at which time a new message should be created.
+   * @param {number} dt - delta time from the timer
+   */
   update(dt) {
     this.spawnTime -= dt
     if (this.spawnTime < 0) {
@@ -77,9 +81,17 @@ class Producer extends BaseComponent {
   }
 
   render() {
+    this.ctx.setLineDash([])
+    // shadow
+    this.ctx.globalAlpha = 0.4;
+    this.ctx.beginPath()
+    this.ctx.fillStyle = '#000'
+    this.ctx.rect(this.x + 2, this.y + 2, this.width, this.height)
+    this.ctx.fill()
+
+    this.ctx.globalAlpha = 1.0;
     this.ctx.beginPath()
     this.ctx.strokeStyle = '#000'
-    this.ctx.setLineDash([])
     this.ctx.lineWidth = 1
     if (this.hover) {
       this.ctx.lineWidth = 2
@@ -89,6 +101,9 @@ class Producer extends BaseComponent {
 
     if (this.dragged) {
       this.ctx.fillStyle = '#ccc'
+      this.ctx.fill()
+    } else {
+      this.ctx.fillStyle = '#fff'
       this.ctx.fill()
     }
 

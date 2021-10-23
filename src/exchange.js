@@ -3,7 +3,7 @@ import BindingMessage from './bindingmessage'
 
 class Exchange extends BaseComponent {
   /**
-   *
+   * Exchange class represents a component which receives messages and route them to queues.
    * @param {number} x - x position of the exchange
    * @param {number} y - y position of the exchange
    * @param {string} name - identifier
@@ -20,6 +20,7 @@ class Exchange extends BaseComponent {
   }
 
   /**
+   * Removes a binding from the exchange.
    * @param {Binding} binding - Binding object
    */
   removeBinding(binding) {
@@ -94,6 +95,14 @@ class Exchange extends BaseComponent {
         gradient.addColorStop(1, 'gray');
         */
 
+    // shadow
+    this.ctx.globalAlpha = 0.4;
+    this.ctx.beginPath()
+    this.ctx.fillStyle = '#000'
+    this.ctx.arc(this.x + 2, this.y + 2, this.radius, 0, 2 * Math.PI)
+    this.ctx.fill()
+
+    this.ctx.globalAlpha = 1.0;
     this.ctx.beginPath()
     // this.ctx.fillStyle = gradient;
     this.ctx.fillStyle = '#ccc'

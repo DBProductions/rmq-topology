@@ -12,6 +12,7 @@ class Base {
   /**
    * Add object to scene.
    * @param {Scene} scene - scene on canvas
+   * @returns {object} this
    */
   addToScene(scene) {
     this.scene = scene
@@ -21,8 +22,10 @@ class Base {
   }
 
   /**
+   * Generates an UUID.
+   *
    * https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-253.php
-   * @return {string} - uuid
+   * @returns {string} - uuid
    */
   createUUID() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
