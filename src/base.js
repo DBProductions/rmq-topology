@@ -36,7 +36,7 @@ class Base {
     )
   }
 
-  update(dt) {} // eslint-disable-line class-methods-use-this
+  update(dt) {} // eslint-disable-line no-unused-vars
 }
 
 export default Base

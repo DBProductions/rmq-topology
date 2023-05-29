@@ -3,8 +3,7 @@ module.exports = {
     browser: true,
     es2021: true
   },
-  extends: ['standard'],
-  //parser: '@typescript-eslint/parser',
+  extends: ['eslint:recommended'],
   parserOptions: {
     ecmaVersion: 12,
     sourceType: 'module'
