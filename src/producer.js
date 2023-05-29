@@ -83,13 +83,13 @@ class Producer extends BaseComponent {
   render() {
     this.ctx.setLineDash([])
     // shadow
-    this.ctx.globalAlpha = 0.4;
+    this.ctx.globalAlpha = 0.4
     this.ctx.beginPath()
     this.ctx.fillStyle = '#000'
     this.ctx.rect(this.x + 2, this.y + 2, this.width, this.height)
     this.ctx.fill()
 
-    this.ctx.globalAlpha = 1.0;
+    this.ctx.globalAlpha = 1.0
     this.ctx.beginPath()
     this.ctx.strokeStyle = '#000'
     this.ctx.lineWidth = 1

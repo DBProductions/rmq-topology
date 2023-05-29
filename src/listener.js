@@ -1,20 +1,20 @@
 import {
-    sendProducerForm,
-    hideProducer,
-    deleteProducerForm,
-    sendConsumerForm,
-    hideConsumer,
-    deleteConsumerForm,
-    sendExchangeForm,
-    hideExchange,
-    deleteExchangeForm,
-    sendQueueForm,
-    hideQueue,
-    deleteQueueForm,
-    sendBindingForm,
-    hideBinding,
-    deleteBindingForm
-  } from './utils'
+  sendProducerForm,
+  hideProducer,
+  deleteProducerForm,
+  sendConsumerForm,
+  hideConsumer,
+  deleteConsumerForm,
+  sendExchangeForm,
+  hideExchange,
+  deleteExchangeForm,
+  sendQueueForm,
+  hideQueue,
+  deleteQueueForm,
+  sendBindingForm,
+  hideBinding,
+  deleteBindingForm
+} from './utils'
 
 // --- Producer ---
 document

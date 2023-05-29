@@ -6,7 +6,7 @@ import {
   displayConsumer,
   displayExchange,
   displayQueue,
-  displayBinding,
+  displayBinding
 } from './utils'
 
 import { Examples } from './examples'

@@ -96,13 +96,13 @@ class Exchange extends BaseComponent {
         */
 
     // shadow
-    this.ctx.globalAlpha = 0.4;
+    this.ctx.globalAlpha = 0.4
     this.ctx.beginPath()
     this.ctx.fillStyle = '#000'
     this.ctx.arc(this.x + 2, this.y + 2, this.radius, 0, 2 * Math.PI)
     this.ctx.fill()
 
-    this.ctx.globalAlpha = 1.0;
+    this.ctx.globalAlpha = 1.0
     this.ctx.beginPath()
     // this.ctx.fillStyle = gradient;
     this.ctx.fillStyle = '#ccc'
