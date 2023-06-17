@@ -1,7 +1,7 @@
-const http = require('http')
-const static = require('node-static')
+import http from 'http'
+import nodeStatic from 'node-static'
 
-const file = new static.Server('public')
+const file = new nodeStatic.Server('public')
 
 http
   .createServer((req, res) => {
