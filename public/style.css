@@ -17,6 +17,10 @@ h2 {
   padding: 3px;
   margin: 3px;
 }
+h2 small {
+  margin-left: 10px;
+  font-size: 12px;
+}
 h3 {
   padding: 3px;
   margin: 3px;
