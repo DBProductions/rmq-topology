@@ -12,8 +12,9 @@
         "encoding": "utf8",             
         "destination": "./public/doc/",
         "theme_opts": {
-            "theme": "light",
-            "title": "rmq-technology"
+            "default_theme": "light",
+            "title": "rmq-topology",
+            "homepageTitle": "JSDoc"
         }
     },
     "templates": {

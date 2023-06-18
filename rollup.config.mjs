@@ -6,7 +6,7 @@ export default {
     sourcemap: true,
     format: 'iife',
     name: 'app',
-    file: 'public/script.min.js'
+    file: 'public/scripts/script.min.js'
   },
   plugins: [
     jsdoc({

@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x, 18.x, 20.x]
+        node-version: [18.x, 20.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -30,9 +30,26 @@ jobs:
       - run: npm run format
       - run: npm run lint
       - run: npm run bundle
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress install
+        uses: cypress-io/github-action@v2
+        with:
+          runTests: false
+          install-command: npm i
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          install: false
+          build: npm run bundle
+          start: npm start
+          wait-on: 'http://localhost:3000'
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, cypress-run]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

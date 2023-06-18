@@ -27,6 +27,8 @@ const config = {
   bindings: []
 }
 
+document.querySelector('#docLink').href = `${window.location.href}doc`;
+
 const canvas = document.querySelector('#canvas')
 canvas.width = window.innerWidth
 canvas.height = 450
