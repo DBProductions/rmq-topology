@@ -13,7 +13,9 @@ import {
   deleteQueueForm,
   sendBindingForm,
   hideBinding,
-  deleteBindingForm
+  deleteBindingForm,
+  sendSettingsForm,
+  hideSettings
 } from './utils'
 
 // --- Producer ---
@@ -78,5 +80,15 @@ document
 document
   .querySelector('#deleteBindingForm')
   .addEventListener('click', deleteBindingForm)
+
+// --- Settings ---
+document
+  .querySelector('#sendSettingsForm')
+  .addEventListener('click', sendSettingsForm)
+
+document
+  .querySelector('#cancelSettingsForm')
+  .addEventListener('click', hideSettings)
+
 
 export {}

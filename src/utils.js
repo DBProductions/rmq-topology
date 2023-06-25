@@ -7,6 +7,22 @@ import Scene from './scene'
 import Timer from './timer'
 
 /**
+ * 
+ * @returns {object}
+ */
+const getSettings = () => {
+  const data = localStorage.getItem("rmqSettings")
+  return JSON.parse(data)
+}
+
+/**
+ * 
+ */
+const setSettings = (settings) => {
+  localStorage.setItem("rmqSettings", JSON.stringify(settings));
+}
+
+/**
  * Calculates the point on the line that's nearest to the mouse position.
  *
  * https://stackoverflow.com/questions/24043967/detect-if-mouse-is-over-an-object-inside-canvas
@@ -791,7 +807,57 @@ const deleteBindingForm = (e) => {
   document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
 }
 
+/**
+ * Display the form to edit settings.
+ * @param {Binding} binding - Binding object
+ */
+const displaySettings = () => {
+  document.querySelector('#settingsPanel').classList.add('panel-wrap-out')
+  const settings = getSettings()
+  if (settings) {
+    document.querySelector('#settingsHost').value = settings.host
+    document.querySelector('#settingsVHost').value = settings.vhost
+    document.querySelector('#settingsUsername').value = settings.username
+    document.querySelector('#settingsPassword').value = settings.password
+  }
+}
+
+/**
+ * @param {object} e - Event object
+ */
+const sendSettingsForm = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  setSettings({
+    host: document.querySelector('#settingsHost').value,
+    vhost: document.querySelector('#settingsVHost').value,
+    username: document.querySelector('#settingsUsername').value,
+    password: document.querySelector('#settingsPassword').value
+  })
+  document.querySelector('#settingsHost').value = ''
+  document.querySelector('#settingsVHost').value = ''
+  document.querySelector('#settingsUsername').value = ''
+  document.querySelector('#settingsPassword').value = ''
+  hideSettings(e)
+}
+
+/**
+ * Reset form values and remove CSS class from the settings panel.
+ * @param {object} e - Event object
+ */
+const hideSettings = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  document.querySelector('#settingsHost').value = ''
+  document.querySelector('#settingsVHost').value = ''
+  document.querySelector('#settingsUsername').value = ''
+  document.querySelector('#settingsPassword').value = ''
+  document.querySelector('#settingsPanel').classList.remove('panel-wrap-out')
+}
+
 export {
+  getSettings,
+  setSettings,
   linepointNearestMouse,
   createTopology,
   displayForm,
@@ -814,5 +880,8 @@ export {
   displayBinding,
   sendBindingForm,
   hideBinding,
-  deleteBindingForm
+  deleteBindingForm,
+  displaySettings,
+  sendSettingsForm,
+  hideSettings
 }

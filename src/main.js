@@ -1,4 +1,6 @@
 import {
+  getSettings,
+  setSettings,
   linepointNearestMouse,
   createTopology,
   displayForm,
@@ -6,18 +8,23 @@ import {
   displayConsumer,
   displayExchange,
   displayQueue,
-  displayBinding
+  displayBinding,
+  displaySettings
 } from './utils'
 
 import { Examples } from './examples'
 import {} from './listener'
 
-const brokerSettings = {
+const brokerDefaultSettings = {
   host: 'http://localhost:15672',
   vhost: '%2f',
   username: 'guest',
   password: 'guest'
 }
+if(!getSettings()) {
+  setSettings(brokerDefaultSettings)
+}
+
 const config = {
   description: 'RMQ Topology helps to simulate and visualize the message flow.',
   producers: [],
@@ -329,6 +336,13 @@ animateBtn.addEventListener('click', (e) => {
   }
 })
 
+const settingsBtn = document.querySelector('#settings')
+settingsBtn.addEventListener('click', (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  displaySettings()
+})
+
 const exportBtn = document.querySelector('#export')
 exportBtn.addEventListener('click', (e) => {
   e.preventDefault()
@@ -442,6 +456,7 @@ generateCurlBtn.addEventListener('click', (e) => {
   e.stopPropagation()
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
+  const brokerSettings = getSettings()
   const { host } = brokerSettings
   const { username } = brokerSettings
   const { password } = brokerSettings
@@ -492,6 +507,7 @@ generateRmqBtn.addEventListener('click', (e) => {
   e.stopPropagation()
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
+  const brokerSettings = getSettings()
   const { host } = brokerSettings
   const { username } = brokerSettings
   const { password } = brokerSettings
@@ -542,6 +558,7 @@ generateTfBtn.addEventListener('click', (e) => {
   e.stopPropagation()
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
+  const brokerSettings = getSettings()
   const { host } = brokerSettings
   const { username } = brokerSettings
   const { password } = brokerSettings

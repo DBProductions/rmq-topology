@@ -40,6 +40,7 @@
                   <a href="#" id="generateTerraform">Terraform</a>
                 </div>
             </div>                 
+            <button id="settings" class="myButton"><i class="fas fa-cog"></i> Settings</button>
         </div>
         <div class="right">
             <a href="https://github.com/DBProductions/rmq-topology" target="_blank"><i class="fab fa-github fa-1x"></i></a>
@@ -188,6 +189,30 @@
                     <button id="importBtn" class="myButton"><i class="fas fa-file-export"></i> Import</button>
                     <div id="imexportErr" class="error"></div>
                 </form>                
+            </div>
+        </div>
+        <div id="settingsPanel" class="panel-wrap">
+            <div class="panel">
+                <form id="settingsForm" action="#">
+                    <h3>Settings</h3>
+                    <div>
+                        <input type="text" id="settingsHost" placeholder="Host">
+                    </div>
+                    <div>
+                        <input type="text" id="settingsVHost" placeholder="Virtual Host">
+                    </div>
+                    <div>
+                        <input type="text" id="settingsUsername" placeholder="Username">
+                    </div>
+                    <div>
+                        <input type="text" id="settingsPassword" placeholder="Password">
+                    </div>
+                    <div class="btnFooter">
+                        <button id="sendSettingsForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="cancelSettingsForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
+                    </div>
+                    <div id="settingsErr" class="error"></div>
+                </form>
             </div>
         </div>        
     </div>
