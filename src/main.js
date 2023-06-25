@@ -21,7 +21,7 @@ const brokerDefaultSettings = {
   username: 'guest',
   password: 'guest'
 }
-if(!getSettings()) {
+if (getSettings() === null) {
   setSettings(brokerDefaultSettings)
 }
 
