@@ -90,5 +90,4 @@ document
   .querySelector('#cancelSettingsForm')
   .addEventListener('click', hideSettings)
 
-
 export {}

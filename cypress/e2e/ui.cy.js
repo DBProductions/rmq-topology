@@ -3,6 +3,45 @@ describe('UI Component', () => {
     cy.visit('/')
   })
 
+  it('Settings', () => {
+    cy.get('#settings').click()
+
+    cy.get('#settingsHost') 
+      .should('have.value', 'http://localhost:15672')
+
+    cy.get('#settingsVHost') 
+      .should('have.value', '%2f')
+
+    cy.get('#settingsUsername') 
+      .should('have.value', 'guest')
+
+    cy.get('#settingsPassword') 
+      .should('have.value', 'guest')
+
+    cy.get('#settingsHost').clear().type('https://localhost:15672')
+    cy.get('#settingsVHost').clear().type('/user')
+    cy.get('#settingsUsername').clear().type('rabbit')
+    cy.get('#settingsPassword').clear().type('rabbit')
+
+    cy.get('#sendSettingsForm').click()
+
+    cy.reload()
+
+    cy.get('#settings').click()
+
+    cy.get('#settingsHost') 
+      .should('have.value', 'https://localhost:15672')
+
+    cy.get('#settingsVHost') 
+      .should('have.value', '/user')
+
+    cy.get('#settingsUsername') 
+      .should('have.value', 'rabbit')
+
+    cy.get('#settingsPassword') 
+      .should('have.value', 'rabbit')
+  })
+
   it('Export definition', () => {
     cy.get('#export').click()
     cy.get('#ImExport').should(

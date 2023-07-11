@@ -7,19 +7,22 @@ import Scene from './scene'
 import Timer from './timer'
 
 /**
+ * Gets the settings from loacalStorage and parse it as JSON.
  * 
  * @returns {object}
  */
 const getSettings = () => {
-  const data = localStorage.getItem("rmqSettings")
+  const data = localStorage.getItem('rmqSettings')
   return JSON.parse(data)
 }
 
 /**
+ * Sets the current settings in localStorage.
  * 
+ * @param {object} settings - settings as JSON to set in localStorage.
  */
 const setSettings = (settings) => {
-  localStorage.setItem("rmqSettings", JSON.stringify(settings));
+  localStorage.setItem('rmqSettings', JSON.stringify(settings))
 }
 
 /**
