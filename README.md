@@ -1,6 +1,7 @@
 # RMQ Topology
 
 A small tool to simulate RabbitMQ topologies and see the message flow.  
+It creates curl, rabbitmqadmin, Terraform and AsyncAPI.  
 
 [Demo Page](https://dbproductions.github.io/rmq-topology/)
 
