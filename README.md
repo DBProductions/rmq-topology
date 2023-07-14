@@ -7,7 +7,7 @@ It creates curl, rabbitmqadmin, Terraform and AsyncAPI.
 
 ![demo page screenshot](screenshot.png "Demo Page Screenshot")
 
-The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/).
+The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/). Cypress runs some tests.  
 
     node -v
     v18.13.0
