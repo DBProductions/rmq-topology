@@ -672,11 +672,12 @@ generateAsyncApiBtn.addEventListener('click', (e) => {
   const brokerSettings = getSettings()
   const { host } = brokerSettings
   const { vhost } = brokerSettings
+  const { title, description } = brokerSettings.asyncapi
 
   generatedString += `asyncapi: 2.6.0
 info:
-  title: RabbitMQ Docs
-  description: Documentation of broker.
+  title: ${title}
+  description: ${description}
   version: 0.1.0
 servers:
   production:
