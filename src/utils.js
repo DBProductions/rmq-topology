@@ -822,6 +822,8 @@ const displaySettings = () => {
     document.querySelector('#settingsVHost').value = settings.vhost
     document.querySelector('#settingsUsername').value = settings.username
     document.querySelector('#settingsPassword').value = settings.password
+    document.querySelector('#settingsAsyncApiTitle').value = settings.asyncapi.title
+    document.querySelector('#settingsAsyncApiDescription').value = settings.asyncapi.description
   }
 }
 
@@ -835,12 +837,12 @@ const sendSettingsForm = (e) => {
     host: document.querySelector('#settingsHost').value,
     vhost: document.querySelector('#settingsVHost').value,
     username: document.querySelector('#settingsUsername').value,
-    password: document.querySelector('#settingsPassword').value
+    password: document.querySelector('#settingsPassword').value,
+    asyncapi: {
+      title: document.querySelector('#settingsAsyncApiTitle').value,
+      description: document.querySelector('#settingsAsyncApiDescription').value
+    }
   })
-  document.querySelector('#settingsHost').value = ''
-  document.querySelector('#settingsVHost').value = ''
-  document.querySelector('#settingsUsername').value = ''
-  document.querySelector('#settingsPassword').value = ''
   hideSettings(e)
 }
 
@@ -855,6 +857,8 @@ const hideSettings = (e) => {
   document.querySelector('#settingsVHost').value = ''
   document.querySelector('#settingsUsername').value = ''
   document.querySelector('#settingsPassword').value = ''
+  document.querySelector('#settingsAsyncApiTitle').value = ''
+  document.querySelector('#settingsAsyncApiDescription').value = ''
   document.querySelector('#settingsPanel').classList.remove('panel-wrap-out')
 }
 

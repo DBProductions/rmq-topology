@@ -18,10 +18,18 @@ describe('UI Component', () => {
     cy.get('#settingsPassword') 
       .should('have.value', 'guest')
 
+    cy.get('#settingsAsyncApiTitle')
+      .should('have.value', '')
+
+    cy.get('#settingsAsyncApiDescription')
+      .should('have.value', '')
+
     cy.get('#settingsHost').clear().type('https://localhost:15672')
     cy.get('#settingsVHost').clear().type('/user')
     cy.get('#settingsUsername').clear().type('rabbit')
     cy.get('#settingsPassword').clear().type('rabbit')
+    cy.get('#settingsAsyncApiTitle').clear().type('RabbitMQ Topologies Documentation')
+    cy.get('#settingsAsyncApiDescription').clear().type('RabbitMQ Topologies Documentation')
 
     cy.get('#sendSettingsForm').click()
 
@@ -40,6 +48,12 @@ describe('UI Component', () => {
 
     cy.get('#settingsPassword') 
       .should('have.value', 'rabbit')
+
+    cy.get('#settingsAsyncApiTitle')
+      .should('have.value', 'RabbitMQ Topologies Documentation')
+
+    cy.get('#settingsAsyncApiDescription')
+      .should('have.value', 'RabbitMQ Topologies Documentation')
   })
 
   it('Export definition', () => {

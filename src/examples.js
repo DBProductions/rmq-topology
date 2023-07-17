@@ -33,7 +33,7 @@ const Examples = {
   },
   fanout: {
     description:
-      'Fanout exchange broadcasts all the messages to all binded queues, it ignores the routing key.',
+      'Fanout exchange broadcasts all the messages to all bind queues, it ignores the routing key.',
     producers: [
       {
         x: 200,
@@ -289,7 +289,7 @@ const Examples = {
   },
   retry: {
     description:
-      'Simple timebased retry mechanism with a queue to park and republish messages.',
+      'Simple time based retry mechanism with a queue to park and republish messages.',
     producers: [
       {
         x: 200,

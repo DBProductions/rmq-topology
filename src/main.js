@@ -19,7 +19,11 @@ const brokerDefaultSettings = {
   host: 'http://localhost:15672',
   vhost: '%2f',
   username: 'guest',
-  password: 'guest'
+  password: 'guest',
+  asyncapi: {
+    title: '',
+    description: ''
+  }
 }
 if (getSettings() === null) {
   setSettings(brokerDefaultSettings)
