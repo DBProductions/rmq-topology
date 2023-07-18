@@ -21,8 +21,8 @@ const brokerDefaultSettings = {
   username: 'guest',
   password: 'guest',
   asyncapi: {
-    title: '',
-    description: ''
+    title: 'RabbitMQ',
+    description: 'Broker description.'
   }
 }
 if (getSettings() === null) {
