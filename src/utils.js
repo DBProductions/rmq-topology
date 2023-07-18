@@ -816,6 +816,7 @@ const deleteBindingForm = (e) => {
  */
 const displaySettings = () => {
   document.querySelector('#settingsPanel').classList.add('panel-wrap-out')
+  document.querySelector('#settingsErr').innerHTML = ''
   const settings = getSettings()
   if (settings) {
     document.querySelector('#settingsHost').value = settings.host
@@ -833,17 +834,24 @@ const displaySettings = () => {
 const sendSettingsForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  setSettings({
-    host: document.querySelector('#settingsHost').value,
-    vhost: document.querySelector('#settingsVHost').value,
-    username: document.querySelector('#settingsUsername').value,
-    password: document.querySelector('#settingsPassword').value,
-    asyncapi: {
-      title: document.querySelector('#settingsAsyncApiTitle').value,
-      description: document.querySelector('#settingsAsyncApiDescription').value
-    }
-  })
-  hideSettings(e)
+  const host = document.querySelector('#settingsHost').value
+  let error = false
+  if (host === '') {
+    error = 'Host is required.'
+    document.querySelector('#settingsErr').innerHTML = error
+  } else {
+    setSettings({
+      host,
+      vhost: document.querySelector('#settingsVHost').value,
+      username: document.querySelector('#settingsUsername').value,
+      password: document.querySelector('#settingsPassword').value,
+      asyncapi: {
+        title: document.querySelector('#settingsAsyncApiTitle').value,
+        description: document.querySelector('#settingsAsyncApiDescription').value
+      }
+    })
+    hideSettings(e)
+  }  
 }
 
 /**

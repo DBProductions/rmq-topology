@@ -129,12 +129,13 @@ h3 {
   color: #000;
   overflow: auto;
   padding: 0.5em;
+  border-left: 1px solid #ccc;
 }
 
 .error {
   margin-top: 7px;
   color: red;
-  font-size: 12px;
+  font-size: 14px;
 }
 form {
   padding: 3px;
