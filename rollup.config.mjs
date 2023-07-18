@@ -9,11 +9,9 @@ export default {
     file: 'public/scripts/script.min.js'
   },
   plugins: [
-    /*
     jsdoc({
       args: [],
       config: 'jsdoc.config.json'
     })
-    */
   ]
 }
