@@ -195,32 +195,34 @@
         <div id="settingsPanel" class="panel-wrap">
             <div class="panel">
                 <form id="settingsForm" action="#">
-                    <h3>Settings</h3>
-                    <div>
-                        <input type="text" id="settingsHost" placeholder="Host">
+                    <ul class="tabrow" id="settingsTabs">
+                        <li id="settingsTabHrefSettings" class="selected"><a href="#">Settings</a></li>
+                        <li id="settingsTabHrefAsyncAPI"><a href="#">AsyncAPI</a></li>
+                    </ul>
+                    <div id="tabContainer">
+                        <div id="settingsTabSettings">
+                            <div>
+                                <input type="text" id="settingsHost" placeholder="Host">
+                            </div>
+                            <div>
+                                <input type="text" id="settingsVHost" placeholder="Virtual Host">
+                            </div>
+                            <div>
+                                <input type="text" id="settingsUsername" placeholder="Username">
+                            </div>
+                            <div>
+                                <input type="text" id="settingsPassword" placeholder="Password">
+                            </div>
+                        </div>
+                        <div id="settingsTabAsyncAPI" class="tab-hidden">
+                            <div>
+                                <input type="text" id="settingsAsyncApiTitle" placeholder="Title for AsyncAPI">
+                            </div>
+                            <div>
+                                <input type="text" id="settingsAsyncApiDescription" placeholder="Description for AsyncAPI">
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <input type="text" id="settingsVHost" placeholder="Virtual Host">
-                    </div>
-                    <div>
-                        <input type="text" id="settingsUsername" placeholder="Username">
-                    </div>
-                    <div>
-                        <input type="text" id="settingsPassword" placeholder="Password">
-                    </div>
-                    <div>AsyncAPI</div>
-                    
-                    <div id="settingsAsyncApi">
-                    
-                    <div>
-                        <input type="text" id="settingsAsyncApiTitle" placeholder="Title for AsyncAPI">
-                    </div>
-                    <div>
-                        <input type="text" id="settingsAsyncApiDescription" placeholder="Description for AsyncAPI">
-                    </div>
-                    
-                    </div>
-                    
                     <div class="btnFooter">
                         <button id="sendSettingsForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
                         <button id="cancelSettingsForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>

@@ -26,6 +26,39 @@ const setSettings = (settings) => {
 }
 
 /**
+ * Hide and show tab links and the content for it.
+ * 
+ * @param {Object} Event 
+ */
+const changeSettingsTab = (e) => {
+  e.preventDefault();
+  try {
+    const link = document.querySelector(`#settingsTabHref${e.target.innerHTML}`)
+    if (link) {
+      const tabLinks = document.querySelector('#settingsTabs')
+      const liList = tabLinks.getElementsByTagName('li')
+      for(let i in liList){
+        if (liList[i].classList) {
+          liList[i].classList.remove('selected')
+        }
+      }
+
+      const tabContent = document.querySelectorAll('#tabContainer > div')
+      for(let d in tabContent){
+        if (tabContent[d].classList) {
+          tabContent[d].classList.add('tab-hidden')
+        }
+      }    
+
+      link.classList.add('selected')
+      document.querySelector(`#settingsTab${e.target.innerHTML}`).classList.remove('tab-hidden')
+    }
+  } catch (err) {
+    return
+  }
+}
+
+/**
  * Calculates the point on the line that's nearest to the mouse position.
  *
  * https://stackoverflow.com/questions/24043967/detect-if-mouse-is-over-an-object-inside-canvas
@@ -873,6 +906,7 @@ const hideSettings = (e) => {
 export {
   getSettings,
   setSettings,
+  changeSettingsTab,
   linepointNearestMouse,
   createTopology,
   displayForm,

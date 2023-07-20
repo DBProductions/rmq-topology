@@ -15,7 +15,8 @@ import {
   hideBinding,
   deleteBindingForm,
   sendSettingsForm,
-  hideSettings
+  hideSettings,
+  changeSettingsTab
 } from './utils'
 
 // --- Producer ---
@@ -82,6 +83,10 @@ document
   .addEventListener('click', deleteBindingForm)
 
 // --- Settings ---
+document
+  .querySelector('#settingsTabs')
+  .addEventListener('click', changeSettingsTab)
+
 document
   .querySelector('#sendSettingsForm')
   .addEventListener('click', sendSettingsForm)

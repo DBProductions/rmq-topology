@@ -50,7 +50,7 @@ class Consumer extends BaseComponent {
   }
 
   /**
-   * Handler for arriving messages.
+   * Handler for arriving messages. Checks the mode and reject or count the arrived messages.
    * @param {QueueMessage} msg - message object
    */
   messageArrived(msg) {

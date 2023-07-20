@@ -574,7 +574,7 @@ generateTfBtn.addEventListener('click', (e) => {
   required_providers {
     rabbitmq = {
       source = "cyrilgdn/rabbitmq"
-      version = "1.5.1"
+      version = "1.8.0"
     }
   }
 }
