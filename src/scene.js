@@ -1,6 +1,7 @@
 class Scene {
   /**
    * The scene includes the actors and call their update and render methods.
+   *
    * @param {*} ctx - context of the canvas
    * @param {number} width - width of the canvas
    * @param {number} height - height of the canvas
@@ -19,7 +20,8 @@ class Scene {
   }
 
   /**
-   * Get DOM offset from givven element.
+   * Get DOM offset from given element.
+   *
    * @param {Object} el - HTML DOM element
    * @returns {object} - x and y position
    */
@@ -36,6 +38,7 @@ class Scene {
 
   /**
    * Add an actor to the scene.
+   *
    * @param {Object} actor
    */
   addActor(actor) {
@@ -44,6 +47,7 @@ class Scene {
 
   /**
    * Remove an actor from the scene.
+   *
    * @param {Object} actor
    */
   removeActor(actor) {
@@ -55,6 +59,7 @@ class Scene {
 
   /**
    * Get object to id from scene.
+   *
    * @param {string} id
    */
   getIdInScene(id) {
@@ -69,6 +74,7 @@ class Scene {
 
   /**
    * Get objects based on the obj constructor.
+   *
    * @param {string} obj
    */
   getObjectsInScene(obj) {
@@ -83,6 +89,7 @@ class Scene {
 
   /**
    * Empty the scene with setting and empty list as actors.
+   *
    */
   purge() {
     this.actors = []
@@ -90,6 +97,7 @@ class Scene {
 
   /**
    * Iterates over the actors and call their update method.
+   *
    * @param {number} dt
    */
   update(dt) {
@@ -100,6 +108,7 @@ class Scene {
 
   /**
    * It renders first the binding and then the rest for a better visual effect.
+   *
    * @param {number} dt
    */
   render(dt) {
@@ -129,6 +138,7 @@ class Scene {
 
   /**
    * It renders first the binding and then the rest for a better visual effect.
+   *
    * @param {number} dt
    */
   renderOnce(dt) {

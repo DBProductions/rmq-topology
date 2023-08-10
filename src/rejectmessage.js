@@ -3,6 +3,7 @@ import BaseMessage from './basemessage'
 class RejectMessage extends BaseMessage {
   /**
    * Message object when a message gets rejected from consumer.
+   *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
    * @param {Queue} queue - Queue object

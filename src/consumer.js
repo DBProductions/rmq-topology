@@ -4,6 +4,7 @@ import RejectMessage from './rejectmessage'
 class Consumer extends BaseComponent {
   /**
    * Consumer class represents a component which consumes messages from a queue.
+   *
    * @param {number} x - x position of the consumer
    * @param {number} y - y position of the consumer
    * @param {string} name - optional identifier
@@ -24,6 +25,7 @@ class Consumer extends BaseComponent {
 
   /**
    * Adds a queue to the list.
+   *
    * @param {Queue} queue - Queue object
    */
   addQueue(queue) {
@@ -36,6 +38,7 @@ class Consumer extends BaseComponent {
 
   /**
    * Removes a queue from the list or empty the list.
+   *
    * @param {Queue} queue - Queue object
    */
   removeQueue(queue) {
@@ -51,6 +54,7 @@ class Consumer extends BaseComponent {
 
   /**
    * Handler for arriving messages. Checks the mode and reject or count the arrived messages.
+   *
    * @param {QueueMessage} msg - message object
    */
   messageArrived(msg) {

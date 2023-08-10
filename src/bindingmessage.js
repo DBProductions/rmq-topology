@@ -3,6 +3,7 @@ import BaseMessage from './basemessage'
 class BindingMessage extends BaseMessage {
   /**
    * Message object between exchange and queue.
+   *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
    * @param {Binding} binding - Binding object

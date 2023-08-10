@@ -3,6 +3,7 @@ import BaseComponent from './basecomponent'
 class Binding extends BaseComponent {
   /**
    * Binging class represents the binding between an exchange and a queue.
+   *
    * @param {object} source
    * @param {object} destination
    * @param {string} routingKey - used routing key
@@ -34,6 +35,7 @@ class Binding extends BaseComponent {
 
   /**
    * http://phrogz.net/tmp/canvas_rotated_text.html
+   *
    * @param {string} text - text to draw as label
    */
   drawLabel(text) {

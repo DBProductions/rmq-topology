@@ -1,6 +1,7 @@
 class Timer {
   /**
    * Timer for a specific target to call update and render methods on every tick.
+   *
    * @param {object} target
    */
   constructor(target) {

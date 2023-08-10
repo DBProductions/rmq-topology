@@ -3,6 +3,7 @@ import BaseMessage from './basemessage'
 class QueueMessage extends BaseMessage {
   /**
    * Message object between queue and consumer.
+   *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
    * @param {Queue} queue - Queue object
@@ -21,6 +22,8 @@ class QueueMessage extends BaseMessage {
   }
 
   /**
+   * Sets the consumer with coordinates.
+   *
    * @param {Consumer} consumer - Consumer object
    */
   setConsumer(consumer) {

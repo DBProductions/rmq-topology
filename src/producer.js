@@ -4,6 +4,7 @@ import ExchangeMessage from './exchangemessage'
 class Producer extends BaseComponent {
   /**
    * Producer class represents a component that publish against exchanges.
+   *
    * @param {number} x - x position of the producer
    * @param {number} y - y position of the producer
    * @param {string} name - optional identifier
@@ -33,6 +34,7 @@ class Producer extends BaseComponent {
 
   /**
    * Adds the exchange to the list when not already present.
+   *
    * @param {Exchange} exchange - Exchange object
    */
   addExchange(exchange) {
@@ -44,6 +46,7 @@ class Producer extends BaseComponent {
 
   /**
    * Removes the exchange from the list.
+   *
    * @param {Exchange} exchange - Exchange object
    */
   removeExchange(exchange) {
@@ -59,6 +62,7 @@ class Producer extends BaseComponent {
 
   /**
    * Determines at which time a new message should be created and be published.
+   *
    * @param {number} dt - delta time from the timer
    */
   update(dt) {
@@ -82,6 +86,7 @@ class Producer extends BaseComponent {
 
   /**
    * Render the producer and lines to every exchange from the list.
+   *
    */
   render() {
     this.ctx.setLineDash([])

@@ -5,6 +5,7 @@ import QueueMessage from './queuemessage'
 class Queue extends BaseComponent {
   /**
    * Queue class represents a component which keeps the messages until they are consumed.
+   *
    * @param {number} x - x position of the queue
    * @param {number} y - y position of the queue
    * @param {string} name - optional identifier
@@ -28,6 +29,7 @@ class Queue extends BaseComponent {
 
   /**
    * Adds a consumer to the queue.
+   *
    * @param {Consumer} consumer - Consumer object
    */
   addConsumer(consumer) {
@@ -45,6 +47,7 @@ class Queue extends BaseComponent {
 
   /**
    * Removes a consumer from the queue.
+   *
    * @param {Consumer} consumer - Consumer object
    */
   removeConsumer(consumer) {
@@ -60,6 +63,7 @@ class Queue extends BaseComponent {
 
   /**
    * Handler for arriving messages.
+   *
    * @param {QueueMessage} msg - QueueMessage object
    */
   messageArrived(msg) {
@@ -144,19 +148,6 @@ class Queue extends BaseComponent {
   }
 
   render() {
-    /*
-        const gradient = this.ctx.createRadialGradient(
-            this.x,
-            this.y,
-            1,
-            this.x,
-            this.y,
-            this.radius,
-        );
-        gradient.addColorStop(0, 'white');
-        gradient.addColorStop(1, 'darkgray');
-        */
-
     // shadow
     this.ctx.globalAlpha = 0.4
     this.ctx.beginPath()

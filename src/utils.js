@@ -9,7 +9,7 @@ import Timer from './timer'
 /**
  * Gets the settings from loacalStorage and parse it as JSON.
  *
- * @returns {object}
+ * @returns {object} settings - settings as JSON from localStorage.
  */
 const getSettings = () => {
   const data = localStorage.getItem('rmqSettings')
@@ -833,6 +833,8 @@ const displayBinding = (binding) => {
 }
 
 /**
+ * Sends the form to create or edit an binding component.
+ *
  * @param {object} e - Event object
  */
 const sendBindingForm = (e) => {
@@ -872,6 +874,7 @@ const sendBindingForm = (e) => {
 
 /**
  * Reset form values and remove CSS class from the binding panel.
+ *
  * @param {object} e - Event object
  */
 const hideBinding = (e) => {
@@ -900,6 +903,7 @@ const deleteBindingForm = (e) => {
 
 /**
  * Display the form to edit settings.
+ *
  * @param {Binding} binding - Binding object
  */
 const displaySettings = () => {
@@ -921,6 +925,8 @@ const displaySettings = () => {
 }
 
 /**
+ * Sends the form to set settings.
+ *
  * @param {object} e - Event object
  */
 const sendSettingsForm = (e) => {
@@ -951,6 +957,7 @@ const sendSettingsForm = (e) => {
 
 /**
  * Reset form values and remove CSS class from the settings panel.
+ *
  * @param {object} e - Event object
  */
 const hideSettings = (e) => {

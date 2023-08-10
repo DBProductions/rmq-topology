@@ -3,6 +3,7 @@ import Base from './base'
 class BaseMessage extends Base {
   /**
    * Base message class for other messages.
+   *
    * @param {number} x - x position
    * @param {number} y - y position
    * @param {integer} radius - radius of the circle

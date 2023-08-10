@@ -3,6 +3,7 @@ import BaseMessage from './basemessage'
 class ExchangeMessage extends BaseMessage {
   /**
    * Message object between producer and exchange.
+   *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
    * @param {Exchange} exchange - Exchange object

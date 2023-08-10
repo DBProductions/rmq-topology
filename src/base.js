@@ -1,6 +1,7 @@
 class Base {
   /**
    * Base class for other components.
+   *
    * @param {number} x - x position
    * @param {number} y - y position
    */
@@ -11,6 +12,7 @@ class Base {
 
   /**
    * Add object to scene.
+   *
    * @param {Scene} scene - scene on canvas
    * @returns {object} this
    */
