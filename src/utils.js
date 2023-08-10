@@ -8,7 +8,7 @@ import Timer from './timer'
 
 /**
  * Gets the settings from loacalStorage and parse it as JSON.
- * 
+ *
  * @returns {object}
  */
 const getSettings = () => {
@@ -18,7 +18,7 @@ const getSettings = () => {
 
 /**
  * Sets the current settings in localStorage.
- * 
+ *
  * @param {object} settings - settings as JSON to set in localStorage.
  */
 const setSettings = (settings) => {
@@ -27,31 +27,33 @@ const setSettings = (settings) => {
 
 /**
  * Hide and show tab links and the content for it.
- * 
- * @param {Object} Event 
+ *
+ * @param {Object} Event
  */
 const changeSettingsTab = (e) => {
-  e.preventDefault();
+  e.preventDefault()
   try {
     const link = document.querySelector(`#settingsTabHref${e.target.innerHTML}`)
     if (link) {
       const tabLinks = document.querySelector('#settingsTabs')
       const liList = tabLinks.getElementsByTagName('li')
-      for(let i in liList){
+      for (let i in liList) {
         if (liList[i].classList) {
           liList[i].classList.remove('selected')
         }
       }
 
       const tabContent = document.querySelectorAll('#tabContainer > div')
-      for(let d in tabContent){
+      for (let d in tabContent) {
         if (tabContent[d].classList) {
           tabContent[d].classList.add('tab-hidden')
         }
-      }    
+      }
 
       link.classList.add('selected')
-      document.querySelector(`#settingsTab${e.target.innerHTML}`).classList.remove('tab-hidden')
+      document
+        .querySelector(`#settingsTab${e.target.innerHTML}`)
+        .classList.remove('tab-hidden')
     }
   } catch (err) {
     return
@@ -82,6 +84,8 @@ const linepointNearestMouse = (line, x, y) => {
 
 /**
  * Creates the topology shown on the canvas.
+ * A new scene with timer plus the parts defined in the configuration.
+ *
  * @param {object} ctx - canvas context
  * @param {object} conf - configuration as JSON
  */
@@ -166,7 +170,8 @@ const createTopology = (ctx, conf) => {
 }
 
 /**
- * Adds the CSS class to the selected one and remove it from the other ones.
+ * Adds the CSS class to the selected one and remove it from all other ones.
+ *
  * @param {string} form
  */
 const displayForm = (form) => {
@@ -185,6 +190,7 @@ const displayForm = (form) => {
 
 /**
  * Display the form to create or edit a producer component.
+ *
  * @param {Producer} producer - Producer object
  */
 const displayProducer = (producer) => {
@@ -197,6 +203,8 @@ const displayProducer = (producer) => {
   document.querySelector('#producerPublishTo').innerHTML = ''
 
   const exchanges = window.scene.getObjectsInScene('Exchange')
+  refreshPublishToSelect(producer, exchanges)
+  /*
   const selectSource = document.getElementById('producerPublishToSelect')
   selectSource.options.length = 0
   selectSource.options[selectSource.options.length] = new Option('---', 0)
@@ -218,6 +226,7 @@ const displayProducer = (producer) => {
       )
     }
   })
+  */
 
   if (producer) {
     document.querySelector('#deleteProducerForm').classList.remove('hidden')
@@ -239,13 +248,44 @@ const displayProducer = (producer) => {
         e.preventDefault()
         e.stopPropagation()
         e.target.parentNode.parentNode.remove()
+        console.log('here')
+        refreshPublishToSelect(producer, exchanges)
       })
     })
   }
 }
 
 /**
+ *
+ *
+ */
+const refreshPublishToSelect = (producer, exchanges) => {
+  const selectSource = document.getElementById('producerPublishToSelect')
+  selectSource.options.length = 0
+  selectSource.options[selectSource.options.length] = new Option('---', 0)
+  Object.keys(exchanges).forEach((exchange) => {
+    if (producer && producer.exchanges) {
+      const presentExchanges = producer.exchanges.findIndex(
+        (s) => s.id === exchanges[exchange].id
+      )
+      if (presentExchanges === -1) {
+        selectSource.options[selectSource.options.length] = new Option(
+          exchanges[exchange].name,
+          exchanges[exchange].id
+        )
+      }
+    } else {
+      selectSource.options[selectSource.options.length] = new Option(
+        exchanges[exchange].name,
+        exchanges[exchange].id
+      )
+    }
+  })
+}
+
+/**
  * Sends the form to create or edit a producer component.
+ *
  * @param {object} e - Event object
  */
 const sendProducerForm = (e) => {
@@ -299,6 +339,7 @@ const sendProducerForm = (e) => {
 
 /**
  * Reset form values and remove CSS class from the producer panel.
+ *
  * @param {object} e - Event object
  */
 const hideProducer = (e) => {
@@ -312,6 +353,7 @@ const hideProducer = (e) => {
 
 /**
  * Remove producer from the scene, render and remove CSS class from the producer panel.
+ *
  * @param {object} e - Event object
  */
 const deleteProducerForm = (e) => {
@@ -326,6 +368,7 @@ const deleteProducerForm = (e) => {
 
 /**
  * Display the form to create or edit consumer component.
+ *
  * @param {Consumer} consumer - Consumer object
  */
 const displayConsumer = (consumer) => {
@@ -393,6 +436,7 @@ const displayConsumer = (consumer) => {
 
 /**
  * Reset form values and remove CSS class from the consumer panel.
+ *
  * @param {object} e - Event object
  */
 const hideConsumer = (e) => {
@@ -467,6 +511,7 @@ const sendConsumerForm = (e) => {
 
 /**
  * Remove consumer from the scene, render and remove CSS class from the consumer panel.
+ *
  * @param {object} e - Event object
  */
 const deleteConsumerForm = (e) => {
@@ -486,6 +531,7 @@ const deleteConsumerForm = (e) => {
 
 /**
  * Display the form to create or edit exchange component.
+ *
  * @param {Exchange} exchange - Exchange object
  */
 const displayExchange = (exchange) => {
@@ -506,6 +552,7 @@ const displayExchange = (exchange) => {
 
 /**
  * Sends the form to create or edit an exchange component.
+ *
  * @param {object} e - Event object
  */
 const sendExchangeForm = (e) => {
@@ -555,6 +602,7 @@ const sendExchangeForm = (e) => {
 
 /**
  * Reset form values and remove CSS class from the exchange panel.
+ *
  * @param {object} e - Event object
  */
 const hideExchange = (e) => {
@@ -568,6 +616,7 @@ const hideExchange = (e) => {
 
 /**
  * Remove exchange from the scene, render and remove CSS class from the exchange panel.
+ *
  * @param {object} e - Event object
  */
 const deleteExchangeForm = (e) => {
@@ -582,6 +631,7 @@ const deleteExchangeForm = (e) => {
 
 /**
  * Display the form to create or edit queue component.
+ *
  * @param {Queue} queue - Queue object
  */
 const displayQueue = (queue) => {
@@ -631,6 +681,7 @@ const displayQueue = (queue) => {
 }
 
 /**
+ * Sends the form to create or edit an queue component.
  *
  * @param {object} e - Event object
  */
@@ -681,6 +732,7 @@ const sendQueueForm = (e) => {
 
 /**
  * Reset form values and remove CSS class from the queue panel.
+ *
  * @param {object} e - Event object
  */
 const hideQueue = (e) => {
@@ -694,6 +746,8 @@ const hideQueue = (e) => {
 }
 
 /**
+ * Removes queue from the scene, render and remove CSS class from the queue panel.
+ *
  * @param {object} e - Event object
  */
 const deleteQueueForm = (e) => {
@@ -719,6 +773,7 @@ const deleteQueueForm = (e) => {
 
 /**
  * Display the form to create or edit binding component.
+ *
  * @param {Binding} binding - Binding object
  */
 const displayBinding = (binding) => {
@@ -853,11 +908,15 @@ const displaySettings = () => {
   const settings = getSettings()
   if (settings) {
     document.querySelector('#settingsHost').value = settings.host
+    document.querySelector('#settingsPort').value = settings.port
+    document.querySelector('#settingsManagement').value = settings.management
     document.querySelector('#settingsVHost').value = settings.vhost
     document.querySelector('#settingsUsername').value = settings.username
     document.querySelector('#settingsPassword').value = settings.password
-    document.querySelector('#settingsAsyncApiTitle').value = settings.asyncapi.title
-    document.querySelector('#settingsAsyncApiDescription').value = settings.asyncapi.description
+    document.querySelector('#settingsAsyncApiTitle').value =
+      settings.asyncapi.title
+    document.querySelector('#settingsAsyncApiDescription').value =
+      settings.asyncapi.description
   }
 }
 
@@ -875,16 +934,19 @@ const sendSettingsForm = (e) => {
   } else {
     setSettings({
       host,
+      port: document.querySelector('#settingsPort').value,
+      management: document.querySelector('#settingsManagement').value,
       vhost: document.querySelector('#settingsVHost').value,
       username: document.querySelector('#settingsUsername').value,
       password: document.querySelector('#settingsPassword').value,
       asyncapi: {
         title: document.querySelector('#settingsAsyncApiTitle').value,
-        description: document.querySelector('#settingsAsyncApiDescription').value
+        description: document.querySelector('#settingsAsyncApiDescription')
+          .value
       }
     })
     hideSettings(e)
-  }  
+  }
 }
 
 /**
@@ -895,6 +957,8 @@ const hideSettings = (e) => {
   e.preventDefault()
   e.stopPropagation()
   document.querySelector('#settingsHost').value = ''
+  document.querySelector('#settingsPort').value = ''
+  document.querySelector('#settingsManagement').value = ''
   document.querySelector('#settingsVHost').value = ''
   document.querySelector('#settingsUsername').value = ''
   document.querySelector('#settingsPassword').value = ''

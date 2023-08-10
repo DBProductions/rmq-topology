@@ -16,7 +16,9 @@ import { Examples } from './examples'
 import {} from './listener'
 
 const brokerDefaultSettings = {
-  host: 'http://localhost:15672',
+  host: 'localhost',
+  port: 5672,
+  management: `http://localhost:15672/api`,
   vhost: '%2f',
   username: 'guest',
   password: 'guest',
@@ -461,14 +463,14 @@ generateCurlBtn.addEventListener('click', (e) => {
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
-  const { host } = brokerSettings
+  const { management } = brokerSettings
   const { username } = brokerSettings
   const { password } = brokerSettings
   const { vhost } = brokerSettings
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = encodeURIComponent(val.name)
-    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${host}/api/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}'\n\n`
+    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}'\n\n`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
@@ -483,7 +485,7 @@ generateCurlBtn.addEventListener('click', (e) => {
     if (val.maxLength) {
       args['x-max-length'] = val.maxLength
     }
-    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${host}/api/queues/${vhost}/${name} -d '{"auto_delete": false, "durable": true, "arguments": ${JSON.stringify(
+    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/queues/${vhost}/${name} -d '{"auto_delete": false, "durable": true, "arguments": ${JSON.stringify(
       args
     )}}'\n\n`
   })
@@ -494,7 +496,7 @@ generateCurlBtn.addEventListener('click', (e) => {
     if (exchangeIndex !== -1 && queueIndex !== -1) {
       const exchange = exchanges[exchangeIndex]
       const queue = queues[queueIndex]
-      generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${host}/api/bindings/e/${encodeURIComponent(
+      generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/bindings/e/${encodeURIComponent(
         exchange.name
       )}/q/${encodeURIComponent(queue.name)} -d '{"routing_key": ${
         val.routingKey
@@ -512,11 +514,11 @@ generateRmqBtn.addEventListener('click', (e) => {
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
-  const { host } = brokerSettings
+  const { management } = brokerSettings
   const { username } = brokerSettings
   const { password } = brokerSettings
+  const url = new URL(management)
   let { vhost } = brokerSettings
-  const url = new URL(host)
   if (vhost === '%2f') {
     vhost = '/'
   }
@@ -563,9 +565,10 @@ generateTfBtn.addEventListener('click', (e) => {
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
-  const { host } = brokerSettings
+  const { management } = brokerSettings
   const { username } = brokerSettings
   const { password } = brokerSettings
+  const url = new URL(management)
   let { vhost } = brokerSettings
   if (vhost === '%2f') {
     vhost = '/'
@@ -579,7 +582,7 @@ generateTfBtn.addEventListener('click', (e) => {
   }
 }
 provider "rabbitmq" {
-  endpoint = "${host}"
+  endpoint = "${url.origin}"
   username = "${username}"
   password = "${password}"
 }
@@ -666,13 +669,15 @@ const generateAsyncApiBtn = document.querySelector('#generateAsyncApi')
 generateAsyncApiBtn.addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
-  console.log('go')
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
   const { host } = brokerSettings
-  const { vhost } = brokerSettings
   const { title, description } = brokerSettings.asyncapi
+  let { vhost } = brokerSettings
+  if (vhost === '%2f') {
+    vhost = '/'
+  }
 
   generatedString += `asyncapi: 2.6.0
 info:
@@ -697,15 +702,14 @@ servers:
       - name: "env:production"
         description: "This environment is the live environment available for final users"
 channels:
-  `;
+  `
 
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
-
     if (val.type === 'topic') {
-        val.bindings.forEach((v) => {
-          if (v.routingKey !== '#') {
-            generatedString += `${val.name.replaceAll(' ', '_')}/${v.routingKey}:
+      val.bindings.forEach((v) => {
+        if (v.routingKey !== '#') {
+          generatedString += `${val.name.replaceAll(' ', '_')}/${v.routingKey}:
       subscribe:
         message:
           $ref: '#/components/messages/Event'
@@ -728,8 +732,8 @@ channels:
             exclusive: true
             autoDelete: false
   `
-          }
-        })
+        }
+      })
     } else {
       generatedString += `  ${val.name.replaceAll(' ', '_')}:
       subscribe:
@@ -747,7 +751,6 @@ channels:
             durable: true
             autoDelete: false
             vhost: ${vhost}
-          routingKey: x.y.z
           queue:
             name: Test
             durable: true
@@ -757,7 +760,7 @@ channels:
     }
   })
   // remove two to start again
-  generatedString = generatedString.slice(0, -2);
+  generatedString = generatedString.slice(0, -2)
   generatedString += `components:
     messages:
       Event:

@@ -6,19 +6,24 @@ describe('UI Component', () => {
   it('Settings', () => {
     cy.get('#settings').click()
 
-    cy.get('#settingsHost') 
-      .should('have.value', 'http://localhost:15672')
+    cy.get('#settingsHost').should('have.value', 'localhost')
 
-    cy.get('#settingsVHost') 
-      .should('have.value', '%2f')
+    cy.get('#settingsPort').should('have.value', '5672')
 
-    cy.get('#settingsUsername') 
-      .should('have.value', 'guest')
+    cy.get('#settingsManagement').should(
+      'have.value',
+      'http://localhost:15672/api'
+    )
 
-    cy.get('#settingsPassword') 
-      .should('have.value', 'guest')
+    cy.get('#settingsVHost').should('have.value', '%2f')
 
-    cy.get('#settingsHost').clear().type('https://localhost:15672')
+    cy.get('#settingsUsername').should('have.value', 'guest')
+
+    cy.get('#settingsPassword').should('have.value', 'guest')
+
+    cy.get('#settingsHost').clear().type('127.0.0.1')
+    cy.get('#settingsPort').clear().type('5671')
+    cy.get('#settingsManagement').clear().type('https://localhost:15672/api')
     cy.get('#settingsVHost').clear().type('/user')
     cy.get('#settingsUsername').clear().type('rabbit')
     cy.get('#settingsPassword').clear().type('rabbit')
@@ -29,17 +34,20 @@ describe('UI Component', () => {
 
     cy.get('#settings').click()
 
-    cy.get('#settingsHost') 
-      .should('have.value', 'https://localhost:15672')
+    cy.get('#settingsHost').should('have.value', '127.0.0.1')
 
-    cy.get('#settingsVHost') 
-      .should('have.value', '/user')
+    cy.get('#settingsPort').should('have.value', '5671')
 
-    cy.get('#settingsUsername') 
-      .should('have.value', 'rabbit')
+    cy.get('#settingsManagement').should(
+      'have.value',
+      'https://localhost:15672/api'
+    )
 
-    cy.get('#settingsPassword') 
-      .should('have.value', 'rabbit')
+    cy.get('#settingsVHost').should('have.value', '/user')
+
+    cy.get('#settingsUsername').should('have.value', 'rabbit')
+
+    cy.get('#settingsPassword').should('have.value', 'rabbit')
   })
 
   it('Export definition', () => {
