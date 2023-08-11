@@ -43,10 +43,11 @@ class Exchange extends BaseComponent {
    */
   messageArrived(msg) {
     const { routingKey, fillStyle } = msg
+    let count = false
     let sendMsg = false
     this.bindings.forEach((val) => {
       if (this.type === 'topic') {
-        // more specific to handle * or #
+        // TODO: more specific to handle * or #
         if (val.routingKey === routingKey || val.routingKey === '#') {
           new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
             this.scene
@@ -60,12 +61,7 @@ class Exchange extends BaseComponent {
           )
           sendMsg = true
         }
-        if (!routingKey) {
-          new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-            this.scene
-          )
-          sendMsg = true
-        }
+        // fanout
       } else {
         new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
           this.scene
@@ -73,12 +69,13 @@ class Exchange extends BaseComponent {
         sendMsg = true
       }
     })
-    // not routed, message is lost
+    // no bindings, message is lost
     if (this.bindings.length === 0) {
       this.scene.lostMessages += 1
+      count = true
     }
     // message not send, then it's lost
-    if (!sendMsg) {
+    if (!sendMsg && !count) {
       this.scene.lostMessages += 1
     }
     this.scene.removeActor(msg)
