@@ -278,7 +278,8 @@ const Examples = {
         x: 650,
         y: 100,
         name: 'Queue 1',
-        dlx: 1
+        dlx: 1,
+        dlxrk: 'Queue 2'
       },
       { x: 650, y: 200, name: 'Queue 2' }
     ],
@@ -327,7 +328,8 @@ const Examples = {
         x: 650,
         y: 100,
         name: 'Queue 1',
-        dlx: 1
+        dlx: 1,
+        dlxrk: 'Queue 2'
       },
       {
         x: 400,

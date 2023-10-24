@@ -478,6 +478,7 @@ generateCurlBtn.addEventListener('click', (e) => {
     const args = {}
     if (val.dlx) {
       args['x-dead-letter-exchange'] = val.dlx.name
+      args['x-dead-letter-routing-key'] = val.dlxrk
     }
     if (val.msgTtl) {
       args['x-message-ttl'] = val.msgTtl
@@ -531,6 +532,7 @@ generateRmqBtn.addEventListener('click', (e) => {
     const args = {}
     if (val.dlx) {
       args['x-dead-letter-exchange'] = val.dlx.name
+      args['x-dead-letter-routing-key'] = val.dlxrk
     }
     if (val.msgTtl) {
       args['x-message-ttl'] = val.msgTtl
@@ -615,6 +617,7 @@ resource "rabbitmq_vhost" "vhost" {
       const extra = []
       if (val.dlx) {
         extra.push(`"x-dead-letter-exchange": "${val.dlx.name}"`)
+        extra.push(`"x-dead-letter-routing-key": "${val.dlxrk}"`)
       }
       if (val.msgTtl) {
         extra.push(`"x-message-ttl": ${val.msgTtl}`)
@@ -769,6 +772,9 @@ channels:
         summary: Summary of the event.
         description: Event description
         contentType: application/json
+        tags:
+          - name: message
+          - name: example
         headers:
           type: object
           properties:

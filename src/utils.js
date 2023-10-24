@@ -119,6 +119,7 @@ const createTopology = (ctx, conf) => {
         queue.name,
         queue.ttl,
         exchanges[queue.dlx],
+        queue.dlxrk,
         queue.maxLength
       )
       newQueue.addToScene(window.scene)
@@ -248,7 +249,6 @@ const displayProducer = (producer) => {
         e.preventDefault()
         e.stopPropagation()
         e.target.parentNode.parentNode.remove()
-        console.log('here')
         refreshPublishToSelect(producer, exchanges)
       })
     })
@@ -645,6 +645,7 @@ const displayQueue = (queue) => {
   document.querySelector('#queueMaxLengthField').value = ''
 
   let dlx = { id: null }
+  //let dlxrk = ''
   if (queue) {
     document.querySelector('#deleteQueueForm').classList.remove('hidden')
     document.querySelector('#queueIdField').value = queue.id
@@ -653,6 +654,8 @@ const displayQueue = (queue) => {
     document.querySelector('#queueMaxLengthField').value = queue.maxLength
     if (queue.dlx) {
       dlx = queue.dlx
+      //dlxrk = queue.dlxrk
+      document.querySelector('#queueDlRoutingKey').value = queue.dlxrk
     }
   }
 
@@ -693,6 +696,7 @@ const sendQueueForm = (e) => {
   const name = document.querySelector('#queueNameField').value
   const msgTtl = document.querySelector('#queueMsgTtlField').value
   const dlx = document.querySelector('#queueDlxSelect').value
+  const dlxrk = document.querySelector('#queueDlRoutingKey').value
   const maxLength = document.querySelector('#queueMaxLengthField').value
   let error = false
 
@@ -705,6 +709,7 @@ const sendQueueForm = (e) => {
     queue.msgTtl = msgTtl
     queue.maxLength = maxLength
     queue.dlx = window.scene.getIdInScene(dlx)
+    queue.dlxrk = dlxrk
   } else {
     const queues = window.scene.getObjectsInScene('Queue')
     const queueIndex = queues.findIndex((q) => q.name === name)
@@ -713,6 +718,7 @@ const sendQueueForm = (e) => {
       Queue1.addToScene(window.scene)
       Queue1.msgTtl = msgTtl
       Queue1.dlx = window.scene.getIdInScene(dlx)
+      Queue1.dlxrk = dlxrk
     } else {
       error = `Queue with name '${name}' already exists.`
       document.querySelector('#queueErr').innerHTML = error

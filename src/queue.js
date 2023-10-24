@@ -14,11 +14,12 @@ class Queue extends BaseComponent {
    * @param {number} maxLength - `x-max-length` argument of the queue
    * @extends BaseComponent
    */
-  constructor(x, y, name, ttl, dlx, maxLength) {
+  constructor(x, y, name, ttl, dlx, dlxrk, maxLength) {
     super(x, y)
     this.name = name
     this.msgTtl = ttl || ''
     this.dlx = dlx
+    this.dlxrk = dlxrk || ''
     this.maxLength = maxLength || ''
     this.radius = 20
     this.binding = null
@@ -74,7 +75,7 @@ class Queue extends BaseComponent {
           this.x,
           this.y,
           this.dlx,
-          this.routingKey,
+          this.dlxrk,
           true,
           undefined,
           fillStyle
