@@ -1,23 +1,34 @@
 import {
-  sendProducerForm,
-  hideProducer,
-  deleteProducerForm,
-  sendConsumerForm,
-  hideConsumer,
-  deleteConsumerForm,
-  sendExchangeForm,
-  hideExchange,
-  deleteExchangeForm,
-  sendQueueForm,
-  hideQueue,
-  deleteQueueForm,
-  sendBindingForm,
-  hideBinding,
-  deleteBindingForm,
   sendSettingsForm,
   hideSettings,
   changeSettingsTab
-} from './utils'
+} from './utils/settings'
+
+import {
+  sendProducerForm,
+  hideProducer,
+  deleteProducerForm
+} from './utils/producer'
+
+import {
+  sendConsumerForm,
+  hideConsumer,
+  deleteConsumerForm
+} from './utils/consumer'
+
+import {
+  sendExchangeForm,
+  hideExchange,
+  deleteExchangeForm
+} from './utils/exchange'
+
+import { sendQueueForm, hideQueue, deleteQueueForm } from './utils/queue'
+
+import {
+  sendBindingForm,
+  hideBinding,
+  deleteBindingForm
+} from './utils/binding'
 
 // --- Producer ---
 document
