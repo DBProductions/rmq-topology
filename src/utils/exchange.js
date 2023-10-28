@@ -95,9 +95,9 @@ const hideExchange = (e) => {
 const deleteExchangeForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const id = document.querySelector('#exchangeIdField').value
-  const actor = window.scene.getIdInScene(id)
-  window.scene.removeActor(actor)
+  window.scene.removeActor(
+    window.scene.getIdInScene(document.querySelector('#exchangeIdField').value)
+  )
   window.scene.renderOnce()
   document.querySelector('#exchangePanel').classList.remove('panel-wrap-out')
 }

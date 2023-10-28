@@ -153,13 +153,13 @@ const sendConsumerForm = (e) => {
 const deleteConsumerForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const id = document.querySelector('#consumerIdField').value
-  const consumer = window.scene.getIdInScene(id)
+  const consumer = window.scene.getIdInScene(
+    document.querySelector('#consumerIdField').value
+  )
   consumer.queues.forEach((rmQueue) => {
     const actor = window.scene.getIdInScene(rmQueue.id)
     actor.removeConsumer(consumer)
   })
-
   window.scene.removeActor(consumer)
   window.scene.renderOnce()
   document.querySelector('#consumerPanel').classList.remove('panel-wrap-out')

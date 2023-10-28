@@ -135,9 +135,9 @@ const hideQueue = (e) => {
 const deleteQueueForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const id = document.querySelector('#queueIdField').value
-  const actor = window.scene.getIdInScene(id)
-
+  const actor = window.scene.getIdInScene(
+    document.querySelector('#queueIdField').value
+  )
   actor.consumers.forEach((consumer) => {
     consumer.removeQueue(actor)
   })
@@ -147,7 +147,6 @@ const deleteQueueForm = (e) => {
       window.scene.removeActor(binding)
     })
   }
-
   window.scene.removeActor(actor)
   window.scene.renderOnce()
   document.querySelector('#queuePanel').classList.remove('panel-wrap-out')

@@ -154,9 +154,9 @@ const hideProducer = (e) => {
 const deleteProducerForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const id = document.querySelector('#producerIdField').value
-  const actor = window.scene.getIdInScene(id)
-  window.scene.removeActor(actor)
+  window.scene.removeActor(
+    window.scene.getIdInScene(document.querySelector('#producerIdField').value)
+  )
   window.scene.renderOnce()
   document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
 }

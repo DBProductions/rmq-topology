@@ -1,3 +1,4 @@
+import { displayForm } from './common'
 import { getSettings } from './settings'
 
 /**
@@ -8,6 +9,7 @@ import { getSettings } from './settings'
 const exportCurl = (e) => {
   e.preventDefault()
   e.stopPropagation()
+  displayForm('imexportForm')
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
@@ -64,6 +66,7 @@ const exportCurl = (e) => {
 const exportRabbitmqadmin = (e) => {
   e.preventDefault()
   e.stopPropagation()
+  displayForm('imexportForm')
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
@@ -120,6 +123,7 @@ const exportRabbitmqadmin = (e) => {
 const exportTerraform = (e) => {
   e.preventDefault()
   e.stopPropagation()
+  displayForm('imexportForm')
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()
@@ -232,6 +236,7 @@ const exportTerraform = (e) => {
 const exportAsyncApi = (e) => {
   e.preventDefault()
   e.stopPropagation()
+  displayForm('imexportForm')
   document.querySelector('#importBtn').classList.add('hidden')
   let generatedString = ''
   const brokerSettings = getSettings()

@@ -352,6 +352,7 @@ const settingsBtn = document.querySelector('#settings')
 settingsBtn.addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
+  displayForm('settingsForm')
   displaySettings()
 })
 

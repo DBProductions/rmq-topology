@@ -127,8 +127,9 @@ const hideBinding = (e) => {
 const deleteBindingForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const id = document.querySelector('#bindingIdField').value
-  const actor = window.scene.getIdInScene(id)
+  const actor = window.scene.getIdInScene(
+    document.querySelector('#bindingIdField').value
+  )
   actor.source.removeBinding(actor)
   window.scene.removeActor(actor)
   window.scene.renderOnce()
