@@ -114,7 +114,7 @@ class Queue extends BaseComponent {
             this.x,
             this.y,
             this.dlx,
-            this.routingKey,
+            this.dlxrk,
             fillStyle
           ).addToScene(this.scene)
         }
@@ -134,12 +134,9 @@ class Queue extends BaseComponent {
       })
       msgToRemove.forEach((val) => {
         if (this.dlx) {
-          new ExchangeMessage(
-            this.x,
-            this.y,
-            this.dlx,
-            this.routingKey
-          ).addToScene(this.scene)
+          new ExchangeMessage(this.x, this.y, this.dlx, this.dlxrk).addToScene(
+            this.scene
+          )
         } else {
           this.scene.lostMessages += 1
         }

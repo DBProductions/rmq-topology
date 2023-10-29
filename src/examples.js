@@ -222,6 +222,7 @@ const Examples = {
         y: 80,
         name: 'Queue 1',
         dlx: 1,
+        dlxrk: 'Queue 2',
         maxLength: 5
       },
       { x: 650, y: 170, name: 'Queue 2' }
@@ -336,6 +337,7 @@ const Examples = {
         y: 300,
         name: 'Queue 2',
         dlx: 0,
+        dlxrk: 'Queue 1',
         ttl: 3000
       }
     ],
