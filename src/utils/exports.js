@@ -246,123 +246,145 @@ const exportAsyncApi = (e) => {
   if (vhost === '%2f') {
     vhost = '/'
   }
-
-  generatedString += `asyncapi: 2.6.0
-  info:
-    title: ${title}
-    description: ${description}
-    termsOfService: https://asyncapi.org/terms/
-    contact:
-      name: API Support
-      url: https://www.asyncapi.org/support
-      email: support@asyncapi.org
-    license:
-      name: Apache 2.0
-      url: https://www.apache.org/licenses/LICENSE-2.0.htm
-    version: 0.1.0
-  servers:
-    production:
-      url: ${host}
-      protocol: amqps
-      protocolVersion: 0.9.1
-      description: Production broker.
-      tags:
-        - name: "env:production"
-          description: "This environment is the live environment available for final users"
-  channels:
-    `
-
   const exchanges = window.scene.getObjectsInScene('Exchange')
+  const queues = window.scene.getObjectsInScene('Queue')
+
+  generatedString += `asyncapi: 3.0.0
+info:
+  title: ${title}
+  description: ${description}
+  termsOfService: https://asyncapi.org/terms/
+  contact:
+    name: API Support
+    url: https://www.asyncapi.org/support
+    email: support@asyncapi.org
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.htm
+  version: 0.1.0
+servers:
+  production:
+    host: ${host}
+    protocol: amqps
+    protocolVersion: 0.9.1
+    description: Production broker.
+    tags:
+      - name: "env:production"
+        description: "This environment is the live environment available for final users"
+channels:
+`  
   exchanges.forEach((val) => {
     if (val.type === 'topic') {
       val.bindings.forEach((v) => {
         if (v.routingKey !== '#') {
-          generatedString += `${val.name.replaceAll(' ', '_')}/${v.routingKey}:
-        subscribe:
-          message:
-            $ref: '#/components/messages/Event'
-        publish:
-          description: Exchange
-          message:
-            $ref: '#/components/messages/Event'
-        bindings:
-          amqp:
-            exchange:
-              name: ${v.source.name}
-              type: topic
-              durable: true
-              autoDelete: false
-              vhost: ${vhost}
-            routingKey: ${v.routingKey}
-            queue:
-              name: ${v.destination.name}
-              durable: true
-              exclusive: true
-              autoDelete: false
-    `
+          generatedString += `  ${val.name.replaceAll(' ', '_')}/${v.routingKey}:
+    address: '${v.routingKey}'
+    messages:
+      event:
+        $ref: '#/components/messages/Event'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: ${v.source.name}
+          type: 'topic'
+          durable: true
+          autoDelete: false
+          vhost: ${vhost}
+`
         }
       })
     } else {
       generatedString += `  ${val.name.replaceAll(' ', '_')}:
-        subscribe:
-          message:
-            $ref: '#/components/messages/Event'
-        publish:
-          description: Exchange
-          message:
-            $ref: '#/components/messages/Event'
-        bindings:
-          amqp:
-            exchange:
-              name: ${val.name}
-              type: ${val.type}
-              durable: true
-              autoDelete: false
-              vhost: ${vhost}
-            queue:
-              name: Test
-              durable: true
-              exclusive: true
-              autoDelete: false
-    `
+    messages:
+      event:
+        $ref: '#/components/messages/Event'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: ${val.name}
+          type: '${val.type}'
+          durable: true
+          autoDelete: false
+          vhost: ${vhost}
+`
     }
   })
+
+  queues.forEach((val) => {
+    generatedString += `  ${val.name.replaceAll(' ', '_')}:
+    messages:
+      event:
+        $ref: '#/components/messages/Event'
+    bindings:
+      amqp:
+        is: queue
+        queue:
+          name: ${val.name}
+          durable: true
+          exclusive: true
+          autoDelete: false
+`
+  })
+  
+  generatedString += `operations:`
+  exchanges.forEach((val) => {
+    console.log(val)
+    //val.bindings.forEach((v) => {
+    generatedString += `
+  send${val.name}:
+    channel:
+      $ref: '#/channels/${val.name.replaceAll(' ', '_')}'
+    action: send`
+    //})
+  })
+
+  queues.forEach((val) => {
+    generatedString += `
+  receive${val.name.replaceAll(' ', '_')}:
+    channel:
+      $ref: '#/channels/${val.name.replaceAll(' ', '_')}'
+    action: receive`
+  })  
+
   // remove two to start again
-  generatedString = generatedString.slice(0, -2)
-  generatedString += `components:
-      messages:
-        Event:
-          name: EventName
-          title: Event Title
-          summary: Summary of the event.
-          description: Event description
-          contentType: application/json
-          tags:
-            - name: message
-            - name: example
-          headers:
-            type: object
-            properties:
-              correlationId:
-                description: Correlation ID set by application
-                type: string
-              applicationInstanceId:
-                description: Unique identifier for a given instance of the publishing application
-                type: string
-          payload:
-            type: object
-            additionalProperties: false
-            properties:
-              created:
-                type: string
-                description: The date and time a message was sent.
-                format: datetime
-              name:
-                type: string
-                description: The name of the message was sent.
-              value:
-                type: string
-                description: The value of the message was sent.`
+  //generatedString = generatedString.slice(0, -2)
+  generatedString += `  
+components:
+  messages:
+    Event:
+      name: EventName
+      title: Event Title
+      summary: Summary of the event.
+      description: Event description
+      contentType: application/json
+      tags:
+        - name: message
+        - name: example
+      headers:
+        type: object
+        properties:
+          correlationId:
+            description: Correlation ID set by application
+            type: string
+          applicationInstanceId:
+            description: Unique identifier for a given instance of the publishing application
+            type: string
+      payload:
+        type: object
+        additionalProperties: false
+        properties:
+          created:
+            type: string
+            description: The date and time a message was sent.
+            format: datetime
+          name:
+            type: string
+            description: The name of the message was sent.
+          value:
+            type: string
+            description: The value of the message was sent.`
 
   document.querySelector('#ImExport').value = generatedString
   document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
