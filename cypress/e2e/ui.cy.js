@@ -7,20 +7,16 @@ describe('UI Component', () => {
     cy.get('#settings').click()
 
     cy.get('#settingsHost').should('have.value', 'localhost')
-
     cy.get('#settingsPort').should('have.value', '5672')
-
     cy.get('#settingsManagement').should(
       'have.value',
       'http://localhost:15672/api'
     )
-
     cy.get('#settingsVHost').should('have.value', '%2f')
-
     cy.get('#settingsUsername').should('have.value', 'guest')
-
     cy.get('#settingsPassword').should('have.value', 'guest')
 
+    // set new values
     cy.get('#settingsHost').clear().type('127.0.0.1')
     cy.get('#settingsPort').clear().type('5671')
     cy.get('#settingsManagement').clear().type('https://localhost:15672/api')

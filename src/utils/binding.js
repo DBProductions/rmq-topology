@@ -122,6 +122,8 @@ const hideBinding = (e) => {
 }
 
 /**
+ * Removes a binding.
+ *
  * @param {object} e - Event object
  */
 const deleteBindingForm = (e) => {

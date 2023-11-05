@@ -135,4 +135,124 @@ const displayForm = (form) => {
   }
 }
 
-export { linepointNearestMouse, createTopology, displayForm }
+/**
+ * Current mouse position inside of a cirle.
+ * @param {object} val - can be Exchange or Queue object
+ * @param {number} mx - x position of the mouse
+ * @param {number} my - y position of the mouse
+ * @returns {object}
+ */
+const findCircle = (val, mx, my) => {
+  let found
+  if (val.constructor.name === 'Exchange' || val.constructor.name === 'Queue') {
+    const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2))
+    if (d <= val.radius) {
+      found = val
+    }
+  }
+  return found
+}
+
+/**
+ * Current mouse position inside of a square.
+ * @param {object} val - can be Producer or Consumer object
+ * @param {number} mx - x position of the mouse
+ * @param {number} my - y position of the mouse
+ * @returns {object}
+ */
+const findSquare = (val, mx, my) => {
+  let found
+  if (
+    val.constructor.name === 'Producer' ||
+    val.constructor.name === 'Consumer'
+  ) {
+    if (
+      mx >= val.x &&
+      mx <= val.x + val.width &&
+      my >= val.y &&
+      my <= val.y + val.height
+    ) {
+      found = val
+    }
+  }
+  return found
+}
+
+/**
+ * Current mouse position over a line.
+ * @param {Binding} val - Binding object
+ * @param {number} mx - x position of the mouse
+ * @param {number} my - y position of the mouse
+ * @returns {object}
+ */
+const findLine = (val, mx, my) => {
+  let found
+  const line = {
+    x0: val.x1,
+    x1: val.x2,
+    y0: val.y1,
+    y1: val.y2
+  }
+
+  let x1
+  let x2
+  if (line.x0 > line.x1) {
+    x1 = line.x1
+    x2 = line.x0
+  } else {
+    x1 = line.x0
+    x2 = line.x1
+  }
+  if (mx > x1 && mx < x2) {
+    // determine how close the mouse must be to the line
+    // for the mouse to be inside the line
+    const tolerance = 3
+    const linepoint = linepointNearestMouse(line, mx, my)
+    const dx = mx - linepoint.x
+    const dy = my - linepoint.y
+    const distance = Math.abs(Math.sqrt(dx * dx + dy * dy))
+    if (distance < tolerance) {
+      found = val
+    }
+  }
+  return found
+}
+
+/**
+ * Find the actor in the scene from the current mouse position.
+ * @param {object} e - Event object
+ * @param {*} line
+ * @returns {object} - undefined or the found actor in scene
+ */
+const findPosition = (e, line = false) => {
+  const mx = e.clientX - e.target.offsetLeft
+  const my = e.clientY - e.target.offsetTop
+  let obj
+  window.scene.actors.forEach((val) => {
+    const foundProducerConsumer = findSquare(val, mx, my)
+    if (foundProducerConsumer) {
+      obj = foundProducerConsumer
+    }
+    const foundExchangeQueue = findCircle(val, mx, my)
+    if (foundExchangeQueue) {
+      obj = foundExchangeQueue
+    }
+    if (line) {
+      const foundLine = findLine(val, mx, my)
+      if (foundLine) {
+        obj = foundLine
+      }
+    }
+  })
+  return obj
+}
+
+export {
+  linepointNearestMouse,
+  createTopology,
+  displayForm,
+  findCircle,
+  findSquare,
+  findLine,
+  findPosition
+}

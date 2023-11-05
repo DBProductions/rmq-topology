@@ -1,7 +1,7 @@
 {
   "name": "rmq-topology",
   "version": "0.0.1",
-  "description": "",
+  "description": "A small tool to simulate RabbitMQ topologies and see the message flow.",
   "main": "index.js",
   "type": "module",
   "scripts": {

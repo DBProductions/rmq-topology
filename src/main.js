@@ -1,7 +1,10 @@
 import {
-  linepointNearestMouse,
   createTopology,
-  displayForm
+  displayForm,
+  findCircle,
+  findSquare,
+  findLine,
+  findPosition
 } from './utils/common'
 
 import { getSettings, setSettings, displaySettings } from './utils/settings'
@@ -54,167 +57,6 @@ canvas.height = 450
 const curCtx = canvas.getContext('2d')
 
 createTopology(curCtx, config)
-
-document.querySelector('#exampleTopology').addEventListener('change', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  displayForm('')
-  let restart = false
-  if (window.timer.running) {
-    window.timer.stop()
-    window.scene.purge()
-    window.scene.renderOnce()
-    restart = true
-  }
-  if (e.target.value !== 'Examples') {
-    createTopology(curCtx, Examples[e.target.value.toLowerCase()])
-    if (restart) {
-      window.timer.start()
-    }
-  } else {
-    window.scene.purge()
-    window.scene.description = ''
-    window.scene.renderOnce()
-  }
-})
-
-document.querySelector('#newComponent').addEventListener('change', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  displayForm(e.target.value)
-  switch (e.target.value) {
-    case 'Producer':
-      displayProducer()
-      break
-    case 'Consumer':
-      displayConsumer()
-      break
-    case 'Exchange':
-      displayExchange()
-      break
-    case 'Queue':
-      displayQueue()
-      break
-    case 'Binding':
-      displayBinding()
-      break
-    default:
-      break
-  }
-  e.target.selectedIndex = 0
-})
-
-/**
- * Current mouse position inside of a cirle.
- * @param {object} val - can be Exchange or Queue object
- * @param {number} mx - x position of the mouse
- * @param {number} my - y position of the mouse
- * @returns {object}
- */
-const findCircle = (val, mx, my) => {
-  let found
-  if (val.constructor.name === 'Exchange' || val.constructor.name === 'Queue') {
-    const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2))
-    if (d <= val.radius) {
-      found = val
-    }
-  }
-  return found
-}
-
-/**
- * Current mouse position inside of a square.
- * @param {object} val - can be Producer or Consumer object
- * @param {number} mx - x position of the mouse
- * @param {number} my - y position of the mouse
- * @returns {object}
- */
-const findSquare = (val, mx, my) => {
-  let found
-  if (
-    val.constructor.name === 'Producer' ||
-    val.constructor.name === 'Consumer'
-  ) {
-    if (
-      mx >= val.x &&
-      mx <= val.x + val.width &&
-      my >= val.y &&
-      my <= val.y + val.height
-    ) {
-      found = val
-    }
-  }
-  return found
-}
-
-/**
- * Current mouse position over a line.
- * @param {Binding} val - Binding object
- * @param {number} mx - x position of the mouse
- * @param {number} my - y position of the mouse
- * @returns {object}
- */
-const findLine = (val, mx, my) => {
-  let found
-  const line = {
-    x0: val.x1,
-    x1: val.x2,
-    y0: val.y1,
-    y1: val.y2
-  }
-
-  let x1
-  let x2
-  if (line.x0 > line.x1) {
-    x1 = line.x1
-    x2 = line.x0
-  } else {
-    x1 = line.x0
-    x2 = line.x1
-  }
-  if (mx > x1 && mx < x2) {
-    // determine how close the mouse must be to the line
-    // for the mouse to be inside the line
-    const tolerance = 3
-    const linepoint = linepointNearestMouse(line, mx, my)
-    const dx = mx - linepoint.x
-    const dy = my - linepoint.y
-    const distance = Math.abs(Math.sqrt(dx * dx + dy * dy))
-    if (distance < tolerance) {
-      found = val
-    }
-  }
-  return found
-}
-
-/**
- * Find the actor in the scene from the current mouse position.
- * @param {object} e - Event object
- * @param {*} line
- * @returns {object} - undefined or the found actor in scene
- */
-const findPosition = (e, line = false) => {
-  const mx = e.clientX - e.target.offsetLeft
-  const my = e.clientY - e.target.offsetTop
-  let obj
-  window.scene.actors.forEach((val) => {
-    const foundProducerConsumer = findSquare(val, mx, my)
-    if (foundProducerConsumer) {
-      obj = foundProducerConsumer
-    }
-    const foundExchangeQueue = findCircle(val, mx, my)
-    if (foundExchangeQueue) {
-      obj = foundExchangeQueue
-    }
-    if (line) {
-      const foundLine = findLine(val, mx, my)
-      if (foundLine) {
-        obj = foundLine
-      }
-    }
-  })
-  return obj
-}
 
 canvas.addEventListener('mousedown', (e) => {
   e.preventDefault()
@@ -335,6 +177,55 @@ canvas.addEventListener('click', (e) => {
   }
 })
 
+document.querySelector('#exampleTopology').addEventListener('change', (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  displayForm('')
+  let restart = false
+  if (window.timer.running) {
+    window.timer.stop()
+    window.scene.purge()
+    window.scene.renderOnce()
+    restart = true
+  }
+  if (e.target.value !== 'Examples') {
+    createTopology(curCtx, Examples[e.target.value.toLowerCase()])
+    if (restart) {
+      window.timer.start()
+    }
+  } else {
+    window.scene.purge()
+    window.scene.description = ''
+    window.scene.renderOnce()
+  }
+})
+
+document.querySelector('#newComponent').addEventListener('change', (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  displayForm(e.target.value)
+  switch (e.target.value) {
+    case 'Producer':
+      displayProducer()
+      break
+    case 'Consumer':
+      displayConsumer()
+      break
+    case 'Exchange':
+      displayExchange()
+      break
+    case 'Queue':
+      displayQueue()
+      break
+    case 'Binding':
+      displayBinding()
+      break
+    default:
+      break
+  }
+  e.target.selectedIndex = 0
+})
+
 const animateBtn = document.querySelector('#animate')
 animateBtn.addEventListener('click', (e) => {
   e.preventDefault()
@@ -348,16 +239,14 @@ animateBtn.addEventListener('click', (e) => {
   }
 })
 
-const settingsBtn = document.querySelector('#settings')
-settingsBtn.addEventListener('click', (e) => {
+document.querySelector('#settings').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   displayForm('settingsForm')
   displaySettings()
 })
 
-const exportBtn = document.querySelector('#export')
-exportBtn.addEventListener('click', (e) => {
+document.querySelector('#export').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   document.querySelector('#importBtn').classList.remove('hidden')
@@ -442,8 +331,7 @@ document.querySelector('#copyBtn').addEventListener('click', (e) => {
   document.execCommand('copy')
 })
 
-const importBtn = document.querySelector('#importBtn')
-importBtn.addEventListener('click', (e) => {
+document.querySelector('#importBtn').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   const importStr = document.querySelector('#ImExport').value
@@ -456,21 +344,20 @@ importBtn.addEventListener('click', (e) => {
   }
 })
 
-const cancelBtn = document.querySelector('#cancelBtn')
-cancelBtn.addEventListener('click', (e) => {
+document.querySelector('#cancelBtn').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   document.querySelector('#imexportPanel').classList.remove('panel-wrap-out')
 })
 
-const generateCurlBtn = document.querySelector('#generateCurl')
-generateCurlBtn.addEventListener('click', exportCurl)
-
-const generateRmqBtn = document.querySelector('#generateRabbitmqadmin')
-generateRmqBtn.addEventListener('click', exportRabbitmqadmin)
-
-const generateTfBtn = document.querySelector('#generateTerraform')
-generateTfBtn.addEventListener('click', exportTerraform)
-
-const generateAsyncApiBtn = document.querySelector('#generateAsyncApi')
-generateAsyncApiBtn.addEventListener('click', exportAsyncApi)
+// export
+document.querySelector('#generateCurl').addEventListener('click', exportCurl)
+document
+  .querySelector('#generateRabbitmqadmin')
+  .addEventListener('click', exportRabbitmqadmin)
+document
+  .querySelector('#generateTerraform')
+  .addEventListener('click', exportTerraform)
+document
+  .querySelector('#generateAsyncApi')
+  .addEventListener('click', exportAsyncApi)

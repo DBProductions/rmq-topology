@@ -20,6 +20,15 @@ describe('Test examples', () => {
     cy.window().its('scene.actors.length').should('equal', 5)
   })
 
+  it('Generate direct curl definition', () => {
+    cy.get('#exampleTopology').select('Direct')
+    cy.get('#generateCurl').click({force: true})
+    cy.get('#ImExport').should(
+      'have.value',
+      'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue -d \'{"routing_key": , "arguments": {}}\'\n\n'
+    )
+  })
+
   it('Fanout example', () => {
     cy.get('#exampleTopology').select('Fanout')
 
@@ -49,10 +58,28 @@ describe('Test examples', () => {
     cy.window().its('scene.actors.length').should('equal', 11)
   })
 
+  it('Generate fanout curl definition', () => {
+    cy.get('#exampleTopology').select('Fanout')
+    cy.get('#generateCurl').click({force: true})
+    cy.get('#ImExport').should(
+      'have.value',
+      'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange -d \'{"type": "fanout", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%203 -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue%201 -d \'{"routing_key": , "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue%202 -d \'{"routing_key": , "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue%203 -d \'{"routing_key": , "arguments": {}}\'\n\n'
+    )
+  })
+
   it('Topic example', () => {
     cy.get('#exampleTopology').select('Topic')
 
     cy.window().its('scene.actors.length').should('equal', 12)
+  })
+
+  it('Generate topic curl definition', () => {
+    cy.get('#exampleTopology').select('Topic')
+    cy.get('#generateCurl').click({force: true})
+    cy.get('#ImExport').should(
+      'have.value',
+      'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange -d \'{"type": "topic", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%203 -d \'{"auto_delete": false, "durable": true, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue%201 -d \'{"routing_key": x.x.x, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue%202 -d \'{"routing_key": #, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/bindings/e/Exchange/q/Queue%203 -d \'{"routing_key": x.y.z, "arguments": {}}\'\n\n'
+    )
   })
 
   it('Queue TTL example', () => {
