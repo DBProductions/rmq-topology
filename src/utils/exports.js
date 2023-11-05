@@ -136,44 +136,44 @@ const exportTerraform = (e) => {
     vhost = '/'
   }
   generatedString += `terraform {
-    required_providers {
-      rabbitmq = {
-        source = "cyrilgdn/rabbitmq"
-        version = "1.8.0"
-      }
+  required_providers {
+    rabbitmq = {
+      source = "cyrilgdn/rabbitmq"
+      version = "1.8.0"
     }
   }
-  provider "rabbitmq" {
-    endpoint = "${url.origin}"
-    username = "${username}"
-    password = "${password}"
-  }
-  resource "rabbitmq_vhost" "vhost" {
-    name = "${vhost}"
-  }
-  `
+}
+provider "rabbitmq" {
+  endpoint = "${url.origin}"
+  username = "${username}"
+  password = "${password}"
+}
+resource "rabbitmq_vhost" "vhost" {
+  name = "${vhost}"
+}
+`
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
     generatedString += `resource "rabbitmq_exchange" "${name}" {
-    name  = "${val.name}"
-    vhost = "\${rabbitmq_vhost.vhost.name}"
-    settings {
-      type        = "${val.type}"
-      durable     = true
-      auto_delete = false
-    }
+  name  = "${val.name}"
+  vhost = "\${rabbitmq_vhost.vhost.name}"
+  settings {
+    type        = "${val.type}"
+    durable     = true
+    auto_delete = false
   }
-  `
+}
+`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
     if (val.dlx || val.msgTtl || val.maxlength) {
       generatedString += `variable "${name}args" {
-      default = <<EOF
-      {
-  `
+  default = <<EOF
+  {
+`
       const extra = []
       if (val.dlx) {
         extra.push(`"x-dead-letter-exchange": "${val.dlx.name}"`)
@@ -185,28 +185,28 @@ const exportTerraform = (e) => {
       if (val.maxLength) {
         extra.push(`"x-max-length": ${val.maxLength}`)
       }
-      generatedString += `        ${extra.join(',\n        ')}`
+      generatedString += `    ${extra.join(',\n    ')}`
       generatedString += `
-      }
-      EOF
   }
-  `
+  EOF
+}
+`
     }
     generatedString += `resource "rabbitmq_queue" "${name}" {
-    name  = "${val.name}"
-    vhost = "\${rabbitmq_vhost.vhost.name}"
-      
-    settings {
-      durable     = true
-      auto_delete = false`
-    if (val.dlx || val.msgTtl || val.maxlength) {
-      generatedString += `
-      arguments_json = "\${var.${name}args}"`
-    }
+  name  = "${val.name}"
+  vhost = "\${rabbitmq_vhost.vhost.name}"
+    
+  settings {
+    durable     = true
+    auto_delete = false`
+  if (val.dlx || val.msgTtl || val.maxlength) {
     generatedString += `
-    }
+    arguments_json = "\${var.${name}args}"`
   }
-  `
+  generatedString += `
+  }
+}
+`
   })
 
   const bindings = window.scene.getObjectsInScene('Binding')
@@ -214,13 +214,13 @@ const exportTerraform = (e) => {
     const srcName = val.source.name.replace(/ /g, '-')
     const destName = val.destination.name.replace(/ /g, '-')
     generatedString += `resource "rabbitmq_binding" "${srcName}${destName}" {
-    source           = "\${rabbitmq_exchange.${srcName}.name}"
-    vhost            = "\${rabbitmq_vhost.vhost.name}"
-    destination      = "\${rabbitmq_queue.${destName}.name}"
-    destination_type = "queue"
-    routing_key      = "${val.routingKey}"
-  }
-  `
+  source           = "\${rabbitmq_exchange.${srcName}.name}"
+  vhost            = "\${rabbitmq_vhost.vhost.name}"
+  destination      = "\${rabbitmq_queue.${destName}.name}"
+  destination_type = "queue"
+  routing_key      = "${val.routingKey}"
+}
+`
   })
 
   document.querySelector('#ImExport').value = generatedString
