@@ -115,11 +115,11 @@ class Scene {
     this.ctx.clearRect(0, 0, this.width, this.height)
 
     if (this.actors.length > 0) {
-      this.ctx.font = '10px Arial'
+      this.ctx.font = '12px Arial'
       this.ctx.fillStyle = '#000'
-      this.ctx.fillText(`${this.lostMessages} messages lost`, 50, 20)
+      this.ctx.fillText(`${this.lostMessages} messages lost`, 50, 25)
     }
-    this.ctx.font = '12px Arial'
+    this.ctx.font = '14px Arial'
     this.ctx.fillText(this.description, 50, this.height - 20)
 
     const allBindings = []
@@ -145,11 +145,11 @@ class Scene {
     this.ctx.clearRect(0, 0, this.width, this.height)
 
     if (this.actors.length > 0) {
-      this.ctx.font = '10px Arial'
+      this.ctx.font = '12px Arial'
       this.ctx.fillStyle = '#000'
-      this.ctx.fillText(`${this.lostMessages} messages lost`, 50, 20)
+      this.ctx.fillText(`${this.lostMessages} messages lost`, 50, 25)
     }
-    this.ctx.font = '12px Arial'
+    this.ctx.font = '14px Arial'
     this.ctx.fillText(this.description, 50, this.height - 20)
 
     const allBindings = []

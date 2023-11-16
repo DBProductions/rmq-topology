@@ -311,6 +311,9 @@ document.querySelector('#export').addEventListener('click', (e) => {
   })
   const producers = window.scene.getObjectsInScene('Producer')
   producers.forEach((val) => {
+    for (let key in val.publishes) {
+      val.publishes[key].exchange = val.publishes[key].exchange.name
+    }
     exports.producers.push({
       x: val.x,
       y: val.y,

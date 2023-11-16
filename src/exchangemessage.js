@@ -13,13 +13,23 @@ class ExchangeMessage extends BaseMessage {
    * @param {string} fillColor - hex color code to fill the circle
    * @extends BaseMessage
    */
-  constructor(x, y, exchange, routingKey, rejected, radius, fillColor) {
+  constructor(
+    x,
+    y,
+    exchange,
+    routingKey,
+    message,
+    rejected,
+    radius,
+    fillColor
+  ) {
     super(x, y, radius, fillColor)
     this.exchange = exchange
+    this.routingKey = routingKey
+    this.message = message
     this.rejected = rejected || false
     this.targetX = this.exchange.x
     this.targetY = this.exchange.y
-    this.routingKey = routingKey
   }
 
   update() {

@@ -23,6 +23,7 @@
                 <option>Direct</option>
                 <option>Fanout</option>
                 <option>Topic</option>
+                <option>Work Queue</option>
                 <option>Queue-Ttl</option>                
                 <option>Queue-Max-Length</option>
                 <option>Dlx</option>
@@ -59,21 +60,22 @@
                     <input type="hidden" id="producerIdField">
                     <div>
                         <input type="text" id="producerNameField" placeholder="Producer Name">
-                    </div>
-                    <div>
-                        <input type="text" id="producerRoutingKeyField" placeholder="Routing Key">
-                    </div>                    
+                    </div>                                        
                     <div>
                         <select id="producerPublishToSelect">
                             <option>---</option>
                         </select>
                     </div>
+                    <div>
+                        <input type="text" id="producerRoutingKeyField" placeholder="Routing Key">
+                    </div>
                     <div id="producerPublishTo"></div>
                     <div class="btnFooter">
-                        <button id="sendProducerForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="sendProducerForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelProducerForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
                         <button id="deleteProducerForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
                     </div>
+                    <div id="producerErr" class="error"></div>
                 </form>
             </div>
         </div>
@@ -96,7 +98,7 @@
                     </div>
                     <div id="consumerConsumesFrom"></div>
                     <div class="btnFooter">
-                        <button id="sendConsumerForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="sendConsumerForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelConsumerForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
                         <button id="deleteConsumerForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
                     </div>
@@ -119,7 +121,7 @@
                         </select>
                     </div>
                     <div class="btnFooter">
-                        <button id="sendExchangeForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="sendExchangeForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelExchangeForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
                         <button id="deleteExchangeForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
                     </div>
@@ -150,7 +152,7 @@
                         <input type="text" id="queueDlRoutingKey" placeholder="Dead Letter Routing Key">
                     </div>
                     <div class="btnFooter">
-                        <button id="sendQueueForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="sendQueueForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelQueueForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
                         <button id="deleteQueueForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>
                     </div>
@@ -177,7 +179,7 @@
                         </select>
                     </div>
                     <div class="btnFooter">
-                        <button id="sendBindingForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="sendBindingForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelBindingForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
                         <button id="deleteBindingForm" class="myButton hidden"><i class="fa fa-trash"></i> Delete</button>                  
                     </div>
@@ -233,7 +235,7 @@
                         </div>
                     </div>
                     <div class="btnFooter">
-                        <button id="sendSettingsForm" class="myButton"><i class="fa fa-save"></i> Send</button> 
+                        <button id="sendSettingsForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelSettingsForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
                     </div>
                     <div id="settingsErr" class="error"></div>

@@ -21,6 +21,10 @@ class BaseMessage extends Base {
     this.rad = null
     this.angle = null
     this.thrust = 5
+    this.message = {
+      headers: {},
+      body: {}
+    }
   }
 
   render() {

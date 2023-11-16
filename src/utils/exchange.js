@@ -1,7 +1,7 @@
 import Exchange from '../exchange'
 
 /**
- * Display the form to create or edit exchange component.
+ * Displays the form to create or edit exchange component.
  *
  * @param {Exchange} exchange - Exchange object
  */
@@ -72,7 +72,7 @@ const sendExchangeForm = (e) => {
 }
 
 /**
- * Reset form values and remove CSS class from the exchange panel.
+ * Resets form values and remove CSS class from the exchange panel.
  *
  * @param {object} e - Event object
  */
@@ -88,16 +88,27 @@ const hideExchange = (e) => {
 }
 
 /**
- * Remove exchange from the scene, render and remove CSS class from the exchange panel.
+ * Remove exchange from the scene, from the producers and the bindings to the exchange.
+ * Renders and removes CSS class from the exchange panel.
  *
  * @param {object} e - Event object
  */
 const deleteExchangeForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  window.scene.removeActor(
-    window.scene.getIdInScene(document.querySelector('#exchangeIdField').value)
-  )
+  const exchangeId = document.querySelector('#exchangeIdField').value
+  const exchange = window.scene.getIdInScene(exchangeId)
+  const producers = window.scene.getObjectsInScene('Producer')
+  producers.forEach((producer) => {
+    producer.removeExchange(exchange)
+  })
+  const bindings = window.scene.getObjectsInScene('Binding')
+  bindings.forEach((binding) => {
+    if (exchangeId === binding.source.id) {
+      window.scene.removeActor(binding)
+    }
+  })
+  window.scene.removeActor(window.scene.getIdInScene(exchangeId))
   window.scene.renderOnce()
   document.querySelector('#exchangePanel').classList.remove('panel-wrap-out')
 }

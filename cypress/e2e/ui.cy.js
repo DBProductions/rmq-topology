@@ -65,10 +65,6 @@ describe('UI Component', () => {
       .type('CypressProducer')
       .should('have.value', 'CypressProducer')
 
-    cy.get('#producerRoutingKeyField')
-      .type('a.b.c')
-      .should('have.value', 'a.b.c')
-
     cy.get('#sendProducerForm').click()
 
     cy.window().its('scene.actors.length').should('equal', 1)
@@ -83,21 +79,49 @@ describe('UI Component', () => {
       .type('Edit')
       .should('have.value', 'CypressProducerEdit')
 
-    cy.get('#producerRoutingKeyField')
-      .type('{selectall}{backspace}')
-      .type('d.e.f')
-      .should('have.value', 'd.e.f')
-
     cy.get('#sendProducerForm').click()
 
     cy.get('#canvas').trigger('click', 403, 203)
 
     cy.get('#producerNameField').should('have.value', 'CypressProducerEdit')
-    cy.get('#producerRoutingKeyField').should('have.value', 'd.e.f')
 
     cy.get('#deleteProducerForm').click()
 
     cy.window().its('scene.actors.length').should('equal', 0)
+  })
+
+  it('Add producer and add two exchanges to it', () => {
+    // exchanges
+    cy.get('#newComponent').select('Exchange')
+    cy.get('#exchangeNameField').type('e1').should('have.value', 'e1')
+    cy.get('#sendExchangeForm').click()
+
+    cy.get('#newComponent').select('Exchange')
+    cy.get('#exchangeNameField').type('e2').should('have.value', 'e2')
+    cy.get('#sendExchangeForm').click()
+
+    cy.moveOnCanvas(400, 300, 30, 200)
+
+    // producer
+    cy.get('#newComponent').select('Producer')
+    cy.get('#producerNameField')
+      .type('CypressProducer')
+      .should('have.value', 'CypressProducer')
+    cy.get('#producerPublishToSelect').select('e1')
+    cy.get('#sendProducerForm').click()
+
+    // edit
+    cy.get('#canvas').trigger('click', 203, 33)
+    cy.get('#producerPublishToSelect').select('e2')
+    cy.get('#sendProducerForm').click()
+
+    cy.window().its('scene.actors.length').should('equal', 3)
+
+    cy.get('#canvas').trigger('click', 203, 33)
+    cy.get('#producerNameField').should('have.value', 'CypressProducer')
+    cy.get('#producerPublishTo').should('have.text', 'e1×e2×')
+
+    cy.get('#cancelProducerForm').click()
   })
 
   it('Add, move and edit consumer', () => {
@@ -210,10 +234,6 @@ describe('UI Component', () => {
       .type('CypressProducer')
       .should('have.value', 'CypressProducer')
 
-    cy.get('#producerRoutingKeyField')
-      .type('CypressQueue')
-      .should('have.value', 'CypressQueue')
-
     cy.get('#sendProducerForm').click()
 
     // consumer
@@ -238,6 +258,10 @@ describe('UI Component', () => {
     cy.get('#canvas').click(200, 30)
 
     cy.get('#producerPublishToSelect').select('CypressExchange')
+
+    cy.get('#producerRoutingKeyField')
+      .type('CypressQueue')
+      .should('have.value', 'CypressQueue')
 
     cy.get('#sendProducerForm').click()
 

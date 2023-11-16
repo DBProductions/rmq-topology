@@ -13,64 +13,55 @@ const displayProducer = (producer) => {
   document.querySelector('#producerNameField').value = ''
   document.querySelector('#producerRoutingKeyField').value = ''
   document.querySelector('#producerPublishTo').innerHTML = ''
+  document.querySelector('#producerErr').innerHTML = ''
 
   const exchanges = window.scene.getObjectsInScene('Exchange')
-  refreshPublishToSelect(producer, exchanges)
+
+  const selectSource = document.getElementById('producerPublishToSelect')
+  selectSource.options.length = 0
+  selectSource.options[selectSource.options.length] = new Option(
+    '- Exchanges',
+    0
+  )
+  Object.keys(exchanges).forEach((exchange) => {
+    selectSource.options[selectSource.options.length] = new Option(
+      exchanges[exchange].name,
+      exchanges[exchange].id
+    )
+  })
 
   if (producer) {
     document.querySelector('#deleteProducerForm').classList.remove('hidden')
     document.querySelector('#producerIdField').value = producer.id
     document.querySelector('#producerNameField').value = producer.name
-    document.querySelector('#producerRoutingKeyField').value =
-      producer.routingKey
     let exchangesDom = ''
-    producer.exchanges.forEach((exchange) => {
-      exchangesDom += `<div id="${exchange.id}" class="row">`
-      exchangesDom += `<input type="hidden" name="producerExchanges[]" value="${exchange.id}">`
-      exchangesDom += `<div class="flex-left">${exchange.name}</div>`
-      exchangesDom += `<div class="flex-right"><a href="#" data-id="${exchange.id}" class="exchangeDeleteLink">&times;</a></div>`
+    for (var key in producer.publishes) {
+      exchangesDom += `<div id="${producer.publishes[key].exchange.id}" class="row">`
+      exchangesDom += `<input type="hidden" name="producerExchanges[]" value="${producer.publishes[key].exchange.id}" data-routing-key="${producer.publishes[key].routingKey}">`
+      exchangesDom += `<div class="flex-left">${producer.publishes[key].exchange.name}<br><small>${producer.publishes[key].routingKey}</small></div>`
+      exchangesDom += `<div class="flex-right"><a href="#" data-id="${producer.publishes[key].exchange.id}" class="exchangeDeleteLink">&times;</a></div>`
       exchangesDom += '</div>'
-    })
+    }
     document.querySelector('#producerPublishTo').innerHTML = exchangesDom
     document.querySelectorAll('.exchangeDeleteLink').forEach((item) => {
       item.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
         e.target.parentNode.parentNode.remove()
-        refreshPublishToSelect(producer, exchanges)
+        selectSource.options.length = 0
+        selectSource.options[selectSource.options.length] = new Option(
+          '- Exchanges',
+          0
+        )
+        Object.keys(exchanges).forEach((exchange) => {
+          selectSource.options[selectSource.options.length] = new Option(
+            exchanges[exchange].name,
+            exchanges[exchange].id
+          )
+        })
       })
     })
   }
-}
-
-/**
- * Refreshs the `producerPublishToSelect` element.
- *
- * @param {Producer} producer - Producer object
- * @param {Exchange} exchange - Exchange object
- */
-const refreshPublishToSelect = (producer, exchanges) => {
-  const selectSource = document.getElementById('producerPublishToSelect')
-  selectSource.options.length = 0
-  selectSource.options[selectSource.options.length] = new Option('---', 0)
-  Object.keys(exchanges).forEach((exchange) => {
-    if (producer && producer.exchanges) {
-      const presentExchanges = producer.exchanges.findIndex(
-        (s) => s.id === exchanges[exchange].id
-      )
-      if (presentExchanges === -1) {
-        selectSource.options[selectSource.options.length] = new Option(
-          exchanges[exchange].name,
-          exchanges[exchange].id
-        )
-      }
-    } else {
-      selectSource.options[selectSource.options.length] = new Option(
-        exchanges[exchange].name,
-        exchanges[exchange].id
-      )
-    }
-  })
 }
 
 /**
@@ -86,45 +77,65 @@ const sendProducerForm = (e) => {
   const routingKey = document.querySelector('#producerRoutingKeyField').value
   const publishTo = document.querySelector('#producerPublishToSelect').value
 
+  const exchange = window.scene.getIdInScene(publishTo)
+
+  const message = {
+    headers: {},
+    body: {}
+  }
+
+  let producer
+  let error = false
+
   if (id) {
-    const producer = window.scene.getIdInScene(id)
+    producer = window.scene.getIdInScene(id)
 
     const exchanges = document.getElementsByName('producerExchanges[]')
-    const idsToKeep = []
-    exchanges.forEach((exchange) => {
-      idsToKeep.push(exchange.value)
-    })
-    const restExchanges = producer.exchanges.filter(
-      (s) => idsToKeep.indexOf(s.id) !== -1
-    )
-    const removeExchanges = producer.exchanges.filter(
-      (s) => idsToKeep.indexOf(s.id) === -1
-    )
-    removeExchanges.forEach((rmExchange) => {
-      const exchange = window.scene.getIdInScene(rmExchange.id)
-      producer.removeExchange(exchange)
-    })
+
+    const keepExchanges = {}
+    for (let key in producer.publishes) {
+      exchanges.forEach((exchange) => {
+        if (
+          exchange.value === producer.publishes[key].exchange.id &&
+          producer.publishes[key].routingKey === exchange.dataset.routingKey
+        ) {
+          keepExchanges[key] = producer.publishes[key]
+        }
+      })
+    }
 
     producer.name = name
-    producer.routingKey = routingKey
-    producer.exchanges = restExchanges
-    if (publishTo !== '0') {
-      producer.addExchange(window.scene.getIdInScene(publishTo))
+    producer.publishes = keepExchanges
+
+    if (exchange) {
+      if (!producer.exchangeWithRoutingKeyExists(exchange, routingKey)) {
+        producer.addMessageToExchange(exchange, routingKey, message)
+      } else {
+        error = 'Already exists.'
+        document.querySelector('#producerErr').innerHTML = error
+      }
     }
   } else {
-    const Producer1 = new Producer(200, 30, name, 0, routingKey)
-    Producer1.addToScene(window.scene)
-    if (publishTo !== '0') {
-      Producer1.addExchange(window.scene.getIdInScene(publishTo))
+    producer = new Producer(200, 30, name, {})
+    if (exchange) {
+      if (!producer.exchangeWithRoutingKeyExists(exchange, routingKey)) {
+        producer.addMessageToExchange(exchange, routingKey, message)
+      } else {
+        error = 'Already exists.'
+        document.querySelector('#producerErr').innerHTML = error
+      }
     }
+    producer.addToScene(window.scene)
   }
 
   window.scene.renderOnce()
 
-  document.querySelector('#producerIdField').value = ''
-  document.querySelector('#producerNameField').value = ''
-  document.querySelector('#producerRoutingKeyField').value = ''
-  document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
+  if (!error) {
+    document.querySelector('#producerIdField').value = ''
+    document.querySelector('#producerNameField').value = ''
+    document.querySelector('#producerRoutingKeyField').value = ''
+    document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
+  }
 }
 
 /**

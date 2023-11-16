@@ -7,8 +7,16 @@ const Examples = {
         x: 200,
         y: 130,
         name: 'Producer',
-        publishes: [0],
-        routingKey: 'Queue'
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'Queue',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [
@@ -33,13 +41,22 @@ const Examples = {
   },
   fanout: {
     description:
-      'Fanout exchange broadcasts all the messages to all bind queues, it ignores the routing key.',
+      'Fanout exchange broadcasts all the messages to all bind queues, it ignores the routing key. Publish/Subscribe',
     producers: [
       {
         x: 200,
         y: 130,
         name: 'Producer',
-        publishes: [0]
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: '',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [
@@ -92,13 +109,31 @@ const Examples = {
         x: 200,
         y: 130,
         name: 'Producer 1',
-        publishes: [0]
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'x.y.z',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       },
       {
         x: 200,
         y: 200,
         name: 'Producer 2',
-        publishes: [0]
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'x.x.x',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [
@@ -143,6 +178,59 @@ const Examples = {
       { exchange: 0, queue: 2, routingKey: 'x.y.z' }
     ]
   },
+  'work queue': {
+    description: 'Work queues share the work between multiple consumers.',
+    producers: [
+      {
+        x: 200,
+        y: 170,
+        name: 'Producer',
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'Queue',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
+      }
+    ],
+    consumers: [
+      {
+        x: 800,
+        y: 80,
+        name: 'Consumer 1',
+        consumes: [0],
+        mode: 'ack'
+      },
+      {
+        x: 800,
+        y: 170,
+        name: 'Consumer 2',
+        consumes: [0],
+        mode: 'ack'
+      },
+      {
+        x: 800,
+        y: 260,
+        name: 'Consumer 3',
+        consumes: [0],
+        mode: 'ack'
+      }
+    ],
+    exchanges: [
+      {
+        x: 400,
+        y: 170,
+        name: 'Exchange',
+        type: 'direct'
+      }
+    ],
+    queues: [{ x: 650, y: 170, name: 'Queue' }],
+    bindings: [{ exchange: 0, queue: 0, routingKey: '' }]
+  },
   'queue-ttl': {
     description:
       'Time to live for queues, messages which are staying longer are removed.',
@@ -151,8 +239,16 @@ const Examples = {
         x: 200,
         y: 100,
         name: 'Producer',
-        publishes: [0],
-        routingKey: 'Queue'
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'Queue',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [],
@@ -182,8 +278,16 @@ const Examples = {
         x: 200,
         y: 100,
         name: 'Producer',
-        publishes: [0],
-        routingKey: 'Queue 1'
+        publishes: {
+          0: {
+            exchange: 'Exchange 1',
+            routingKey: 'Queue 1',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [
@@ -240,8 +344,16 @@ const Examples = {
         x: 200,
         y: 100,
         name: 'Producer',
-        publishes: [0],
-        routingKey: 'Queue 1'
+        publishes: {
+          0: {
+            exchange: 'Exchange 1',
+            routingKey: 'Queue 1',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [
@@ -297,8 +409,16 @@ const Examples = {
         x: 200,
         y: 100,
         name: 'Producer',
-        publishes: [0],
-        routingKey: 'Queue 1'
+        publishes: {
+          0: {
+            exchange: 'Exchange 1',
+            routingKey: 'Queue 1',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
       }
     ],
     consumers: [
