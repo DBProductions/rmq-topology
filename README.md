@@ -10,11 +10,13 @@ It creates curl, rabbitmqadmin, Terraform and AsyncAPI.
 The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/). Cypress runs some tests.  
 
     node -v
-    v18.13.0
+    v20.10.0
     npm i
 
     npm run bundle
     npm start
+
+    http://localhost:3000/
 
 ## Feedback
 Star this repo if you found it useful. Use the github issue tracker to give feedback on this repo.

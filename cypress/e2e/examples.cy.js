@@ -38,6 +38,15 @@ describe('Test examples', () => {
     )
   })
 
+  it('Generate direct rabbitmqadmin definition', () => {
+    cy.get('#exampleTopology').select('Direct')
+    cy.get('#generateRabbitmqadmin').click({ force: true })
+    cy.get('#ImExport').should(
+      'have.value',
+      'rabbitmqadmin -H localhost -u guest -p guest -V / declare exchange name="Exchange" type="direct" durable=true\n\nrabbitmqadmin -H localhost -u guest -p guest -V / declare queue name="Queue" durable=true\n\nrabbitmqadmin -H localhost -u guest -p guest -V / declare binding source="Exchange" destination_type="queue" destination="Queue" routing_key=""\n\n'
+    )
+  })
+
   it('Fanout example', () => {
     cy.get('#exampleTopology').select('Fanout')
 
