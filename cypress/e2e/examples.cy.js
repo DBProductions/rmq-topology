@@ -97,7 +97,7 @@ describe('Test examples', () => {
   it('Topic example', () => {
     cy.get('#exampleTopology').select('Topic')
 
-    cy.window().its('scene.actors.length').should('equal', 12)
+    cy.window().its('scene.actors.length').should('equal', 13)
   })
 
   it('Export topic defintion', () => {
@@ -105,7 +105,7 @@ describe('Test examples', () => {
     cy.get('#export').click()
     cy.get('#ImExport').should(
       'have.value',
-      '{"description":"","producers":[{"x":200,"y":130,"name":"Producer 1","publishes":{"0":{"exchange":"Exchange","routingKey":"x.y.z","message":{"headers":{},"body":{}}}}},{"x":200,"y":200,"name":"Producer 2","publishes":{"0":{"exchange":"Exchange","routingKey":"x.x.x","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"},{"x":800,"y":260,"name":"Consumer 3","consumes":[2],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"topic"}],"queues":[{"x":650,"y":80,"name":"Queue 1","maxLength":""},{"x":650,"y":170,"name":"Queue 2","maxLength":""},{"x":650,"y":260,"name":"Queue 3","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":"x.x.x"},{"exchange":0,"queue":1,"routingKey":"#"},{"exchange":0,"queue":2,"routingKey":"x.y.z"}]}'
+      '{"description":"","producers":[{"x":200,"y":80,"name":"Producer 1","publishes":{"0":{"exchange":"Exchange","routingKey":"x.y.z","message":{"headers":{},"body":{}}}}},{"x":200,"y":170,"name":"Producer 2","publishes":{"0":{"exchange":"Exchange","routingKey":"x.x.x","message":{"headers":{},"body":{}}}}},{"x":200,"y":260,"name":"Producer 3","publishes":{"0":{"exchange":"Exchange","routingKey":"y.y.y","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"},{"x":800,"y":260,"name":"Consumer 3","consumes":[2],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"topic"}],"queues":[{"x":650,"y":80,"name":"Queue 1","maxLength":""},{"x":650,"y":170,"name":"Queue 2","maxLength":""},{"x":650,"y":260,"name":"Queue 3","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":"x.x.x"},{"exchange":0,"queue":1,"routingKey":"#"},{"exchange":0,"queue":2,"routingKey":"x.y.z"}]}'
     )
   })
 
