@@ -59,6 +59,9 @@ class Binding extends BaseComponent {
     this.dy = this.y2 - this.y1
   }
 
+  /**
+   * Renders the line between bind components.
+   */
   render() {
     this.ctx.beginPath()
     this.ctx.strokeStyle = '#000'

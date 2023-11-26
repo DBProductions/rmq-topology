@@ -27,6 +27,9 @@ class BaseMessage extends Base {
     }
   }
 
+  /**
+   * Renders the circle representing the message.
+   */
   render() {
     this.ctx.beginPath()
     this.ctx.fillStyle = this.fillStyle

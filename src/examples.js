@@ -107,7 +107,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 130,
+        y: 80,
         name: 'Producer 1',
         publishes: {
           0: {
@@ -122,12 +122,27 @@ const Examples = {
       },
       {
         x: 200,
-        y: 200,
+        y: 170,
         name: 'Producer 2',
         publishes: {
           0: {
             exchange: 'Exchange',
             routingKey: 'x.x.x',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
+      },
+      {
+        x: 200,
+        y: 260,
+        name: 'Producer 3',
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'y.y.y',
             message: {
               headers: {},
               body: {}
@@ -327,7 +342,7 @@ const Examples = {
         name: 'Queue 1',
         dlx: 1,
         dlxrk: 'Queue 2',
-        maxLength: 5
+        maxLength: 3
       },
       { x: 650, y: 170, name: 'Queue 2' }
     ],
