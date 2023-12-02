@@ -4,7 +4,7 @@ describe('Direct example', () => {
   })
 
   it('Rendered like expected', () => {
-    cy.get('#exampleTopology').select('Direct')
+    cy.get('#exampleTopology').select('Direct Exchange')
 
     // producer
     cy.get('#canvas').trigger('click', 203, 133)
@@ -16,20 +16,35 @@ describe('Direct example', () => {
     cy.get('#consumerNameField').should('have.value', 'Consumer')
     cy.get('#cancelConsumerForm').click()
 
+    // exchange
+    cy.get('#canvas').trigger('click', 403, 153)
+    cy.get('#exchangeNameField').should('have.value', 'Exchange')
+    cy.get('#cancelExchangeForm').click()
+
+    // queue
+    cy.get('#canvas').trigger('click', 653, 153)
+    cy.get('#queueNameField').should('have.value', 'Queue')
+    cy.get('#cancelQueueForm').click()
+
+    // binding
+    cy.get('#canvas').trigger('click', 450, 150)
+    cy.get('#bindingRoutingKeyField').should('have.value', '')
+    cy.get('#cancelBindingForm').click()
+
     cy.window().its('scene.actors.length').should('equal', 5)
   })
 
   it('Export direct defintion', () => {
-    cy.get('#exampleTopology').select('Direct')
+    cy.get('#exampleTopology').select('Direct Exchange')
     cy.get('#export').click()
     cy.get('#ImExport').should(
       'have.value',
-      '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct"}],"queues":[{"x":650,"y":150,"name":"Queue","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
+      '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":150,"name":"Queue","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
     )
   })
 
   it('Generate direct curl definition', () => {
-    cy.get('#exampleTopology').select('Direct')
+    cy.get('#exampleTopology').select('Direct Exchange')
     cy.get('#generateCurl').click({ force: true })
     cy.get('#ImExport').should(
       'have.value',
@@ -38,7 +53,7 @@ describe('Direct example', () => {
   })
 
   it('Generate direct rabbitmqadmin definition', () => {
-    cy.get('#exampleTopology').select('Direct')
+    cy.get('#exampleTopology').select('Direct Exchange')
     cy.get('#generateRabbitmqadmin').click({ force: true })
     cy.get('#ImExport').should(
       'have.value',
@@ -47,7 +62,7 @@ describe('Direct example', () => {
   })
 
   it('Generate direct terraform definition', () => {
-    cy.get('#exampleTopology').select('Direct')
+    cy.get('#exampleTopology').select('Direct Exchange')
     cy.get('#generateTerraform').click({ force: true })
     cy.get('#ImExport').should(
       'have.value',

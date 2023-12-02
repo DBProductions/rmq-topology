@@ -1,5 +1,5 @@
 const Examples = {
-  direct: {
+  'direct exchange': {
     description:
       'Direct exchange sends message to the queue whose matches the routing key.',
     producers: [
@@ -39,7 +39,7 @@ const Examples = {
     queues: [{ x: 650, y: 150, name: 'Queue' }],
     bindings: [{ exchange: 0, queue: 0, routingKey: '' }]
   },
-  fanout: {
+  'fanout exchange': {
     description:
       'Fanout exchange broadcasts all the messages to all bind queues, it ignores the routing key. Publish/Subscribe',
     producers: [
@@ -101,7 +101,7 @@ const Examples = {
       { exchange: 0, queue: 2, routingKey: '' }
     ]
   },
-  topic: {
+  'topic exchange': {
     description:
       'Topic exchange sends messages by routing key to the matching queue.',
     producers: [
@@ -345,6 +345,70 @@ const Examples = {
         maxLength: 3
       },
       { x: 650, y: 170, name: 'Queue 2' }
+    ],
+    bindings: [
+      { exchange: 0, queue: 0, routingKey: '' },
+      { exchange: 1, queue: 1, routingKey: '' }
+    ]
+  },
+  'alternate exchange': {
+    description:
+      'When an exchange can not route the message it publishes the message to the alternate exchange.',
+    producers: [
+      {
+        x: 200,
+        y: 100,
+        name: 'Producer',
+        publishes: {
+          0: {
+            exchange: 'Exchange 1',
+            routingKey: '',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
+      }
+    ],
+    consumers: [
+      {
+        x: 800,
+        y: 80,
+        name: 'Consumer 1',
+        consumes: [0],
+        mode: 'ack'
+      },
+      {
+        x: 800,
+        y: 180,
+        name: 'Consumer 2',
+        consumes: [1],
+        mode: 'ack'
+      }
+    ],
+    exchanges: [
+      {
+        x: 400,
+        y: 80,
+        name: 'Exchange 1',
+        type: 'direct',
+        alternate: 'Exchange 2'
+      },
+      {
+        x: 450,
+        y: 180,
+        name: 'Exchange 2',
+        type: 'topic'
+      }
+    ],
+    queues: [
+      {
+        x: 650,
+        y: 100,
+        name: 'Queue 1'
+      },
+      { x: 650, y: 200, name: 'Queue 2' }
     ],
     bindings: [
       { exchange: 0, queue: 0, routingKey: '' },

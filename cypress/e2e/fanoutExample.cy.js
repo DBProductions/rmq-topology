@@ -4,7 +4,7 @@ describe('Fanout example', () => {
   })
 
   it('Rendered like expected', () => {
-    cy.get('#exampleTopology').select('Fanout')
+    cy.get('#exampleTopology').select('Fanout Exchange')
 
     // producer
     cy.get('#canvas').trigger('click', 203, 133)
@@ -33,16 +33,16 @@ describe('Fanout example', () => {
   })
 
   it('Export fanout defintion', () => {
-    cy.get('#exampleTopology').select('Fanout')
+    cy.get('#exampleTopology').select('Fanout Exchange')
     cy.get('#export').click()
     cy.get('#ImExport').should(
       'have.value',
-      '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":50,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":150,"name":"Consumer 2","consumes":[1],"mode":"ack"},{"x":800,"y":250,"name":"Consumer 3","consumes":[2],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"fanout"}],"queues":[{"x":650,"y":80,"name":"Queue 1","maxLength":""},{"x":650,"y":170,"name":"Queue 2","maxLength":""},{"x":650,"y":260,"name":"Queue 3","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":0,"queue":1,"routingKey":""},{"exchange":0,"queue":2,"routingKey":""}]}'
+      '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":50,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":150,"name":"Consumer 2","consumes":[1],"mode":"ack"},{"x":800,"y":250,"name":"Consumer 3","consumes":[2],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"fanout","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","maxLength":""},{"x":650,"y":170,"name":"Queue 2","maxLength":""},{"x":650,"y":260,"name":"Queue 3","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":0,"queue":1,"routingKey":""},{"exchange":0,"queue":2,"routingKey":""}]}'
     )
   })
 
   it('Generate fanout curl definition', () => {
-    cy.get('#exampleTopology').select('Fanout')
+    cy.get('#exampleTopology').select('Fanout Exchange')
     cy.get('#generateCurl').click({ force: true })
     cy.get('#ImExport').should(
       'have.value',
@@ -51,7 +51,7 @@ describe('Fanout example', () => {
   })
 
   it('Generate fanout rabbitmqadmin definition', () => {
-    cy.get('#exampleTopology').select('Fanout')
+    cy.get('#exampleTopology').select('Fanout Exchange')
     cy.get('#generateRabbitmqadmin').click({ force: true })
     cy.get('#ImExport').should(
       'have.value',
@@ -60,7 +60,7 @@ describe('Fanout example', () => {
   })
 
   it('Generate fanout terraform definition', () => {
-    cy.get('#exampleTopology').select('Fanout')
+    cy.get('#exampleTopology').select('Fanout Exchange')
     cy.get('#generateTerraform').click({ force: true })
     cy.get('#ImExport').should(
       'have.value',

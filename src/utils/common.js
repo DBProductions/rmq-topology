@@ -56,6 +56,14 @@ const createTopology = (ctx, conf) => {
       newExchange.addToScene(window.scene)
       exchanges.push(newExchange)
     })
+    // alternate exchanges
+    const alternateExchanges = conf.exchanges.filter((s) => s.alternate)
+    const currentExchanges = window.scene.getObjectsInScene('Exchange')
+    alternateExchanges.forEach((ex) => {
+      const e = currentExchanges.filter((s) => s.name == ex.name)[0]
+      const a = currentExchanges.filter((s) => s.name == ex.alternate)[0]
+      e.setAlternate(a)
+    })
   }
   if (conf.queues) {
     conf.queues.forEach((queue) => {

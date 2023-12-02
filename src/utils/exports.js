@@ -2,6 +2,97 @@ import { displayForm } from './common'
 import { getSettings } from './settings'
 
 /**
+ * Export topology as config.
+ *
+ * @param {object} e - Event object
+ */
+const exportTopology = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  document.querySelector('#importBtn').classList.remove('hidden')
+  const exports = {
+    description: '',
+    producers: [],
+    consumers: [],
+    exchanges: [],
+    queues: [],
+    bindings: []
+  }
+  const exchanges = window.scene.getObjectsInScene('Exchange')
+  exchanges.forEach((val) => {
+    let alternate = null
+    if (val.alternate) {
+      alternate = val.alternate.name
+    }
+    exports.exchanges.push({
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      type: val.type,
+      alternate
+    })
+  })
+  const queues = window.scene.getObjectsInScene('Queue')
+  queues.forEach((val) => {
+    const q = {
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      ttl: val.ttl,
+      maxLength: val.maxLength
+    }
+    if (val.dlx) {
+      const exchangeIndex = exchanges.findIndex((e) => e.id === val.dlx.id)
+      q.dlx = exchangeIndex
+    }
+    exports.queues.push(q)
+  })
+  const bindings = window.scene.getObjectsInScene('Binding')
+  bindings.forEach((val) => {
+    const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
+    const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
+    if (exchangeIndex !== -1 && queueIndex !== -1) {
+      exports.bindings.push({
+        exchange: exchangeIndex,
+        queue: queueIndex,
+        routingKey: val.routingKey
+      })
+    }
+  })
+  const consumers = window.scene.getObjectsInScene('Consumer')
+  consumers.forEach((val) => {
+    const consumes = []
+    val.queues.forEach((queue) => {
+      const queueIndex = queues.findIndex((q) => q.id === queue.id)
+      consumes.push(queueIndex)
+    })
+    exports.consumers.push({
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      consumes,
+      mode: val.mode
+    })
+  })
+  const producers = window.scene.getObjectsInScene('Producer')
+  producers.forEach((val) => {
+    for (let key in val.publishes) {
+      val.publishes[key].exchange = val.publishes[key].exchange.name
+    }
+    exports.producers.push({
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      publishes: val.publishes,
+      routingKey: val.routingKey
+    })
+  })
+
+  document.querySelector('#ImExport').value = JSON.stringify(exports)
+  document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
+}
+
+/**
  * Export topology as curl statements.
  *
  * @param {object} e - Event object
@@ -20,7 +111,13 @@ const exportCurl = (e) => {
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = encodeURIComponent(val.name)
-    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}'\n\n`
+    const args = {}
+    if (val.alternate !== null) {
+      args['alternate-exchange'] = val.alternate.name
+    }
+    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": ${JSON.stringify(
+      args
+    )}}'\n\n`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
@@ -35,7 +132,7 @@ const exportCurl = (e) => {
     }
     if (val.maxLength) {
       args['x-max-length'] = val.maxLength
-    }
+    }    
     generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/queues/${vhost}/${name} -d '{"auto_delete": false, "durable": true, "arguments": ${JSON.stringify(
       args
     )}}'\n\n`
@@ -368,4 +465,4 @@ components:
   document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
 }
 
-export { exportCurl, exportRabbitmqadmin, exportTerraform, exportAsyncApi }
+export { exportTopology, exportCurl, exportRabbitmqadmin, exportTerraform, exportAsyncApi }

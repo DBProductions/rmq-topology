@@ -20,14 +20,21 @@
             </select>
             <select id="exampleTopology" class="headerSelect">
                 <option>Examples</option>
-                <option>Direct</option>
-                <option>Fanout</option>
-                <option>Topic</option>
-                <option>Work Queue</option>
-                <option>Queue-Ttl</option>                
-                <option>Queue-Max-Length</option>
-                <option>Dlx</option>
-                <option>Retry</option>
+                <optgroup label="Basic">
+                  <option>Direct Exchange</option>
+                  <option>Fanout Exchange</option>
+                  <option>Topic Exchange</option>
+                </optgroup>
+                <optgroup label="Extended">
+                  <option>Work Queue</option>
+                  <option>Queue-Ttl</option>                
+                  <option>Queue-Max-Length</option>
+                  <option>Alternate Exchange</option>
+                </optgroup>
+                <optgroup label="Advanced">
+                  <option>Dlx</option>
+                  <option>Retry</option>
+                </optgroup>
             </select>            
             <button id="animate" class="myButton"><i class="fas fa-play"></i> Start</button>
             <button id="export" class="myButton"><i class="fas fa-file-export"></i> Export</button>
@@ -120,6 +127,11 @@
                             <option>topic</option>
                         </select>
                     </div>
+                    <div>
+                        <select id="exchangeAlternateSelect">
+                            <option>---</option>
+                        </select>
+                    </div>
                     <div class="btnFooter">
                         <button id="sendExchangeForm" class="myButton"><i class="fa fa-save"></i> Save</button> 
                         <button id="cancelExchangeForm" class="myButton"><i class="fa fa-ban"></i> Cancel</button>
@@ -201,8 +213,8 @@
             <div class="panel">
                 <form id="settingsForm" action="#">
                     <ul class="tabrow" id="settingsTabs">
-                        <li id="settingsTabHrefSettings" class="selected"><a href="#">Settings</a></li>
-                        <li id="settingsTabHrefAsyncAPI"><a href="#">AsyncAPI</a></li>
+                        <li id="settingsTabHrefSettings" class="selected"><a href="#" id="settingsLinkSettings">Settings</a></li>
+                        <li id="settingsTabHrefAsyncAPI"><a href="#" id="settingsLinkAsyncapi">AsyncAPI</a></li>
                     </ul>
                     <div id="tabContainer">
                         <div id="settingsTabSettings">

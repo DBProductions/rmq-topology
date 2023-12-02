@@ -21,6 +21,12 @@ describe('Test examples', () => {
     cy.window().its('scene.actors.length').should('equal', 9)
   })
 
+  it('Alternate example', () => {
+    cy.get('#exampleTopology').select('Dlx')
+
+    cy.window().its('scene.actors.length').should('equal', 9)
+  })
+
   it('Dlx example', () => {
     cy.get('#exampleTopology').select('Dlx')
 

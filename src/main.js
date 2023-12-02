@@ -15,6 +15,7 @@ import { displayQueue } from './utils/queue'
 import { displayBinding } from './utils/binding'
 
 import {
+  exportTopology,
   exportCurl,
   exportRabbitmqadmin,
   exportTerraform,
@@ -246,92 +247,17 @@ document.querySelector('#settings').addEventListener('click', (e) => {
   displaySettings()
 })
 
-document.querySelector('#export').addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  document.querySelector('#importBtn').classList.remove('hidden')
-  const exports = {
-    description: '',
-    producers: [],
-    consumers: [],
-    exchanges: [],
-    queues: [],
-    bindings: []
-  }
-  const exchanges = window.scene.getObjectsInScene('Exchange')
-  exchanges.forEach((val) => {
-    exports.exchanges.push({
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      type: val.type
-    })
-  })
-  const queues = window.scene.getObjectsInScene('Queue')
-  queues.forEach((val) => {
-    const q = {
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      ttl: val.ttl,
-      maxLength: val.maxLength
-    }
-    if (val.dlx) {
-      const exchangeIndex = exchanges.findIndex((e) => e.id === val.dlx.id)
-      q.dlx = exchangeIndex
-    }
-    exports.queues.push(q)
-  })
-  const bindings = window.scene.getObjectsInScene('Binding')
-  bindings.forEach((val) => {
-    const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
-    const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
-    if (exchangeIndex !== -1 && queueIndex !== -1) {
-      exports.bindings.push({
-        exchange: exchangeIndex,
-        queue: queueIndex,
-        routingKey: val.routingKey
-      })
-    }
-  })
-  const consumers = window.scene.getObjectsInScene('Consumer')
-  consumers.forEach((val) => {
-    const consumes = []
-    val.queues.forEach((queue) => {
-      const queueIndex = queues.findIndex((q) => q.id === queue.id)
-      consumes.push(queueIndex)
-    })
-    exports.consumers.push({
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      consumes,
-      mode: val.mode
-    })
-  })
-  const producers = window.scene.getObjectsInScene('Producer')
-  producers.forEach((val) => {
-    for (let key in val.publishes) {
-      val.publishes[key].exchange = val.publishes[key].exchange.name
-    }
-    exports.producers.push({
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      publishes: val.publishes,
-      routingKey: val.routingKey
-    })
-  })
-
-  document.querySelector('#ImExport').value = JSON.stringify(exports)
-  document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
-})
-
 document.querySelector('#copyBtn').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   document.querySelector('#ImExport').select()
   document.execCommand('copy')
+})
+
+document.querySelector('#cancelBtn').addEventListener('click', (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  document.querySelector('#imexportPanel').classList.remove('panel-wrap-out')
 })
 
 document.querySelector('#importBtn').addEventListener('click', (e) => {
@@ -347,13 +273,8 @@ document.querySelector('#importBtn').addEventListener('click', (e) => {
   }
 })
 
-document.querySelector('#cancelBtn').addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  document.querySelector('#imexportPanel').classList.remove('panel-wrap-out')
-})
-
 // export
+document.querySelector('#export').addEventListener('click', exportTopology)
 document.querySelector('#generateCurl').addEventListener('click', exportCurl)
 document
   .querySelector('#generateRabbitmqadmin')

@@ -9,11 +9,16 @@ const displayProducer = (producer) => {
   document.querySelector('#deleteProducerForm').classList.add('hidden')
   document.querySelector('#producerPanel').classList.add('panel-wrap-out')
 
-  document.querySelector('#producerIdField').value = ''
-  document.querySelector('#producerNameField').value = ''
-  document.querySelector('#producerRoutingKeyField').value = ''
-  document.querySelector('#producerPublishTo').innerHTML = ''
-  document.querySelector('#producerErr').innerHTML = ''
+  const producerParams = [
+    '#producerIdField',
+    '#producerNameField',
+    '#producerRoutingKeyField',
+    '#producerPublishTo',
+    '#producerErr'
+  ]
+  producerParams.forEach((p) => {
+    document.querySelector(p).value = ''
+  })
 
   const exchanges = window.scene.getObjectsInScene('Exchange')
 
@@ -103,7 +108,6 @@ const sendProducerForm = (e) => {
         }
       })
     }
-
     producer.name = name
     producer.publishes = keepExchanges
 
@@ -131,9 +135,14 @@ const sendProducerForm = (e) => {
   window.scene.renderOnce()
 
   if (!error) {
-    document.querySelector('#producerIdField').value = ''
-    document.querySelector('#producerNameField').value = ''
-    document.querySelector('#producerRoutingKeyField').value = ''
+    const producerParams = [
+      '#producerIdField',
+      '#producerNameField',
+      '#producerRoutingKeyField'
+    ]
+    producerParams.forEach((p) => {
+      document.querySelector(p).value = ''
+    })
     document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
   }
 }
@@ -146,12 +155,12 @@ const sendProducerForm = (e) => {
 const hideProducer = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const settingsParams = [
+  const producerParams = [
     '#producerIdField',
     '#producerNameField',
     '#producerRoutingKeyField'
   ]
-  settingsParams.forEach((p) => {
+  producerParams.forEach((p) => {
     document.querySelector(p).value = ''
   })
   document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
