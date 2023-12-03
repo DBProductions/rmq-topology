@@ -144,7 +144,7 @@ const exportCurl = (e) => {
     if (exchangeIndex !== -1 && queueIndex !== -1) {
       const exchange = exchanges[exchangeIndex]
       const queue = queues[queueIndex]
-      generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/bindings/e/${encodeURIComponent(
+      generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPOST ${management}/bindings/${vhost}/e/${encodeURIComponent(
         exchange.name
       )}/q/${encodeURIComponent(queue.name)} -d '{"routing_key": ${
         val.routingKey
@@ -177,7 +177,12 @@ const exportRabbitmqadmin = (e) => {
   }
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
-    generatedString += `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare exchange name="${val.name}" type="${val.type}" durable=true\n\n`
+    generatedString += `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare exchange `
+    generatedString += `name="${val.name}" type="${val.type}" durable=true`
+    if (val.alternate !== null) {      
+      generatedString += ` arguments='${JSON.stringify({"alternate-exchange": val.alternate.name})}'`
+    }
+    generatedString += `\n\n`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {

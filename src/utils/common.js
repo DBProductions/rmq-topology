@@ -5,6 +5,11 @@ import Queue from '../queue'
 import Binding from '../binding'
 import Scene from '../scene'
 import Timer from '../timer'
+import { displayProducer } from './producer'
+import { displayConsumer } from './consumer'
+import { displayExchange } from './exchange'
+import { displayQueue } from './queue'
+import { displayBinding } from './binding'
 
 /**
  * Calculates the point on the line that's nearest to the mouse position.
@@ -147,6 +152,37 @@ const displayForm = (form) => {
 }
 
 /**
+ * Decides which component have to be displayed to get created.
+ *
+ * @param {object} e - Event object
+ */
+const addNewComponent = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  displayForm(e.target.value)
+  switch (e.target.value) {
+    case 'Producer':
+      displayProducer()
+      break
+    case 'Consumer':
+      displayConsumer()
+      break
+    case 'Exchange':
+      displayExchange()
+      break
+    case 'Queue':
+      displayQueue()
+      break
+    case 'Binding':
+      displayBinding()
+      break
+    default:
+      break
+  }
+  e.target.selectedIndex = 0
+}
+
+/**
  * Current mouse position inside of a cirle.
  * @param {object} val - can be Exchange or Queue object
  * @param {number} mx - x position of the mouse
@@ -262,6 +298,7 @@ export {
   linepointNearestMouse,
   createTopology,
   displayForm,
+  addNewComponent,
   findCircle,
   findSquare,
   findLine,

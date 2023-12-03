@@ -1,6 +1,7 @@
 import {
   createTopology,
   displayForm,
+  addNewComponent,
   findCircle,
   findSquare,
   findLine,
@@ -151,25 +152,21 @@ canvas.addEventListener('click', (e) => {
   e.stopPropagation()
   const ele = findPosition(e, true)
   if (ele && ele.constructor) {
+    displayForm(ele.constructor.name)
     switch (ele.constructor.name) {
       case 'Producer':
-        displayForm(ele.constructor.name)
         displayProducer(ele)
         break
       case 'Exchange':
-        displayForm(ele.constructor.name)
         displayExchange(ele)
         break
       case 'Queue':
-        displayForm(ele.constructor.name)
         displayQueue(ele)
         break
       case 'Binding':
-        displayForm(ele.constructor.name)
         displayBinding(ele)
         break
       case 'Consumer':
-        displayForm(ele.constructor.name)
         displayConsumer(ele)
         break
       default:
@@ -201,31 +198,9 @@ document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   }
 })
 
-document.querySelector('#newComponent').addEventListener('change', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  displayForm(e.target.value)
-  switch (e.target.value) {
-    case 'Producer':
-      displayProducer()
-      break
-    case 'Consumer':
-      displayConsumer()
-      break
-    case 'Exchange':
-      displayExchange()
-      break
-    case 'Queue':
-      displayQueue()
-      break
-    case 'Binding':
-      displayBinding()
-      break
-    default:
-      break
-  }
-  e.target.selectedIndex = 0
-})
+document
+  .querySelector('#newComponent')
+  .addEventListener('change', addNewComponent)
 
 const animateBtn = document.querySelector('#animate')
 animateBtn.addEventListener('click', (e) => {
