@@ -76,15 +76,19 @@ const exportTopology = (e) => {
   })
   const producers = window.scene.getObjectsInScene('Producer')
   producers.forEach((val) => {
+    const publishes = {}
     for (let key in val.publishes) {
-      val.publishes[key].exchange = val.publishes[key].exchange.name
+      publishes[key] = {
+        exchange: val.publishes[key].exchange.name,
+        routingKey: val.publishes[key].routingKey,
+        message: val.publishes[key].message
+      }
     }
     exports.producers.push({
       x: val.x,
       y: val.y,
       name: val.name,
-      publishes: val.publishes,
-      routingKey: val.routingKey
+      publishes
     })
   })
 
@@ -343,7 +347,7 @@ const exportAsyncApi = (e) => {
   let generatedString = ''
   const brokerSettings = getSettings()
   const { host } = brokerSettings
-  const { title, description } = brokerSettings.asyncapi
+  const { title, description, version } = brokerSettings.asyncapi
   let { vhost } = brokerSettings
   if (vhost === '%2f') {
     vhost = '/'
@@ -361,7 +365,7 @@ info:
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.htm
-  version: 0.1.0
+  version: ${version}
 servers:
   production:
     url: ${host}

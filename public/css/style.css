@@ -16,10 +16,12 @@ canvas {
 h2 {
   padding: 3px;
   margin: 3px;
+  color: #ff6600;
 }
 h2 small {
   margin-left: 10px;
   font-size: 12px;
+  color: #aab6b1;
 }
 h3 {
   padding: 3px;

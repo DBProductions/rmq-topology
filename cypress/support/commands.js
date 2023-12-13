@@ -29,3 +29,11 @@ Cypress.Commands.add('moveOnCanvas', (x1, x2, y1, y2) => {
   cy.get('#canvas').trigger('mousemove', x2, y2)
   cy.get('#canvas').trigger('mouseup')
 })
+
+Cypress.Commands.add('assertValueCopiedToClipboard', (value) => {
+  cy.window().then((win) => {
+    win.navigator.clipboard.readText().then((text) => {
+      expect(text).to.eq(value)
+    })
+  })
+})

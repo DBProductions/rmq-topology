@@ -26,9 +26,10 @@ describe('Settings', () => {
       'have.value',
       'Broker description.'
     )
+    cy.get('#settingsAsyncApiVersion').should('have.value', '0.0.1')
   })
 
-  it('New settings get saved', () => {
+  it('New settings are saved', () => {
     cy.get('#settings').click()
     cy.get('#settingsHost').clear().type('127.0.0.1')
     cy.get('#settingsPort').clear().type('5671')
@@ -36,6 +37,12 @@ describe('Settings', () => {
     cy.get('#settingsVHost').clear().type('/user')
     cy.get('#settingsUsername').clear().type('rabbit')
     cy.get('#settingsPassword').clear().type('rabbit')
+
+    cy.get('#settingsLinkAsyncapi').click()
+    cy.get('#settingsAsyncApiTitle').clear().type('title')
+    cy.get('#settingsAsyncApiDescription').clear().type('description')
+    cy.get('#settingsAsyncApiVersion').clear().type('0.0.2')
+
     cy.get('#sendSettingsForm').click()
 
     cy.reload()
@@ -50,5 +57,10 @@ describe('Settings', () => {
     cy.get('#settingsVHost').should('have.value', '/user')
     cy.get('#settingsUsername').should('have.value', 'rabbit')
     cy.get('#settingsPassword').should('have.value', 'rabbit')
+
+    cy.get('#settingsLinkAsyncapi').click()
+    cy.get('#settingsAsyncApiTitle').should('have.value', 'title')
+    cy.get('#settingsAsyncApiDescription').should('have.value', 'description')
+    cy.get('#settingsAsyncApiVersion').should('have.value', '0.0.2')
   })
 })

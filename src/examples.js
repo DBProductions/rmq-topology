@@ -41,7 +41,7 @@ const Examples = {
   },
   'fanout exchange': {
     description:
-      'Fanout exchange broadcasts all the messages to all bind queues, it ignores the routing key. Publish/Subscribe',
+      'Fanout exchange broadcasts all the messages to all bind queues, it ignores the routing key. Publish/Subscribe pattern.',
     producers: [
       {
         x: 200,
@@ -194,7 +194,8 @@ const Examples = {
     ]
   },
   'work queue': {
-    description: 'Work queues share the work between multiple consumers.',
+    description:
+      'Work queues share the work between multiple consumers behind one queue.',
     producers: [
       {
         x: 200,
