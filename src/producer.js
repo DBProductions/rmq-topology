@@ -1,5 +1,5 @@
 import BaseComponent from './basecomponent'
-import ExchangeMessage from './exchangemessage'
+import ExchangeMessage from './messages/exchangemessage'
 
 class Producer extends BaseComponent {
   /**
@@ -22,7 +22,15 @@ class Producer extends BaseComponent {
     this.curDelay = 0
     this.spawnTime = 1.0 // seconds
     this.fullSpawnTime = this.spawnTime
-    this.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`
+
+    var letters = '012345'.split('')
+    var color = `#${letters[Math.round(Math.random() * 5)]}`
+    letters = '0123456789ABCDEF'.split('')
+    for (var i = 0; i < 5; i++) {
+      color += letters[Math.round(Math.random() * 15)]
+    }
+    //this.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`
+    this.color = color
 
     this.publishedMessages = 0
     this.publishes = publishes || {}
@@ -117,8 +125,7 @@ class Producer extends BaseComponent {
   }
 
   /**
-   * Render the producer and lines to every exchange from the list.
-   *
+   * Render the producer and draw lines to every exchange from the list.
    */
   render() {
     this.ctx.setLineDash([])
@@ -166,7 +173,6 @@ class Producer extends BaseComponent {
       this.ctx.setLineDash([3, 3])
       this.ctx.lineWidth = 1
       this.ctx.moveTo(this.x + this.width / 2, this.y + this.height / 2)
-      //this.ctx.lineTo(val.x, val.y)
       this.ctx.lineTo(
         this.publishes[key].exchange.x,
         this.publishes[key].exchange.y

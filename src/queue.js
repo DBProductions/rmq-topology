@@ -1,6 +1,6 @@
 import BaseComponent from './basecomponent'
-import ExchangeMessage from './exchangemessage'
-import QueueMessage from './queuemessage'
+import ExchangeMessage from './messages/exchangemessage'
+import QueueMessage from './messages/queuemessage'
 
 class Queue extends BaseComponent {
   /**

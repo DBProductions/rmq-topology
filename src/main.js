@@ -53,6 +53,7 @@ canvas.width = window.innerWidth
 canvas.height = 450
 const curCtx = canvas.getContext('2d')
 
+// creates the scene with timer and bind it to the window object.
 createTopology(curCtx, config)
 
 canvas.addEventListener('mouseup', mouseUpOnCanvas)

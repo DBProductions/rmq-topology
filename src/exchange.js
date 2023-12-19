@@ -1,6 +1,6 @@
 import BaseComponent from './basecomponent'
-import BindingMessage from './bindingmessage'
-import AlternateMessage from './alternatemessage'
+import BindingMessage from './messages/bindingmessage'
+import AlternateMessage from './messages/alternatemessage'
 
 class Exchange extends BaseComponent {
   /**

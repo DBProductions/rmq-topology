@@ -1,5 +1,5 @@
 import BaseComponent from './basecomponent'
-import RejectMessage from './rejectmessage'
+import RejectMessage from './messages/rejectmessage'
 
 class Consumer extends BaseComponent {
   /**

@@ -2,7 +2,7 @@ import BaseMessage from './basemessage'
 
 class AlternateMessage extends BaseMessage {
   /**
-   * Message object between exchange and queue.
+   * Message object between exchange and exchange.
    *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message

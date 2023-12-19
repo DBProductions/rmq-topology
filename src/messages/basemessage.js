@@ -1,4 +1,4 @@
-import Base from './base'
+import Base from '../base'
 
 class BaseMessage extends Base {
   /**
@@ -28,7 +28,7 @@ class BaseMessage extends Base {
   }
 
   /**
-   * Renders the circle representing the message.
+   * Renders a circle representing the message.
    */
   render() {
     this.ctx.beginPath()

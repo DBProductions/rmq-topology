@@ -2,7 +2,8 @@ import BaseMessage from './basemessage'
 
 class ExchangeMessage extends BaseMessage {
   /**
-   * Message object between producer and exchange.
+   * Message object between producer and exchange.<br>
+   * The exchange receives this messages and route with another message.
    *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
@@ -32,6 +33,10 @@ class ExchangeMessage extends BaseMessage {
     this.targetY = this.exchange.y
   }
 
+  /**
+   * Updates the values for the moving message.<br>
+   * When the target gets reached the method of an arriving messages gets called.
+   */
   update() {
     this.dx = this.targetX - this.x
     this.dy = this.targetY - this.y
