@@ -1,3 +1,5 @@
 .DS_Store
 node_modules/
 public/doc/
+public/scripts/script.min.js
+public/scripts/script.min.js.map

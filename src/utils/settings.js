@@ -72,6 +72,8 @@ const displaySettings = () => {
       settings.asyncapi.title
     document.querySelector('#settingsAsyncApiDescription').value =
       settings.asyncapi.description
+    document.querySelector('#settingsAsyncApiVersion').value =
+      settings.asyncapi.version
   }
 }
 
@@ -99,7 +101,8 @@ const sendSettingsForm = (e) => {
       asyncapi: {
         title: document.querySelector('#settingsAsyncApiTitle').value,
         description: document.querySelector('#settingsAsyncApiDescription')
-          .value
+          .value,
+        version: document.querySelector('#settingsAsyncApiVersion').value
       }
     })
     hideSettings(e)
@@ -122,7 +125,8 @@ const hideSettings = (e) => {
     '#settingsUsername',
     '#settingsPassword',
     '#settingsAsyncApiTitle',
-    '#settingsAsyncApiDescription'
+    '#settingsAsyncApiDescription',
+    '#settingsAsyncApiVersion'
   ]
   settingsParams.forEach((p) => {
     document.querySelector(p).value = ''

@@ -1,17 +1,16 @@
+import { createTopology, displayForm, addNewComponent } from './utils/common'
+
 import {
-  linepointNearestMouse,
-  createTopology,
-  displayForm
-} from './utils/common'
+  mouseUpOnCanvas,
+  mouseDownOnCanvas,
+  mouseMoveOnCanvas,
+  clickOnCanvas
+} from './utils/canvas'
 
 import { getSettings, setSettings, displaySettings } from './utils/settings'
-import { displayProducer } from './utils/producer'
-import { displayConsumer } from './utils/consumer'
-import { displayExchange } from './utils/exchange'
-import { displayQueue } from './utils/queue'
-import { displayBinding } from './utils/binding'
 
 import {
+  exportTopology,
   exportCurl,
   exportRabbitmqadmin,
   exportTerraform,
@@ -30,7 +29,8 @@ const brokerDefaultSettings = {
   password: 'guest',
   asyncapi: {
     title: 'RabbitMQ',
-    description: 'Broker description.'
+    description: 'Broker description.',
+    version: '0.0.1'
   }
 }
 if (getSettings() === null) {
@@ -53,7 +53,13 @@ canvas.width = window.innerWidth
 canvas.height = 450
 const curCtx = canvas.getContext('2d')
 
+// creates the scene with timer and bind it to the window object.
 createTopology(curCtx, config)
+
+canvas.addEventListener('mouseup', mouseUpOnCanvas)
+canvas.addEventListener('mousedown', mouseDownOnCanvas)
+canvas.addEventListener('mousemove', mouseMoveOnCanvas)
+canvas.addEventListener('click', clickOnCanvas)
 
 document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   e.preventDefault()
@@ -78,262 +84,9 @@ document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   }
 })
 
-document.querySelector('#newComponent').addEventListener('change', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  displayForm(e.target.value)
-  switch (e.target.value) {
-    case 'Producer':
-      displayProducer()
-      break
-    case 'Consumer':
-      displayConsumer()
-      break
-    case 'Exchange':
-      displayExchange()
-      break
-    case 'Queue':
-      displayQueue()
-      break
-    case 'Binding':
-      displayBinding()
-      break
-    default:
-      break
-  }
-  e.target.selectedIndex = 0
-})
-
-/**
- * Current mouse position inside of a cirle.
- * @param {object} val - can be Exchange or Queue object
- * @param {number} mx - x position of the mouse
- * @param {number} my - y position of the mouse
- * @returns {object}
- */
-const findCircle = (val, mx, my) => {
-  let found
-  if (val.constructor.name === 'Exchange' || val.constructor.name === 'Queue') {
-    const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2))
-    if (d <= val.radius) {
-      found = val
-    }
-  }
-  return found
-}
-
-/**
- * Current mouse position inside of a square.
- * @param {object} val - can be Producer or Consumer object
- * @param {number} mx - x position of the mouse
- * @param {number} my - y position of the mouse
- * @returns {object}
- */
-const findSquare = (val, mx, my) => {
-  let found
-  if (
-    val.constructor.name === 'Producer' ||
-    val.constructor.name === 'Consumer'
-  ) {
-    if (
-      mx >= val.x &&
-      mx <= val.x + val.width &&
-      my >= val.y &&
-      my <= val.y + val.height
-    ) {
-      found = val
-    }
-  }
-  return found
-}
-
-/**
- * Current mouse position over a line.
- * @param {Binding} val - Binding object
- * @param {number} mx - x position of the mouse
- * @param {number} my - y position of the mouse
- * @returns {object}
- */
-const findLine = (val, mx, my) => {
-  let found
-  const line = {
-    x0: val.x1,
-    x1: val.x2,
-    y0: val.y1,
-    y1: val.y2
-  }
-
-  let x1
-  let x2
-  if (line.x0 > line.x1) {
-    x1 = line.x1
-    x2 = line.x0
-  } else {
-    x1 = line.x0
-    x2 = line.x1
-  }
-  if (mx > x1 && mx < x2) {
-    // determine how close the mouse must be to the line
-    // for the mouse to be inside the line
-    const tolerance = 3
-    const linepoint = linepointNearestMouse(line, mx, my)
-    const dx = mx - linepoint.x
-    const dy = my - linepoint.y
-    const distance = Math.abs(Math.sqrt(dx * dx + dy * dy))
-    if (distance < tolerance) {
-      found = val
-    }
-  }
-  return found
-}
-
-/**
- * Find the actor in the scene from the current mouse position.
- * @param {object} e - Event object
- * @param {*} line
- * @returns {object} - undefined or the found actor in scene
- */
-const findPosition = (e, line = false) => {
-  const mx = e.clientX - e.target.offsetLeft
-  const my = e.clientY - e.target.offsetTop
-  let obj
-  window.scene.actors.forEach((val) => {
-    const foundProducerConsumer = findSquare(val, mx, my)
-    if (foundProducerConsumer) {
-      obj = foundProducerConsumer
-    }
-    const foundExchangeQueue = findCircle(val, mx, my)
-    if (foundExchangeQueue) {
-      obj = foundExchangeQueue
-    }
-    if (line) {
-      const foundLine = findLine(val, mx, my)
-      if (foundLine) {
-        obj = foundLine
-      }
-    }
-  })
-  return obj
-}
-
-canvas.addEventListener('mousedown', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  if (!window.timer.running) {
-    const ele = findPosition(e)
-    if (ele) {
-      ele.dragged = true
-      ele.hover = false
-    }
-  }
-})
-
-canvas.addEventListener('mouseup', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  if (!window.timer.running) {
-    window.scene.actors.map((obj) => {
-      obj.dragged = false
-      return true
-    })
-    window.scene.renderOnce()
-  }
-})
-
-canvas.addEventListener('mousemove', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  document.body.style.cursor = 'default'
-  if (!window.timer.running) {
-    const mx = e.clientX - e.target.offsetLeft
-    const my = e.clientY - e.target.offsetTop
-
-    const draggedActor = window.scene.actors.filter((a) => a.dragged === true)
-    if (draggedActor.length > 0) {
-      const actor = draggedActor[0]
-      document.body.style.cursor = 'pointer'
-      if (actor.constructor.name === 'Producer') {
-        actor.x = mx - actor.width / 2
-        actor.y = my - actor.height / 2
-      } else if (actor.constructor.name === 'Consumer') {
-        actor.x = mx - actor.width / 2
-        actor.y = my - actor.height / 2
-      } else {
-        actor.x = mx
-        actor.y = my
-      }
-      if (actor.binding) {
-        if (actor.binding.source === actor) {
-          actor.bindings.forEach((binding) => {
-            binding.x1 = mx
-            binding.y1 = my
-          })
-        }
-        if (actor.binding.destination === actor) {
-          actor.bindings.forEach((binding) => {
-            binding.x2 = mx
-            binding.y2 = my
-          })
-        }
-      }
-    } else {
-      window.scene.actors.forEach((val) => {
-        val.hover = false
-        const foundProducerConsumer = findSquare(val, mx, my)
-        if (foundProducerConsumer) {
-          document.body.style.cursor = 'pointer'
-          val.hover = true
-        }
-        const foundExchangeQueue = findCircle(val, mx, my)
-        if (foundExchangeQueue) {
-          document.body.style.cursor = 'pointer'
-          val.hover = true
-        }
-
-        if (val.constructor.name === 'Binding') {
-          const foundLine = findLine(val, mx, my)
-          if (foundLine) {
-            document.body.style.cursor = 'pointer'
-            val.hover = true
-          }
-        }
-      })
-    }
-    window.scene.renderOnce()
-  }
-})
-
-canvas.addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  const ele = findPosition(e, true)
-  if (ele && ele.constructor) {
-    switch (ele.constructor.name) {
-      case 'Producer':
-        displayForm(ele.constructor.name)
-        displayProducer(ele)
-        break
-      case 'Exchange':
-        displayForm(ele.constructor.name)
-        displayExchange(ele)
-        break
-      case 'Queue':
-        displayForm(ele.constructor.name)
-        displayQueue(ele)
-        break
-      case 'Binding':
-        displayForm(ele.constructor.name)
-        displayBinding(ele)
-        break
-      case 'Consumer':
-        displayForm(ele.constructor.name)
-        displayConsumer(ele)
-        break
-      default:
-        console.log(ele.constructor.name)
-    }
-  }
-})
+document
+  .querySelector('#newComponent')
+  .addEventListener('change', addNewComponent)
 
 const animateBtn = document.querySelector('#animate')
 animateBtn.addEventListener('click', (e) => {
@@ -348,91 +101,11 @@ animateBtn.addEventListener('click', (e) => {
   }
 })
 
-const settingsBtn = document.querySelector('#settings')
-settingsBtn.addEventListener('click', (e) => {
+document.querySelector('#settings').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   displayForm('settingsForm')
   displaySettings()
-})
-
-const exportBtn = document.querySelector('#export')
-exportBtn.addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  document.querySelector('#importBtn').classList.remove('hidden')
-  const exports = {
-    description: '',
-    producers: [],
-    consumers: [],
-    exchanges: [],
-    queues: [],
-    bindings: []
-  }
-  const exchanges = window.scene.getObjectsInScene('Exchange')
-  exchanges.forEach((val) => {
-    exports.exchanges.push({
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      type: val.type
-    })
-  })
-  const queues = window.scene.getObjectsInScene('Queue')
-  queues.forEach((val) => {
-    const q = {
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      ttl: val.ttl,
-      maxLength: val.maxLength
-    }
-    if (val.dlx) {
-      const exchangeIndex = exchanges.findIndex((e) => e.id === val.dlx.id)
-      q.dlx = exchangeIndex
-    }
-    exports.queues.push(q)
-  })
-  const bindings = window.scene.getObjectsInScene('Binding')
-  bindings.forEach((val) => {
-    const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
-    const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
-    if (exchangeIndex !== -1 && queueIndex !== -1) {
-      exports.bindings.push({
-        exchange: exchangeIndex,
-        queue: queueIndex,
-        routingKey: val.routingKey
-      })
-    }
-  })
-  const consumers = window.scene.getObjectsInScene('Consumer')
-  consumers.forEach((val) => {
-    const consumes = []
-    val.queues.forEach((queue) => {
-      const queueIndex = queues.findIndex((q) => q.id === queue.id)
-      consumes.push(queueIndex)
-    })
-    exports.consumers.push({
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      consumes,
-      mode: val.mode
-    })
-  })
-  const producers = window.scene.getObjectsInScene('Producer')
-  producers.forEach((val) => {
-    exports.producers.push({
-      x: val.x,
-      y: val.y,
-      name: val.name,
-      publishes: val.publishes,
-      routingKey: val.routingKey
-    })
-  })
-
-  document.querySelector('#ImExport').value = JSON.stringify(exports)
-  document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
 })
 
 document.querySelector('#copyBtn').addEventListener('click', (e) => {
@@ -442,8 +115,13 @@ document.querySelector('#copyBtn').addEventListener('click', (e) => {
   document.execCommand('copy')
 })
 
-const importBtn = document.querySelector('#importBtn')
-importBtn.addEventListener('click', (e) => {
+document.querySelector('#cancelBtn').addEventListener('click', (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  document.querySelector('#imexportPanel').classList.remove('panel-wrap-out')
+})
+
+document.querySelector('#importBtn').addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   const importStr = document.querySelector('#ImExport').value
@@ -456,21 +134,15 @@ importBtn.addEventListener('click', (e) => {
   }
 })
 
-const cancelBtn = document.querySelector('#cancelBtn')
-cancelBtn.addEventListener('click', (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  document.querySelector('#imexportPanel').classList.remove('panel-wrap-out')
-})
-
-const generateCurlBtn = document.querySelector('#generateCurl')
-generateCurlBtn.addEventListener('click', exportCurl)
-
-const generateRmqBtn = document.querySelector('#generateRabbitmqadmin')
-generateRmqBtn.addEventListener('click', exportRabbitmqadmin)
-
-const generateTfBtn = document.querySelector('#generateTerraform')
-generateTfBtn.addEventListener('click', exportTerraform)
-
-const generateAsyncApiBtn = document.querySelector('#generateAsyncApi')
-generateAsyncApiBtn.addEventListener('click', exportAsyncApi)
+// export
+document.querySelector('#export').addEventListener('click', exportTopology)
+document.querySelector('#generateCurl').addEventListener('click', exportCurl)
+document
+  .querySelector('#generateRabbitmqadmin')
+  .addEventListener('click', exportRabbitmqadmin)
+document
+  .querySelector('#generateTerraform')
+  .addEventListener('click', exportTerraform)
+document
+  .querySelector('#generateAsyncApi')
+  .addEventListener('click', exportAsyncApi)

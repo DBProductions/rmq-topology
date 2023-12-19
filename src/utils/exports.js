@@ -2,6 +2,101 @@ import { displayForm } from './common'
 import { getSettings } from './settings'
 
 /**
+ * Export topology as config.
+ *
+ * @param {object} e - Event object
+ */
+const exportTopology = (e) => {
+  e.preventDefault()
+  e.stopPropagation()
+  document.querySelector('#importBtn').classList.remove('hidden')
+  const exports = {
+    description: '',
+    producers: [],
+    consumers: [],
+    exchanges: [],
+    queues: [],
+    bindings: []
+  }
+  const exchanges = window.scene.getObjectsInScene('Exchange')
+  exchanges.forEach((val) => {
+    let alternate = null
+    if (val.alternate) {
+      alternate = val.alternate.name
+    }
+    exports.exchanges.push({
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      type: val.type,
+      alternate
+    })
+  })
+  const queues = window.scene.getObjectsInScene('Queue')
+  queues.forEach((val) => {
+    const q = {
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      ttl: val.ttl,
+      maxLength: val.maxLength
+    }
+    if (val.dlx) {
+      const exchangeIndex = exchanges.findIndex((e) => e.id === val.dlx.id)
+      q.dlx = exchangeIndex
+    }
+    exports.queues.push(q)
+  })
+  const bindings = window.scene.getObjectsInScene('Binding')
+  bindings.forEach((val) => {
+    const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
+    const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
+    if (exchangeIndex !== -1 && queueIndex !== -1) {
+      exports.bindings.push({
+        exchange: exchangeIndex,
+        queue: queueIndex,
+        routingKey: val.routingKey
+      })
+    }
+  })
+  const consumers = window.scene.getObjectsInScene('Consumer')
+  consumers.forEach((val) => {
+    const consumes = []
+    val.queues.forEach((queue) => {
+      const queueIndex = queues.findIndex((q) => q.id === queue.id)
+      consumes.push(queueIndex)
+    })
+    exports.consumers.push({
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      consumes,
+      mode: val.mode
+    })
+  })
+  const producers = window.scene.getObjectsInScene('Producer')
+  producers.forEach((val) => {
+    const publishes = {}
+    for (let key in val.publishes) {
+      publishes[key] = {
+        exchange: val.publishes[key].exchange.name,
+        routingKey: val.publishes[key].routingKey,
+        message: val.publishes[key].message
+      }
+    }
+    exports.producers.push({
+      x: val.x,
+      y: val.y,
+      name: val.name,
+      publishes
+    })
+  })
+
+  document.querySelector('#ImExport').value = JSON.stringify(exports)
+  document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
+}
+
+/**
  * Export topology as curl statements.
  *
  * @param {object} e - Event object
@@ -20,7 +115,13 @@ const exportCurl = (e) => {
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = encodeURIComponent(val.name)
-    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}'\n\n`
+    const args = {}
+    if (val.alternate !== null) {
+      args['alternate-exchange'] = val.alternate.name
+    }
+    generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": ${JSON.stringify(
+      args
+    )}}'\n\n`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
@@ -35,7 +136,7 @@ const exportCurl = (e) => {
     }
     if (val.maxLength) {
       args['x-max-length'] = val.maxLength
-    }
+    }    
     generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/queues/${vhost}/${name} -d '{"auto_delete": false, "durable": true, "arguments": ${JSON.stringify(
       args
     )}}'\n\n`
@@ -47,7 +148,7 @@ const exportCurl = (e) => {
     if (exchangeIndex !== -1 && queueIndex !== -1) {
       const exchange = exchanges[exchangeIndex]
       const queue = queues[queueIndex]
-      generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/bindings/e/${encodeURIComponent(
+      generatedString += `curl -u ${username}:${password} -i -H "content-type:application/json" -XPOST ${management}/bindings/${vhost}/e/${encodeURIComponent(
         exchange.name
       )}/q/${encodeURIComponent(queue.name)} -d '{"routing_key": ${
         val.routingKey
@@ -80,7 +181,12 @@ const exportRabbitmqadmin = (e) => {
   }
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
-    generatedString += `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare exchange name="${val.name}" type="${val.type}" durable=true\n\n`
+    generatedString += `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare exchange `
+    generatedString += `name="${val.name}" type="${val.type}" durable=true`
+    if (val.alternate !== null) {      
+      generatedString += ` arguments='${JSON.stringify({"alternate-exchange": val.alternate.name})}'`
+    }
+    generatedString += `\n\n`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
@@ -136,44 +242,44 @@ const exportTerraform = (e) => {
     vhost = '/'
   }
   generatedString += `terraform {
-    required_providers {
-      rabbitmq = {
-        source = "cyrilgdn/rabbitmq"
-        version = "1.8.0"
-      }
+  required_providers {
+    rabbitmq = {
+      source = "cyrilgdn/rabbitmq"
+      version = "1.8.0"
     }
   }
-  provider "rabbitmq" {
-    endpoint = "${url.origin}"
-    username = "${username}"
-    password = "${password}"
-  }
-  resource "rabbitmq_vhost" "vhost" {
-    name = "${vhost}"
-  }
-  `
+}
+provider "rabbitmq" {
+  endpoint = "${url.origin}"
+  username = "${username}"
+  password = "${password}"
+}
+resource "rabbitmq_vhost" "vhost" {
+  name = "${vhost}"
+}
+`
   const exchanges = window.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
     generatedString += `resource "rabbitmq_exchange" "${name}" {
-    name  = "${val.name}"
-    vhost = "\${rabbitmq_vhost.vhost.name}"
-    settings {
-      type        = "${val.type}"
-      durable     = true
-      auto_delete = false
-    }
+  name  = "${val.name}"
+  vhost = "\${rabbitmq_vhost.vhost.name}"
+  settings {
+    type        = "${val.type}"
+    durable     = true
+    auto_delete = false
   }
-  `
+}
+`
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
     if (val.dlx || val.msgTtl || val.maxlength) {
       generatedString += `variable "${name}args" {
-      default = <<EOF
-      {
-  `
+  default = <<EOF
+  {
+`
       const extra = []
       if (val.dlx) {
         extra.push(`"x-dead-letter-exchange": "${val.dlx.name}"`)
@@ -185,28 +291,28 @@ const exportTerraform = (e) => {
       if (val.maxLength) {
         extra.push(`"x-max-length": ${val.maxLength}`)
       }
-      generatedString += `        ${extra.join(',\n        ')}`
+      generatedString += `    ${extra.join(',\n    ')}`
       generatedString += `
-      }
-      EOF
   }
-  `
+  EOF
+}
+`
     }
     generatedString += `resource "rabbitmq_queue" "${name}" {
-    name  = "${val.name}"
-    vhost = "\${rabbitmq_vhost.vhost.name}"
-      
-    settings {
-      durable     = true
-      auto_delete = false`
-    if (val.dlx || val.msgTtl || val.maxlength) {
-      generatedString += `
-      arguments_json = "\${var.${name}args}"`
-    }
+  name  = "${val.name}"
+  vhost = "\${rabbitmq_vhost.vhost.name}"
+    
+  settings {
+    durable     = true
+    auto_delete = false`
+  if (val.dlx || val.msgTtl || val.maxlength) {
     generatedString += `
-    }
+    arguments_json = "\${var.${name}args}"`
   }
-  `
+  generatedString += `
+  }
+}
+`
   })
 
   const bindings = window.scene.getObjectsInScene('Binding')
@@ -214,13 +320,13 @@ const exportTerraform = (e) => {
     const srcName = val.source.name.replace(/ /g, '-')
     const destName = val.destination.name.replace(/ /g, '-')
     generatedString += `resource "rabbitmq_binding" "${srcName}${destName}" {
-    source           = "\${rabbitmq_exchange.${srcName}.name}"
-    vhost            = "\${rabbitmq_vhost.vhost.name}"
-    destination      = "\${rabbitmq_queue.${destName}.name}"
-    destination_type = "queue"
-    routing_key      = "${val.routingKey}"
-  }
-  `
+  source           = "\${rabbitmq_exchange.${srcName}.name}"
+  vhost            = "\${rabbitmq_vhost.vhost.name}"
+  destination      = "\${rabbitmq_queue.${destName}.name}"
+  destination_type = "queue"
+  routing_key      = "${val.routingKey}"
+}
+`
   })
 
   document.querySelector('#ImExport').value = generatedString
@@ -241,7 +347,7 @@ const exportAsyncApi = (e) => {
   let generatedString = ''
   const brokerSettings = getSettings()
   const { host } = brokerSettings
-  const { title, description } = brokerSettings.asyncapi
+  const { title, description, version } = brokerSettings.asyncapi
   let { vhost } = brokerSettings
   if (vhost === '%2f') {
     vhost = '/'
@@ -390,4 +496,4 @@ components:
   document.querySelector('#imexportPanel').classList.add('panel-wrap-out')
 }
 
-export { exportCurl, exportRabbitmqadmin, exportTerraform, exportAsyncApi }
+export { exportTopology, exportCurl, exportRabbitmqadmin, exportTerraform, exportAsyncApi }

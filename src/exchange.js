@@ -1,5 +1,6 @@
 import BaseComponent from './basecomponent'
-import BindingMessage from './bindingmessage'
+import BindingMessage from './messages/bindingmessage'
+import AlternateMessage from './messages/alternatemessage'
 
 class Exchange extends BaseComponent {
   /**
@@ -9,15 +10,25 @@ class Exchange extends BaseComponent {
    * @param {number} y - y position of the exchange
    * @param {string} name - identifier
    * @param {string} type - exchange type
+   * @param {Exchange} alternate - alternate exchange
    * @extends BaseComponent
    */
-  constructor(x, y, name, type) {
+  constructor(x, y, name, type, alternate) {
     super(x, y)
     this.name = name
     this.type = type || 'direct'
     this.radius = 15
-    // this.binding = null;
     this.bindings = []
+    this.alternate = alternate || null
+  }
+
+  /**
+   * Sets alternate exchange for exchange.
+   *
+   * @param {Exchange} alternate - alternate exchange
+   */
+  setAlternate(exchange) {
+    this.alternate = exchange
   }
 
   /**
@@ -43,9 +54,9 @@ class Exchange extends BaseComponent {
    */
   messageArrived(msg) {
     const { routingKey, fillStyle } = msg
-    let count = false
     let sendMsg = false
     this.bindings.forEach((val) => {
+      //console.log(routingKey)
       if (this.type === 'topic') {
         // TODO: more specific to handle * or #
         if (val.routingKey === routingKey || val.routingKey === '#') {
@@ -71,17 +82,35 @@ class Exchange extends BaseComponent {
     })
     // no bindings, message is lost
     if (this.bindings.length === 0) {
-      this.scene.lostMessages += 1
-      count = true
+      sendMsg = false
+    }
+    if (this.alternate) {
+      new AlternateMessage(
+        this.x,
+        this.y,
+        this.alternate,
+        routingKey,
+        fillStyle
+      ).addToScene(this.scene)
+      sendMsg = true
     }
     // message not send, then it's lost
-    if (!sendMsg && !count) {
+    if (!sendMsg) {
       this.scene.lostMessages += 1
     }
     this.scene.removeActor(msg)
   }
 
   render() {
+    if (this.alternate) {
+      this.ctx.beginPath()
+      this.ctx.strokeStyle = '#000'
+      this.ctx.setLineDash([3, 3])
+      this.ctx.lineWidth = 1
+      this.ctx.moveTo(this.x, this.y)
+      this.ctx.lineTo(this.alternate.x, this.alternate.y)
+      this.ctx.stroke()
+    }
     // shadow
     this.ctx.globalAlpha = 0.4
     this.ctx.beginPath()

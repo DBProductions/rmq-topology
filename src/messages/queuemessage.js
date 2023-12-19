@@ -46,6 +46,7 @@ class QueueMessage extends BaseMessage {
         this.x += velX
         this.y += velY
       } else {
+        //console.log(this.message)
         this.consumer.messageArrived(this)
       }
     }

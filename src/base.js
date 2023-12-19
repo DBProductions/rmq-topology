@@ -1,6 +1,6 @@
 class Base {
   /**
-   * Base class for other components.
+   * Base class for all other components.
    *
    * @param {number} x - x position
    * @param {number} y - y position
@@ -11,7 +11,7 @@ class Base {
   }
 
   /**
-   * Add object to scene.
+   * Add an object as actor to scene.
    *
    * @param {Scene} scene - scene on canvas
    * @returns {object} this
@@ -24,8 +24,7 @@ class Base {
   }
 
   /**
-   * Generates an UUID.
-   *
+   * Generates an UUID, used to identify every object in the scene.<br>
    * https://www.w3resource.com/javascript-exercises/fundamental/javascript-fundamental-exercise-253.php
    * @returns {string} - uuid
    */

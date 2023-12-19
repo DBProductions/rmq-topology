@@ -2,7 +2,8 @@ import BaseMessage from './basemessage'
 
 class ExchangeMessage extends BaseMessage {
   /**
-   * Message object between producer and exchange.
+   * Message object between producer and exchange.<br>
+   * The exchange receives this messages and route with another message.
    *
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
@@ -13,15 +14,29 @@ class ExchangeMessage extends BaseMessage {
    * @param {string} fillColor - hex color code to fill the circle
    * @extends BaseMessage
    */
-  constructor(x, y, exchange, routingKey, rejected, radius, fillColor) {
+  constructor(
+    x,
+    y,
+    exchange,
+    routingKey,
+    message,
+    rejected,
+    radius,
+    fillColor
+  ) {
     super(x, y, radius, fillColor)
     this.exchange = exchange
+    this.routingKey = routingKey
+    this.message = message
     this.rejected = rejected || false
     this.targetX = this.exchange.x
     this.targetY = this.exchange.y
-    this.routingKey = routingKey
   }
 
+  /**
+   * Updates the values for the moving message.<br>
+   * When the target gets reached the method of an arriving messages gets called.
+   */
   update() {
     this.dx = this.targetX - this.x
     this.dy = this.targetY - this.y

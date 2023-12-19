@@ -1,18 +1,17 @@
 import BaseComponent from './basecomponent'
-import ExchangeMessage from './exchangemessage'
+import ExchangeMessage from './messages/exchangemessage'
 
 class Producer extends BaseComponent {
   /**
-   * Producer class represents a component that publish against exchanges.
+   * Producer class represents a component that publishs against exchanges.
    *
    * @param {number} x - x position of the producer
    * @param {number} y - y position of the producer
    * @param {string} name - optional identifier
    * @param {(object|Array)} publishes - list of exchanges to publish to
-   * @param {string} routingKey - used routing key
    * @extends BaseComponent
    */
-  constructor(x, y, name, publishes, routingKey) {
+  constructor(x, y, name, publishes) {
     super(x, y)
     this.name = name
     this.width = 20
@@ -23,25 +22,19 @@ class Producer extends BaseComponent {
     this.curDelay = 0
     this.spawnTime = 1.0 // seconds
     this.fullSpawnTime = this.spawnTime
-    this.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`
 
-    this.routingKey = routingKey || 'x.x.x'
-    this.publishedMessages = 0
-    this.publishes = publishes
-    this.exchanges = []
-    this.debug = false
-  }
-
-  /**
-   * Adds the exchange to the list when not already present.
-   *
-   * @param {Exchange} exchange - Exchange object
-   */
-  addExchange(exchange) {
-    const exchangeIndex = this.exchanges.findIndex((e) => e === exchange)
-    if (exchangeIndex === -1) {
-      this.exchanges.push(exchange)
+    var letters = '012345'.split('')
+    var color = `#${letters[Math.round(Math.random() * 5)]}`
+    letters = '0123456789ABCDEF'.split('')
+    for (var i = 0; i < 5; i++) {
+      color += letters[Math.round(Math.random() * 15)]
     }
+    //this.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`
+    this.color = color
+
+    this.publishedMessages = 0
+    this.publishes = publishes || {}
+    this.debug = false
   }
 
   /**
@@ -50,43 +43,89 @@ class Producer extends BaseComponent {
    * @param {Exchange} exchange - Exchange object
    */
   removeExchange(exchange) {
-    const exchangeIndex = this.exchanges.findIndex((e) => e === exchange)
-    if (exchangeIndex !== -1) {
-      if (this.exchanges.length === 1) {
-        this.exchanges = []
-      } else {
-        this.exchanges.splice(exchangeIndex, 1)
+    for (let key in this.publishes) {
+      if (this.publishes[key].exchange === exchange) {
+        delete this.publishes[key]
       }
     }
   }
 
   /**
-   * Determines at which time a new message should be created and be published.
+   * Adds a message to an exchange when the exchange exists.
+   *
+   * @param {Exchange} exchange - Exchange object
+   * @param {Object} message - JSON message with headers and body
+   */
+  addMessageToExchange(exchange, routingKey, message) {
+    if (!this.exchangeWithRoutingKeyExists(exchange, routingKey)) {
+      this.publishes[Object.keys(this.publishes).length] = {
+        exchange,
+        routingKey,
+        message
+      }
+    }
+    if (Object.keys(this.publishes).length === 0) {
+      this.publishes[Object.keys(this.publishes).length] = {
+        exchange,
+        routingKey,
+        message
+      }
+    }
+  }
+
+  /**
+   * Checks for exchange in combination with routing key to exists.
+   *
+   * @param {Exchange} exchange - Exchange object
+   * @param {string} routingKey - routing key
+   */
+  exchangeWithRoutingKeyExists(exchange, routingKey) {
+    for (let key in this.publishes) {
+      if (
+        this.publishes[key].exchange === exchange &&
+        this.publishes[key].routingKey === routingKey
+      ) {
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * Determines at which time a new message be published.
    *
    * @param {number} dt - delta time from the timer
    */
   update(dt) {
     this.spawnTime -= dt
     if (this.spawnTime < 0) {
-      this.exchanges.forEach((val) => {
+      for (let key in this.publishes) {
+        if (!this.publishes[key].message) {
+          this.publishes[key].message = {
+            headers: {},
+            body: {}
+          }
+        }
+        this.publishes[key].message.headers['message-id'] = this.createUUID()
+
         new ExchangeMessage(
           this.x + this.width / 2,
           this.y + this.height / 2,
-          val,
-          this.routingKey,
+          this.publishes[key].exchange,
+          this.publishes[key].routingKey,
+          this.publishes[key].message,
           undefined,
           undefined,
           this.color
         ).addToScene(this.scene)
         this.publishedMessages += 1
-      })
+      }
       this.spawnTime = this.fullSpawnTime
     }
   }
 
   /**
-   * Render the producer and lines to every exchange from the list.
-   *
+   * Render the producer and draw lines to every exchange from the list.
    */
   render() {
     this.ctx.setLineDash([])
@@ -127,21 +166,19 @@ class Producer extends BaseComponent {
       this.x - `Send: ${this.publishedMessages}`.length,
       this.y + this.height + 20
     )
-    this.ctx.fillText(
-      this.routingKey,
-      this.x - this.routingKey.length,
-      this.y + this.height + 30
-    )
 
-    this.exchanges.forEach((val) => {
+    for (let key in this.publishes) {
       this.ctx.beginPath()
       this.ctx.strokeStyle = '#aaa'
       this.ctx.setLineDash([3, 3])
       this.ctx.lineWidth = 1
       this.ctx.moveTo(this.x + this.width / 2, this.y + this.height / 2)
-      this.ctx.lineTo(val.x, val.y)
+      this.ctx.lineTo(
+        this.publishes[key].exchange.x,
+        this.publishes[key].exchange.y
+      )
       this.ctx.stroke()
-    })
+    }
   }
 }
 

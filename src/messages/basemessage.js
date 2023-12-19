@@ -1,4 +1,4 @@
-import Base from './base'
+import Base from '../base'
 
 class BaseMessage extends Base {
   /**
@@ -21,8 +21,15 @@ class BaseMessage extends Base {
     this.rad = null
     this.angle = null
     this.thrust = 5
+    this.message = {
+      headers: {},
+      body: {}
+    }
   }
 
+  /**
+   * Renders a circle representing the message.
+   */
   render() {
     this.ctx.beginPath()
     this.ctx.fillStyle = this.fillStyle

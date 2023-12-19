@@ -17,8 +17,6 @@ class BaseComponent extends Base {
     this.hover = false
     this.debug = false
   }
-
-  update(dt) {} // eslint-disable-line no-unused-vars
 }
 
 export default BaseComponent
