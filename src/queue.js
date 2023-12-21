@@ -85,7 +85,7 @@ class Queue extends BaseComponent {
         this.scene.lostMessages += 1
       }
     } else {
-      // no consumer
+      // no consumer, message stays in the queue
       if (this.consumers.length === 0) {
         this.messages.push({
           ts: Date.now(),

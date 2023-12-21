@@ -359,6 +359,7 @@ const exportAsyncApi = (e) => {
 info:
   title: ${title}
   description: ${description}
+  version: ${version}
   termsOfService: https://asyncapi.org/terms/
   contact:
     name: API Support
@@ -366,8 +367,7 @@ info:
     email: support@asyncapi.org
   license:
     name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0.htm
-  version: 0.1.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.htm  
 servers:
   production:
     host: ${host}
@@ -375,8 +375,8 @@ servers:
     protocolVersion: 0.9.1
     description: Production broker.
     tags:
-      - name: "env:production"
-        description: "This environment is the live environment available for final users"
+      - name: env:production
+        description: This environment is the live environment available for final users
 channels:
 `  
   exchanges.forEach((val) => {
