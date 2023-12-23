@@ -383,7 +383,7 @@ channels:
     if (val.type === 'topic') {
       val.bindings.forEach((v) => {
         if (v.routingKey !== '#') {
-          generatedString += `  ${val.name.replaceAll(' ', '_')}/${v.routingKey}:
+          generatedString += `  ${val.name.replaceAll(' ', '_')}_${v.routingKey}:
     address: '${v.routingKey}'
     messages:
       event:
@@ -435,15 +435,16 @@ channels:
   })
   
   generatedString += `operations:`
-  exchanges.forEach((val) => {
-    console.log(val)
-    //val.bindings.forEach((v) => {
+  exchanges.forEach((val) => {    
+    val.bindings.forEach((v) => {
+      if (v.routingKey !== '#') {
     generatedString += `
-  send${val.name}:
+  send${val.name}/${v.routingKey}:
     channel:
-      $ref: '#/channels/${val.name.replaceAll(' ', '_')}'
+      $ref: '#/channels/${val.name.replaceAll(' ', '_')}_${v.routingKey}'
     action: send`
-    //})
+      }
+    })
   })
 
   queues.forEach((val) => {
