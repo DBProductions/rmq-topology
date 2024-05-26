@@ -29,14 +29,14 @@ const changeSettingsTab = (e) => {
     if (link) {
       const tabLinks = document.querySelector('#settingsTabs')
       const liList = tabLinks.getElementsByTagName('li')
-      for (let i in liList) {
+      for (const i in liList) {
         if (liList[i].classList) {
           liList[i].classList.remove('selected')
         }
       }
 
       const tabContent = document.querySelectorAll('#tabContainer > div')
-      for (let d in tabContent) {
+      for (const d in tabContent) {
         if (tabContent[d].classList) {
           tabContent[d].classList.add('tab-hidden')
         }

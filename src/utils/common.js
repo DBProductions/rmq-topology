@@ -89,7 +89,7 @@ const createTopology = (ctx, conf) => {
     conf.producers.forEach((producer) => {
       const newProducer = new Producer(producer.x, producer.y, producer.name)
       const currentExchanges = window.scene.getObjectsInScene('Exchange')
-      for (let val in producer.publishes) {
+      for (const val in producer.publishes) {
         currentExchanges.forEach((ex) => {
           if (ex.name === producer.publishes[val].exchange) {
             newProducer.addMessageToExchange(

@@ -43,7 +43,7 @@ class Producer extends BaseComponent {
    * @param {Exchange} exchange - Exchange object
    */
   removeExchange(exchange) {
-    for (let key in this.publishes) {
+    for (const key in this.publishes) {
       if (this.publishes[key].exchange === exchange) {
         delete this.publishes[key]
       }
@@ -80,7 +80,7 @@ class Producer extends BaseComponent {
    * @param {string} routingKey - routing key
    */
   exchangeWithRoutingKeyExists(exchange, routingKey) {
-    for (let key in this.publishes) {
+    for (const key in this.publishes) {
       if (
         this.publishes[key].exchange === exchange &&
         this.publishes[key].routingKey === routingKey
@@ -99,7 +99,7 @@ class Producer extends BaseComponent {
   update(dt) {
     this.spawnTime -= dt
     if (this.spawnTime < 0) {
-      for (let key in this.publishes) {
+      for (const key in this.publishes) {
         if (!this.publishes[key].message) {
           this.publishes[key].message = {
             headers: {},
@@ -167,7 +167,7 @@ class Producer extends BaseComponent {
       this.y + this.height + 20
     )
 
-    for (let key in this.publishes) {
+    for (const key in this.publishes) {
       this.ctx.beginPath()
       this.ctx.strokeStyle = '#aaa'
       this.ctx.setLineDash([3, 3])

@@ -77,7 +77,7 @@ const exportTopology = (e) => {
   const producers = window.scene.getObjectsInScene('Producer')
   producers.forEach((val) => {
     const publishes = {}
-    for (let key in val.publishes) {
+    for (const key in val.publishes) {
       publishes[key] = {
         exchange: val.publishes[key].exchange.name,
         routingKey: val.publishes[key].routingKey,

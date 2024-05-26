@@ -14,9 +14,9 @@ class Binding extends BaseComponent {
     this.source = source
     this.destination = destination
     this.routingKey = routingKey
-    // eslint-disable-next-line no-param-reassign
+
     source.binding = this
-    // eslint-disable-next-line no-param-reassign
+
     destination.binding = this
     source.bindings.push(this)
     destination.bindings.push(this)

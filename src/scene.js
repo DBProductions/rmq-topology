@@ -31,7 +31,7 @@ class Scene {
       do {
         this.curleft += ele.offsetLeft
         this.curtop += ele.offsetTop
-      } while ((ele = ele.offsetParent)) // eslint-disable-line no-cond-assign
+      } while ((ele = ele.offsetParent))
     }
     return { x: this.curleft, y: this.curtop }
   }

@@ -44,7 +44,6 @@ const displayConsumer = (consumer) => {
     const modes = document.getElementsByName('consumerMode')
     modes.forEach((val) => {
       if (consumer.mode === val.value) {
-        // eslint-disable-next-line no-param-reassign
         val.checked = true
       }
     })

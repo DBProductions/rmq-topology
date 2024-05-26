@@ -98,7 +98,7 @@ const sendProducerForm = (e) => {
     const exchanges = document.getElementsByName('producerExchanges[]')
 
     const keepExchanges = {}
-    for (let key in producer.publishes) {
+    for (const key in producer.publishes) {
       exchanges.forEach((exchange) => {
         if (
           exchange.value === producer.publishes[key].exchange.id &&
