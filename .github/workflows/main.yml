@@ -15,15 +15,36 @@ permissions:
   id-token: write
 
 jobs:
+  bun:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+      - name: Cypress install
+        uses: cypress-io/github-action@v5
+        with:
+          runTests: false
+          install-command: bun i
+      - run: bun i
+      - run: bun run build
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          install: false
+          build: bun run build
+          start: bun run dev
+          wait-on: 'http://localhost:3000'
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [19.x, 20.x, 21.x]
+        node-version: [20.x, 21.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm i
@@ -34,12 +55,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [19.x, 20.x, 21.x]
+        node-version: [20.x, 21.x]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Cypress install
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v5
         with:
           runTests: false
           install-command: npm i
@@ -58,15 +79,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - run: npm i
       - run: npm run bundle
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: './public'
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3
