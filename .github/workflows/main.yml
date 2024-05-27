@@ -36,7 +36,7 @@ jobs:
         with:
           install: false
           build: bun run bundle
-          start: bun run dev
+          start: bun run start
           wait-on: 'http://localhost:3000'
   build:
     runs-on: ubuntu-latest
