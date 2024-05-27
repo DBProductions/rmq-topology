@@ -12,13 +12,13 @@ const displayProducer = (producer) => {
   const producerParams = [
     '#producerIdField',
     '#producerNameField',
-    '#producerRoutingKeyField',
-    '#producerPublishTo',
-    '#producerErr'
+    '#producerRoutingKeyField'
   ]
   producerParams.forEach((p) => {
     document.querySelector(p).value = ''
   })
+  document.querySelector('#producerPublishTo').innerHTML = ''
+  document.querySelector('#producerErr').innerHTML = ''
 
   const exchanges = window.scene.getObjectsInScene('Exchange')
 
@@ -143,6 +143,8 @@ const sendProducerForm = (e) => {
     producerParams.forEach((p) => {
       document.querySelector(p).value = ''
     })
+    document.querySelector('#producerPublishTo').innerHTML = ''
+    document.querySelector('#producerErr').innerHTML = ''
     document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
   }
 }
@@ -163,6 +165,8 @@ const hideProducer = (e) => {
   producerParams.forEach((p) => {
     document.querySelector(p).value = ''
   })
+  document.querySelector('#producerPublishTo').innerHTML = ''
+  document.querySelector('#producerErr').innerHTML = ''
   document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
 }
 
