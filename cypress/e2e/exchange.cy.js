@@ -38,4 +38,18 @@ describe('Exchange', () => {
 
     cy.window().its('scene.actors.length').should('equal', 0)
   })
+
+  it('Exchange name must be unique', () => {
+    cy.get('#newComponent').select('Exchange')
+    cy.get('#exchangeNameField').type('Exchange')
+    cy.get('#sendExchangeForm').click()
+
+    cy.window().its('scene.actors.length').should('equal', 1)
+
+    cy.get('#newComponent').select('Exchange')
+    cy.get('#exchangeNameField').type('Exchange')
+    cy.get('#sendExchangeForm').click()
+
+    cy.window().its('scene.actors.length').should('equal', 1)
+  })
 })

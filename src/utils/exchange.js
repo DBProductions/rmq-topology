@@ -19,6 +19,7 @@ const displayExchange = (exchange) => {
     document.querySelector(p).value = ''
   })
   document.querySelector('#exchangeTypeSelect').value = 'direct'
+  document.querySelector('#exchangeErr').innerHTML = ''
 
   const selectSource = document.getElementById('exchangeAlternateSelect')
   selectSource.options.length = 0
@@ -127,6 +128,7 @@ const hideExchange = (e) => {
     document.querySelector(p).value = ''
   })
   document.querySelector('#exchangeTypeSelect').value = 'direct'
+  document.querySelector('#exchangeErr').innerHTML = ''
   document.querySelector('#exchangePanel').classList.remove('panel-wrap-out')
 }
 
