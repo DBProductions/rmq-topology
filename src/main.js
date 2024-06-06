@@ -1,4 +1,4 @@
-import { createTopology, displayForm, addNewComponent } from './utils/common'
+import { createTopology, displayForm } from './utils/common'
 
 import {
   mouseUpOnCanvas,
@@ -8,14 +8,6 @@ import {
 } from './utils/canvas'
 
 import { getSettings, setSettings, displaySettings } from './utils/settings'
-
-import {
-  exportTopology,
-  exportCurl,
-  exportRabbitmqadmin,
-  exportTerraform,
-  exportAsyncApi
-} from './utils/exports'
 
 import { Examples } from './examples'
 import {} from './listener'
@@ -84,10 +76,6 @@ document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   }
 })
 
-document
-  .querySelector('#newComponent')
-  .addEventListener('change', addNewComponent)
-
 const animateBtn = document.querySelector('#animate')
 animateBtn.addEventListener('click', (e) => {
   e.preventDefault()
@@ -133,16 +121,3 @@ document.querySelector('#importBtn').addEventListener('click', (e) => {
     document.querySelector('#imexportErr').innerHTML = 'Parse error'
   }
 })
-
-// export
-document.querySelector('#export').addEventListener('click', exportTopology)
-document.querySelector('#generateCurl').addEventListener('click', exportCurl)
-document
-  .querySelector('#generateRabbitmqadmin')
-  .addEventListener('click', exportRabbitmqadmin)
-document
-  .querySelector('#generateTerraform')
-  .addEventListener('click', exportTerraform)
-document
-  .querySelector('#generateAsyncApi')
-  .addEventListener('click', exportAsyncApi)

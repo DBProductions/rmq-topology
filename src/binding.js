@@ -16,8 +16,8 @@ class Binding extends BaseComponent {
     this.routingKey = routingKey
 
     source.binding = this
-
     destination.binding = this
+
     source.bindings.push(this)
     destination.bindings.push(this)
     this.setCoords()

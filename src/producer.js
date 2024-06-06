@@ -34,6 +34,7 @@ class Producer extends BaseComponent {
 
     this.publishedMessages = 0
     this.publishes = publishes || {}
+    this.customHeaders = []
     this.debug = false
   }
 
@@ -106,6 +107,7 @@ class Producer extends BaseComponent {
             body: {}
           }
         }
+        this.publishes[key].message.headers['app-id'] = this.name
         this.publishes[key].message.headers['message-id'] = this.createUUID()
 
         new ExchangeMessage(

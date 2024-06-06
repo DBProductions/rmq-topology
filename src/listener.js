@@ -1,3 +1,13 @@
+import { addNewComponent } from './utils/common'
+
+import {
+  exportTopology,
+  exportCurl,
+  exportRabbitmqadmin,
+  exportTerraform,
+  exportAsyncApi
+} from './utils/exports'
+
 import {
   sendSettingsForm,
   hideSettings,
@@ -29,6 +39,23 @@ import {
   hideBinding,
   deleteBindingForm
 } from './utils/binding'
+
+document
+  .querySelector('#newComponent')
+  .addEventListener('change', addNewComponent)
+
+// --- Export ---
+document.querySelector('#export').addEventListener('click', exportTopology)
+document.querySelector('#generateCurl').addEventListener('click', exportCurl)
+document
+  .querySelector('#generateRabbitmqadmin')
+  .addEventListener('click', exportRabbitmqadmin)
+document
+  .querySelector('#generateTerraform')
+  .addEventListener('click', exportTerraform)
+document
+  .querySelector('#generateAsyncApi')
+  .addEventListener('click', exportAsyncApi)
 
 // --- Producer ---
 document
