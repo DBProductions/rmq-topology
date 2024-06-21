@@ -5,14 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "npm run run:cypress",
+    "test": "vitest run",
+    "test:coverage": "vitest run src --coverage",
     "start:cypress": "npx cypress open",
     "run:cypress": "npx cypress run --headless --config video=false -b chrome",
     "lint": "npx eslint ./src",
     "lint:fix": "npx eslint ./src --fix",
     "format": "npx prettier --write \"{,!(node_modules)/**/}*.{js,ts}\"",
     "bundle": "npx rollup -c",
-    "release": "npm run format && npm run lint && npm run bundle && npm run run:cypress",
+    "release": "npm run format && npm run lint && npm test && npm run bundle && npm run run:cypress",
     "start": "node index.js"
   },
   "keywords": [
@@ -30,12 +31,15 @@
   },
   "license": "ISC",
   "devDependencies": {
+    "@vitest/coverage-istanbul": "^1.6.0",
     "clean-jsdoc-theme": "^4.3.0",
-    "cypress": "^13.11.0",
+    "cypress": "^13.12.0",
     "eslint": "^9.5.0",
+    "jsdom": "^24.1.0",
     "prettier": "^3.3.2",
     "rollup-plugin-jsdoc": "^0.1.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "node-static": "^0.7.11"

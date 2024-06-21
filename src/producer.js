@@ -58,6 +58,12 @@ class Producer extends BaseComponent {
    * @param {Object} message - JSON message with headers and body
    */
   addMessageToExchange(exchange, routingKey, message) {
+    if (!message) {
+      message = {
+        headers: {},
+        body: {}
+      }
+    }
     if (!this.exchangeWithRoutingKeyExists(exchange, routingKey)) {
       this.publishes[Object.keys(this.publishes).length] = {
         exchange,

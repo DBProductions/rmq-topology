@@ -72,6 +72,7 @@ describe('Topologies', () => {
 
     cy.wait(5000)
 
+    // stop
     cy.get('#animate').click()
   })
 })
