@@ -30,7 +30,7 @@ jobs:
       - run: npm i
       - run: npm run format
       - run: npm run lint
-      - run: npm test
+      - run: npm run test:coverage
       - run: npm run bundle
       - name: Cypress install
         uses: cypress-io/github-action@v5
