@@ -79,7 +79,7 @@ describe('Queue', () => {
   })
 
   it('should correctly route a rejected message when dlx exists', () => {
-    let dlxqueue = new Queue(0, 0, null, null, exchange)
+    const dlxqueue = new Queue(0, 0, null, null, exchange)
     dlxqueue.addConsumer(consumer1)
     dlxqueue.addToScene(scene)
     const rejectMsg = new RejectMessage(0, 0, queue)
