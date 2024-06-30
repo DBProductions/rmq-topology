@@ -8,6 +8,8 @@ It creates curl, rabbitmqadmin, Terraform and AsyncAPI definitions.
 
 ![demo page screenshot](screenshot.png "Demo Page Screenshot")
 
+![Coverage](https://img.shields.io/badge/Code%20Coverage-16%25-critical?style=flat "Coverage")
+
 The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/). [Vitest](https://vitest.dev/) and [Cypress](https://www.cypress.io/) runs some tests.  
 
     node -v

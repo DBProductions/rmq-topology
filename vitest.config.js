@@ -13,6 +13,7 @@ export default defineConfig({
         ...configDefaults.exclude,
         'output/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
         'public/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        'src/utils/**/*',
         'src/examples.js',
         'src/listener.js',
         'src/main.js',
