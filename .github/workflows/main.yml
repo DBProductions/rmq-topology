@@ -36,6 +36,9 @@ jobs:
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: coverage/cobertura-coverage.xml
+          badge: true
+          format: markdown
+          output: both
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
