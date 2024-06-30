@@ -8,7 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     coverage: {
       provider: 'istanbul',
-      reporter: ['text', 'json', 'html'],
+      reporter: ['text', 'json', 'html', 'cobertura'],
       exclude: [
         ...configDefaults.exclude,
         'output/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
