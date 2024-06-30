@@ -32,10 +32,6 @@ jobs:
       - run: npm run lint
       - run: npm run test:coverage      
       - run: npm run bundle
-      - name: Code Coverage Summary
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage/coverage-final.json
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
