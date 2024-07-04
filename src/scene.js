@@ -135,36 +135,6 @@ class Scene {
       val.render(dt)
     })
   }
-
-  /**
-   * It renders first the binding and then the rest for a better visual effect.
-   *
-   * @param {number} dt
-   */
-  renderOnce(dt) {
-    this.ctx.clearRect(0, 0, this.width, this.height)
-
-    if (this.actors.length > 0) {
-      this.ctx.font = '12px Arial'
-      this.ctx.fillStyle = '#000'
-      this.ctx.fillText(`${this.lostMessages} messages lost`, 50, 25)
-    }
-    this.ctx.font = '14px Arial'
-    this.ctx.fillText(this.description, 50, this.height - 20)
-
-    const allBindings = []
-    const noneBindings = []
-    const myFilter = (s) => s.constructor.name === 'Binding'
-    this.actors.forEach((e, idx, arr) =>
-      (myFilter(e, idx, arr) ? allBindings : noneBindings).push(e)
-    )
-    allBindings.forEach((val) => {
-      val.render(dt)
-    })
-    noneBindings.forEach((val) => {
-      val.render(dt)
-    })
-  }
 }
 
 export default Scene

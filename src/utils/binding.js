@@ -92,7 +92,7 @@ const sendBindingForm = (e) => {
     Binding1.addToScene(window.scene)
   }
 
-  window.scene.renderOnce()
+  window.scene.render()
 
   document.querySelector('#bindingIdField').value = ''
   document.querySelector('#bindingRoutingKeyField').value = ''
@@ -134,7 +134,7 @@ const deleteBindingForm = (e) => {
   )
   actor.source.removeBinding(actor)
   window.scene.removeActor(actor)
-  window.scene.renderOnce()
+  window.scene.render()
   document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
 }
 

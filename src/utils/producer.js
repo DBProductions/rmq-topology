@@ -132,7 +132,7 @@ const sendProducerForm = (e) => {
     producer.addToScene(window.scene)
   }
 
-  window.scene.renderOnce()
+  window.scene.render()
 
   if (!error) {
     const producerParams = [
@@ -181,7 +181,7 @@ const deleteProducerForm = (e) => {
   window.scene.removeActor(
     window.scene.getIdInScene(document.querySelector('#producerIdField').value)
   )
-  window.scene.renderOnce()
+  window.scene.render()
   document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
 }
 

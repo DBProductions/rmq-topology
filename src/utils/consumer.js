@@ -137,7 +137,7 @@ const sendConsumerForm = (e) => {
     }
   }
 
-  window.scene.renderOnce()
+  window.scene.render()
 
   document.querySelector('#consumerIdField').value = ''
   document.querySelector('#consumerNameField').value = ''
@@ -160,7 +160,7 @@ const deleteConsumerForm = (e) => {
     actor.removeConsumer(consumer)
   })
   window.scene.removeActor(consumer)
-  window.scene.renderOnce()
+  window.scene.render()
   document.querySelector('#consumerPanel').classList.remove('panel-wrap-out')
 }
 

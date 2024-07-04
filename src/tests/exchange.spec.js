@@ -1,32 +1,65 @@
 import Exchange from '../exchange'
-import BaseComponent from '../basecomponent'
-import BindingMessage from '../messages/bindingmessage'
-import AlternateMessage from '../messages/alternatemessage'
+import Queue from '../queue'
+import Binding from '../binding'
+import ExchangeMessage from '../messages/exchangemessage'
 
 describe('Exchange', () => {
-  let exchange, scene
+  let exchange, queue, binding, msg1, msg2, scene
 
   beforeEach(() => {
     exchange = new Exchange(0, 0, 'test-exchange', 'direct')
-    scene = { addToScene: vi.fn() }
+    queue = new Queue(0, 0, 'q')
+    binding = new Binding(exchange, queue, 'x')
+    msg1 = new ExchangeMessage(0, 0, exchange, 'x', {}, false)
+    msg2 = new ExchangeMessage(0, 0, exchange, 'q', {}, false)
+    scene = { lostMessages: 0, addActor: vi.fn(), removeActor: vi.fn() }
   })
 
-  // Happy path test case
   it('should create an instance of Exchange with default values', () => {
+    exchange.addToScene(scene)
     expect(exchange).toBeInstanceOf(Exchange)
     expect(exchange.x).toEqual(0)
     expect(exchange.y).toEqual(0)
     expect(exchange.name).toEqual('test-exchange')
     expect(exchange.type).toEqual('direct')
     expect(exchange.radius).toEqual(15)
-    expect(exchange.bindings).toEqual([])
     expect(exchange.alternate).toBeNull()
+    expect(scene.addActor).toHaveBeenCalledTimes(1)
   })
 
-  // Test setAlternate method
+  it('should remove binding correctly', () => {
+    exchange.removeBinding(binding)
+    expect(exchange.bindings).toEqual([])
+  })
+
   it('should set the alternate exchange correctly', () => {
     const alternateExchange = new Exchange(1, 1, 'alt-exchange', 'direct')
     exchange.setAlternate(alternateExchange)
     expect(exchange.alternate).toEqual(alternateExchange)
+  })
+
+  it('should handle arriving messages on direct exchange', () => {
+    exchange.addToScene(scene)
+    exchange.messageArrived(msg1)
+    expect(scene.removeActor).toHaveBeenCalledTimes(1)
+
+    exchange.messageArrived(msg2)
+    expect(scene.removeActor).toHaveBeenCalledTimes(2)
+
+    expect(scene.lostMessages).toEqual(1)
+  })
+
+  it('should handle arriving messages on fanout exchange', () => {
+    const fanout = new Exchange(0, 0, 'fanout-exchange', 'fanout')
+    fanout.addToScene(scene)
+    fanout.messageArrived(msg1)
+    expect(scene.removeActor).toHaveBeenCalledTimes(1)
+  })
+
+  it('should handle arriving messages on topic exchange', () => {
+    const topic = new Exchange(0, 0, 'topic-exchange', 'topic')
+    topic.addToScene(scene)
+    topic.messageArrived(msg1)
+    expect(scene.removeActor).toHaveBeenCalledTimes(1)
   })
 })

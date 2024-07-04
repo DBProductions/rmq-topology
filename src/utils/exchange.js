@@ -105,7 +105,7 @@ const sendExchangeForm = (e) => {
     }
   }
 
-  window.scene.renderOnce()
+  window.scene.render()
 
   if (!error) {
     document.querySelector('#exchangeIdField').value = ''
@@ -154,7 +154,7 @@ const deleteExchangeForm = (e) => {
     }
   })
   window.scene.removeActor(window.scene.getIdInScene(exchangeId))
-  window.scene.renderOnce()
+  window.scene.render()
   document.querySelector('#exchangePanel').classList.remove('panel-wrap-out')
 }
 

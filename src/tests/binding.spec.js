@@ -42,7 +42,7 @@ describe('Binding', () => {
     binding.ctx = {
       save: vi.fn(),
       translate: vi.fn(),
-      rotate: vi.fn(),      
+      rotate: vi.fn(),
       fillText: vi.fn(),
       restore: vi.fn()
     }

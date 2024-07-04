@@ -52,7 +52,7 @@ class Producer extends BaseComponent {
   }
 
   /**
-   * Adds a message to an exchange when the exchange exists.
+   * Adds a message to an exchange.
    *
    * @param {Exchange} exchange - Exchange object
    * @param {Object} message - JSON message with headers and body
@@ -65,13 +65,6 @@ class Producer extends BaseComponent {
       }
     }
     if (!this.exchangeWithRoutingKeyExists(exchange, routingKey)) {
-      this.publishes[Object.keys(this.publishes).length] = {
-        exchange,
-        routingKey,
-        message
-      }
-    }
-    if (Object.keys(this.publishes).length === 0) {
       this.publishes[Object.keys(this.publishes).length] = {
         exchange,
         routingKey,

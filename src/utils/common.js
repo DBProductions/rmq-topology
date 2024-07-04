@@ -129,7 +129,7 @@ const createTopology = (ctx, conf) => {
     })
   }
 
-  window.scene.renderOnce()
+  window.scene.render()
 }
 
 /**

@@ -4,10 +4,17 @@ import Exchange from '../exchange'
 describe('Producer', () => {
   let producer
   let exchange
+  let scene
 
   beforeEach(() => {
     producer = new Producer(0, 0, 'producer')
     exchange = new Exchange(0, 0, 'test-exchange', 'direct')
+    scene = {
+      ctx: {},
+      lostMessages: 0,
+      addActor: vi.fn(),
+      removeActor: vi.fn()
+    }
   })
 
   it('should create a new instance of Producer with default values', () => {
@@ -27,25 +34,29 @@ describe('Producer', () => {
     expect(customProducer.publishes).toEqual([{}])
   })
 
-  it('xxx should update publishedMessages when messages are sent', () => {
+  it('should add message to exchange but only unique', () => {
+    producer.addToScene(scene)
     producer.addMessageToExchange(exchange, 'x.y')
-    producer.update(-2)
-    expect(producer.publishes).toEqual({
-      0: { exchange, routingKey: 'x.y', message: { body: {}, headers: {} } }
-    })
-    //expect(producer.publishedMessages).toEqual(0);
+    producer.addMessageToExchange(exchange, 'x.y')
+    producer.addMessageToExchange(exchange, 'x.y.z')
+    producer.update(2)
+    expect(producer.publishes[0].exchange).toEqual(exchange)
+    expect(producer.publishes[0].routingKey).toEqual('x.y')
+    expect(producer.publishes[1].exchange).toEqual(exchange)
+    expect(producer.publishes[1].routingKey).toEqual('x.y.z')
   })
 
   it('should update publishedMessages when messages are sent', () => {
-    producer.update()
-    expect(producer.publishedMessages).toEqual(0)
+    producer.addToScene(scene)
+    producer.addMessageToExchange(exchange, 'x.y')
+    producer.update(2)
+    expect(producer.publishedMessages).toEqual(1)
   })
 
-  it('should create ExchangeMessage objects and add them to the scene when updating', () => {
-    const scene = {} // Assuming there's a scene object that can be manipulated
-    producer.update()
+  it('should not update publishedMessages when messages are not sent', () => {
+    producer.addToScene(scene)
+    producer.update(1) // spawn time is 1.5
     expect(producer.publishedMessages).toEqual(0)
-    //expect(scene[Producer.prototype.scene]).toHaveLength(1); // Assuming ExchangeMessage objects are added to the scene
   })
 
   it('should create UUID when creating an ExchangeMessage', () => {
@@ -56,5 +67,29 @@ describe('Producer', () => {
     expect(message.exchange).toEqual('test')
     expect(message.routingKey).toEqual('x.y')
     expect(message.message).toEqual({ headers: {}, body: {} })
+  })
+
+  it('should remove the specified exchange from the object', () => {
+    producer.publishes = {
+      exchange1: { exchange: 'exchange1' },
+      exchange2: { exchange: 'exchange2' },
+      exchange3: { exchange: 'exchange3' }
+    }
+    const exchangeToRemove = 'exchange1'
+    producer.removeExchange(exchangeToRemove)
+    expect(producer.publishes[exchangeToRemove]).toBeUndefined()
+  })
+
+  it('should not remove any exchange if the specified exchange does not exist', () => {
+    producer.publishes = {
+      exchange1: { exchange: 'exchange1' },
+      exchange2: { exchange: 'exchange2' },
+      exchange3: { exchange: 'exchange3' }
+    }
+    const nonExistingExchange = 'nonExistingExchange'
+    producer.removeExchange(nonExistingExchange)
+    expect(producer.publishes[nonExistingExchange]).toEqual(
+      producer.publishes[nonExistingExchange]
+    )
   })
 })

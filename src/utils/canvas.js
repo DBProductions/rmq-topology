@@ -25,7 +25,7 @@ const mouseUpOnCanvas = (e) => {
       obj.dragged = false
       return true
     })
-    window.scene.renderOnce()
+    window.scene.render()
   }
 }
 
@@ -110,7 +110,7 @@ const mouseMoveOnCanvas = (e) => {
         }
       })
     }
-    window.scene.renderOnce()
+    window.scene.render()
   }
 }
 

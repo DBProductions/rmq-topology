@@ -18,7 +18,7 @@ export default defineConfig({
         'src/listener.js',
         'src/main.js',
         'index.js'
-      ],
+      ]
     }
   }
 })

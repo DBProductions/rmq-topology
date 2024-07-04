@@ -1,4 +1,5 @@
 import Scene from '../scene'
+import Exchange from '../exchange'
 
 describe('Scene', () => {
   let scene
@@ -6,6 +7,7 @@ describe('Scene', () => {
   let actor1
   let actor2
   let bindingActor
+  let exchange
 
   beforeEach(() => {
     ctx = {
@@ -23,6 +25,7 @@ describe('Scene', () => {
       update: vi.fn(),
       render: vi.fn()
     } // Create a mock binding actor object
+    exchange = new Exchange(0, 0, 'test-exchange', 'direct')
   })
 
   it('should initialize with the correct properties', () => {
@@ -47,10 +50,23 @@ describe('Scene', () => {
     expect(scene.actors).not.toContainEqual(actor1)
   })
 
+  it('should purge scene', () => {
+    scene.addActor(actor1)
+    scene.addActor(actor2)
+    scene.purge()
+    expect(scene.actors).toEqual([])
+  })
+
   it('should return the correct actor by id', () => {
     scene.addActor(actor1)
     const foundActor = scene.getIdInScene('actor1')
     expect(foundActor).toEqual(actor1)
+  })
+
+  it('should return the correct objects', () => {
+    scene.addActor(exchange)
+    const foundActor = scene.getObjectsInScene('Exchange')
+    expect(foundActor).toEqual([exchange])
   })
 
   it('should return an empty array if no actor with the given id is found', () => {

@@ -61,7 +61,7 @@ document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   if (window.timer.running) {
     window.timer.stop()
     window.scene.purge()
-    window.scene.renderOnce()
+    window.scene.render()
     restart = true
   }
   if (e.target.value !== 'Examples') {
@@ -72,7 +72,7 @@ document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   } else {
     window.scene.purge()
     window.scene.description = ''
-    window.scene.renderOnce()
+    window.scene.render()
   }
 })
 

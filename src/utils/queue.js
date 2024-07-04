@@ -96,7 +96,7 @@ const sendQueueForm = (e) => {
     }
   }
 
-  window.scene.renderOnce()
+  window.scene.render()
 
   if (!error) {
     document.querySelector('#queueIdField').value = ''
@@ -148,7 +148,7 @@ const deleteQueueForm = (e) => {
     })
   }
   window.scene.removeActor(actor)
-  window.scene.renderOnce()
+  window.scene.render()
   document.querySelector('#queuePanel').classList.remove('panel-wrap-out')
 }
 
