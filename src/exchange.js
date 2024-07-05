@@ -56,7 +56,6 @@ class Exchange extends BaseComponent {
     const { routingKey, fillStyle } = msg
     let sendMsg = false
     this.bindings.forEach((val) => {
-      //console.log(routingKey)
       if (this.type === 'topic') {
         // TODO: more specific to handle * or #
         if (val.routingKey === routingKey || val.routingKey === '#') {
@@ -84,7 +83,7 @@ class Exchange extends BaseComponent {
     if (this.bindings.length === 0) {
       sendMsg = false
     }
-    if (this.alternate) {
+    if (this.alternate && !sendMsg) {
       new AlternateMessage(
         this.x,
         this.y,
