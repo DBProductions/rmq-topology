@@ -19,5 +19,7 @@ The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/),
 
     http://localhost:3000/
 
+![workflow](https://github.com/DBProductions/rmq-topology/actions/workflows/main.yml/badge.svg)
+
 ## Feedback
 Star this repo if you found it useful. Use the github issue tracker to give feedback on this repo.
