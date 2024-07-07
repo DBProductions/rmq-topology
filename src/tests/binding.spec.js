@@ -1,16 +1,30 @@
 import Binding from '../binding'
 
-describe('Binding', () => {
-  let source, destination, binding
+describe('Binding', () => {  
+  let source
+  let destination  
+  let binding
+  let ctx
 
   beforeEach(() => {
     source = { x: 0, y: 0, bindings: [] }
     destination = { x: 10, y: 10, bindings: [] }
     binding = new Binding(source, destination, 'routingKey')
-  })
-
-  it('should create a new instance of Binding', () => {
-    expect(binding).toBeInstanceOf(Binding)
+    ctx = {
+      beginPath: vi.fn(),
+      strokeStyle: vi.fn(),
+      setLineDash: vi.fn(),
+      lineWidth: vi.fn(),
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+      save: vi.fn(),
+      textAlign: vi.fn(),
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillText: vi.fn(),
+      restore: vi.fn()
+    }
   })
 
   it('should set the source and destination properties correctly', () => {
@@ -39,18 +53,48 @@ describe('Binding', () => {
   })
 
   it('should draw the label at the correct position and rotation', () => {
-    binding.ctx = {
-      save: vi.fn(),
-      translate: vi.fn(),
-      rotate: vi.fn(),
-      fillText: vi.fn(),
-      restore: vi.fn()
-    }
+    binding.ctx = ctx
     binding.drawLabel('routingKey')
+    expect(binding.ctx.save).toHaveBeenCalled()
+    expect(binding.ctx.textAlign).toEqual('center')
+    expect(binding.ctx.translate).toHaveBeenCalled()
+    expect(binding.ctx.rotate).toHaveBeenCalled()
+    expect(binding.ctx.fillText).toHaveBeenCalledWith('routingKey', 0, 0)
+    expect(binding.ctx.restore).toHaveBeenCalled()
+  })
+
+  it('should render like expected', () => {
+    binding.ctx = ctx
+    binding.render()
+    expect(binding.ctx.beginPath).toHaveBeenCalled()
+    expect(binding.ctx.strokeStyle).toEqual('#000')
+    expect(binding.ctx.setLineDash).toHaveBeenCalledWith([])
+    expect(binding.ctx.lineWidth).toEqual(1)
+    expect(binding.ctx.moveTo).toHaveBeenCalled()
+    expect(binding.ctx.lineTo).toHaveBeenCalled()
+    expect(binding.ctx.stroke).toHaveBeenCalled()
     expect(binding.ctx.save).toHaveBeenCalled()
     expect(binding.ctx.translate).toHaveBeenCalled()
     expect(binding.ctx.rotate).toHaveBeenCalled()
-    expect(binding.ctx.fillText).toHaveBeenCalled()
+    expect(binding.ctx.fillText).toHaveBeenCalledWith('routingKey', 0, 0)
+    expect(binding.ctx.restore).toHaveBeenCalled()
+  })
+
+  it('should render hover like expected', () => {
+    binding.hover = true;
+    binding.ctx = ctx
+    binding.render()
+    expect(binding.ctx.beginPath).toHaveBeenCalled()
+    expect(binding.ctx.strokeStyle).toEqual('#000')
+    expect(binding.ctx.setLineDash).toHaveBeenCalledWith([])
+    expect(binding.ctx.lineWidth).toEqual(2)
+    expect(binding.ctx.moveTo).toHaveBeenCalled()
+    expect(binding.ctx.lineTo).toHaveBeenCalled()
+    expect(binding.ctx.stroke).toHaveBeenCalled()
+    expect(binding.ctx.save).toHaveBeenCalled()
+    expect(binding.ctx.translate).toHaveBeenCalled()
+    expect(binding.ctx.rotate).toHaveBeenCalled()
+    expect(binding.ctx.fillText).toHaveBeenCalledWith('routingKey', 0, 0)
     expect(binding.ctx.restore).toHaveBeenCalled()
   })
 })
