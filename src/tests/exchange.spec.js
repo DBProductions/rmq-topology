@@ -75,7 +75,7 @@ describe('Exchange', () => {
   })
 
   it('should handle arriving messages on exchange without binding', () => {
-    exchange.removeBinding(binding)    
+    exchange.removeBinding(binding)
     exchange.addToScene(scene)
     exchange.messageArrived(msg1)
     expect(exchange.bindings).toEqual([])
@@ -86,7 +86,7 @@ describe('Exchange', () => {
   it('should handle arriving messages on exchange without binding and alternate', () => {
     const alternateExchange = new Exchange(1, 1, 'alt-exchange', 'direct')
     exchange.setAlternate(alternateExchange)
-    exchange.removeBinding(binding)    
+    exchange.removeBinding(binding)
     exchange.addToScene(scene)
     exchange.messageArrived(msg1)
     expect(exchange.bindings).toEqual([])

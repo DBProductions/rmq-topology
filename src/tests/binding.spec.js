@@ -1,8 +1,8 @@
 import Binding from '../binding'
 
-describe('Binding', () => {  
+describe('Binding', () => {
   let source
-  let destination  
+  let destination
   let binding
   let ctx
 
@@ -81,7 +81,7 @@ describe('Binding', () => {
   })
 
   it('should render hover like expected', () => {
-    binding.hover = true;
+    binding.hover = true
     binding.ctx = ctx
     binding.render()
     expect(binding.ctx.beginPath).toHaveBeenCalled()

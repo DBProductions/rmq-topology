@@ -60,6 +60,16 @@ describe('Queue', () => {
     expect(queue.messages.length).toEqual(1)
   })
 
+  it('should correctly stay in the queue until maximum length', () => {
+    const maxLengthQueue = new Queue(0, 0, null, null, exchange, null, 2)
+    maxLengthQueue.addToScene(scene)
+    const bindMsg = new BindingMessage(0, 0, binding)
+    maxLengthQueue.messageArrived(bindMsg)
+    maxLengthQueue.messageArrived(bindMsg)
+    maxLengthQueue.messageArrived(bindMsg)
+    expect(maxLengthQueue.messages.length).toEqual(2 )
+  })
+
   it('should correctly stay in the queue until a consumer got added', () => {
     queue.addToScene(scene)
     const bindMsg = new BindingMessage(0, 0, binding)
@@ -67,6 +77,15 @@ describe('Queue', () => {
     expect(queue.messages.length).toEqual(1)
     queue.addConsumer(consumer1)
     expect(queue.messages.length).toEqual(0)
+  })
+
+  it('should correctly route a message', () => {
+    queue.addConsumer(consumer1)
+    queue.addToScene(scene)
+    const bindingMsg = new BindingMessage(0, 0, binding)
+    queue.messageArrived(bindingMsg)
+    expect(scene.removeActor).toHaveBeenCalledTimes(1)
+    expect(scene.lostMessages).toEqual(0)
   })
 
   it('should correctly remove a rejected message when no dlx exists', () => {
