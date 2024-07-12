@@ -8,7 +8,7 @@ It creates curl, rabbitmqadmin, Terraform and AsyncAPI definitions.
 
 ![demo page screenshot](screenshot.png "Demo Page Screenshot")
 
-The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/). [Vitest](https://vitest.dev/) and [Cypress](https://www.cypress.io/) runs some tests.  
+The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/). [Vitest](https://vitest.dev/) and [Cypress](https://www.cypress.io/) run some tests.  
 
     node -v
     v21.5.0
