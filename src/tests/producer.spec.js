@@ -5,6 +5,7 @@ describe('Producer', () => {
   let producer
   let exchange
   let scene
+  let ctx
 
   beforeEach(() => {
     producer = new Producer(0, 0, 'producer')
@@ -14,6 +15,23 @@ describe('Producer', () => {
       lostMessages: 0,
       addActor: vi.fn(),
       removeActor: vi.fn()
+    }
+    ctx = {
+      beginPath: vi.fn(),
+      strokeStyle: vi.fn(),
+      setLineDash: vi.fn(),
+      lineWidth: vi.fn(),
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+      save: vi.fn(),
+      textAlign: vi.fn(),
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillText: vi.fn(),
+      restore: vi.fn(),
+      rect: vi.fn(),
+      fill: vi.fn()
     }
   })
 
@@ -91,5 +109,14 @@ describe('Producer', () => {
     expect(producer.publishes[nonExistingExchange]).toEqual(
       producer.publishes[nonExistingExchange]
     )
+  })
+
+  it('should render', () => {
+    producer.ctx = ctx
+    producer.render()
+    expect(producer.ctx.setLineDash).toHaveBeenCalled()
+    expect(producer.ctx.beginPath).toHaveBeenCalled()
+    expect(producer.ctx.rect).toHaveBeenCalled(2)
+    expect(producer.ctx.stroke).toHaveBeenCalled()
   })
 })

@@ -10,6 +10,7 @@ describe('Exchange', () => {
   let msg1
   let msg2
   let scene
+  let ctx
 
   beforeEach(() => {
     exchange = new Exchange(0, 0, 'test-exchange', 'direct')
@@ -18,6 +19,24 @@ describe('Exchange', () => {
     msg1 = new ExchangeMessage(0, 0, exchange, 'x', {}, false)
     msg2 = new ExchangeMessage(0, 0, exchange, 'q', {}, false)
     scene = { lostMessages: 0, addActor: vi.fn(), removeActor: vi.fn() }
+    ctx = {
+      beginPath: vi.fn(),
+      strokeStyle: vi.fn(),
+      setLineDash: vi.fn(),
+      lineWidth: vi.fn(),
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+      save: vi.fn(),
+      textAlign: vi.fn(),
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillText: vi.fn(),
+      restore: vi.fn(),
+      rect: vi.fn(),
+      fill: vi.fn(),
+      arc: vi.fn()
+    }
   })
 
   it('should create an instance of Exchange with default values', () => {
@@ -92,5 +111,22 @@ describe('Exchange', () => {
     expect(exchange.bindings).toEqual([])
     expect(scene.removeActor).toHaveBeenCalledTimes(1)
     expect(scene.lostMessages).toEqual(0)
+  })
+
+  it('should render', () => {
+    exchange.ctx = ctx
+    exchange.render()
+    expect(exchange.ctx.beginPath).toHaveBeenCalled()
+    expect(exchange.ctx.fill).toHaveBeenCalled(2)
+  })
+
+  it('should render with hover', () => {
+    exchange.ctx = ctx
+    exchange.hover = true
+    exchange.dragged = true
+    exchange.render()
+    expect(exchange.ctx.beginPath).toHaveBeenCalled()
+    expect(exchange.ctx.fill).toHaveBeenCalled(2)
+    expect(exchange.ctx.stroke).toHaveBeenCalled(2)
   })
 })

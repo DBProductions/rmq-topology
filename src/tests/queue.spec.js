@@ -10,6 +10,7 @@ describe('Queue', () => {
   let consumer1
   let consumer2
   let scene
+  let ctx
   let binding
 
   beforeEach(() => {
@@ -19,6 +20,24 @@ describe('Queue', () => {
     consumer1 = new Consumer(0, 0)
     consumer2 = { id: 'consumer2' }
     binding = { destination: { x: 0, y: 0 } }
+    ctx = {
+      beginPath: vi.fn(),
+      strokeStyle: vi.fn(),
+      setLineDash: vi.fn(),
+      lineWidth: vi.fn(),
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+      save: vi.fn(),
+      textAlign: vi.fn(),
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillText: vi.fn(),
+      restore: vi.fn(),
+      rect: vi.fn(),
+      roundRect: vi.fn(),
+      fill: vi.fn()
+    }
   })
 
   it('should correctly add a consumer to the queue', () => {
@@ -105,5 +124,35 @@ describe('Queue', () => {
     dlxqueue.messageArrived(rejectMsg)
     expect(scene.removeActor).toHaveBeenCalledTimes(1)
     expect(scene.lostMessages).toEqual(0)
+  })
+
+  it('should render', () => {
+    queue.ctx = ctx
+    queue.render()
+    expect(queue.ctx.beginPath).toHaveBeenCalled(2)
+    expect(queue.ctx.roundRect).toHaveBeenCalled(2)
+    expect(queue.ctx.fill).toHaveBeenCalled()
+  })
+
+  it('should render with hover', () => {
+    queue.ctx = ctx
+    queue.hover = true
+    queue.dragged = true    
+    queue.render()
+    expect(queue.ctx.setLineDash).toHaveBeenCalled()
+    expect(queue.ctx.beginPath).toHaveBeenCalled(2)
+    expect(queue.ctx.roundRect).toHaveBeenCalled(2)
+    expect(queue.ctx.stroke).toHaveBeenCalled()
+    expect(queue.ctx.fill).toHaveBeenCalled()
+  })
+
+  it('should render with dlx', () => {
+    queue.ctx = ctx
+    queue.dlx = {x: 0, y: 0}
+    queue.render()
+    expect(queue.ctx.beginPath).toHaveBeenCalled(3)
+    expect(queue.ctx.roundRect).toHaveBeenCalled(2)
+    expect(queue.ctx.stroke).toHaveBeenCalled()
+    expect(queue.ctx.fill).toHaveBeenCalled()
   })
 })

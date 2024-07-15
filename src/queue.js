@@ -153,7 +153,7 @@ class Queue extends BaseComponent {
     this.ctx.globalAlpha = 0.4
     this.ctx.beginPath()
     this.ctx.fillStyle = '#000'
-    this.ctx.roundRect(this.x - 23, this.y - 12, 50, 30, [30])
+    this.ctx.roundRect(this.x - 23, this.y - 12, 50, 30, [10])
     this.ctx.fill()
     
     this.ctx.globalAlpha = 1.0
@@ -161,7 +161,7 @@ class Queue extends BaseComponent {
     // this.ctx.fillStyle = gradient;
     this.ctx.fillStyle = '#ccc'
     this.ctx.setLineDash([])
-    this.ctx.roundRect(this.x - 25, this.y - 15, 50, 30, [30])
+    this.ctx.roundRect(this.x - 25, this.y - 15, 50, 30, [10])
     this.ctx.fill()
 
     if (this.dragged) {

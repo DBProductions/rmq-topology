@@ -3,13 +3,34 @@ import Queue from '../queue'
 import QueueMessage from '../messages/queuemessage'
 
 describe('Consumer', () => {
-  let consumer, queue, qm, scene
+  let consumer
+  let queue
+  let qm
+  let scene
+  let ctx
 
   beforeEach(() => {
     consumer = new Consumer(0, 0)
     queue = new Queue(1, 1)
     scene = { lostMessages: 0, addActor: vi.fn(), removeActor: vi.fn() }
     qm = new QueueMessage(0, 0, queue, consumer)
+    ctx = {
+      beginPath: vi.fn(),
+      strokeStyle: vi.fn(),
+      setLineDash: vi.fn(),
+      lineWidth: vi.fn(),
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+      save: vi.fn(),
+      textAlign: vi.fn(),
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillText: vi.fn(),
+      restore: vi.fn(),
+      rect: vi.fn(),
+      fill: vi.fn()
+    }
   })
 
   it('should create a new Consumer with default values', () => {
@@ -45,5 +66,28 @@ describe('Consumer', () => {
     consumer.addToScene(scene)
     consumer.messageArrived(qm)
     expect(consumer.arrivedMessages).toBe(1)
+  })
+
+  it('should render', () => {
+    consumer.ctx = ctx
+    consumer.render()
+    expect(consumer.ctx.setLineDash).toHaveBeenCalled()
+    expect(consumer.ctx.beginPath).toHaveBeenCalled()
+    expect(consumer.ctx.rect).toHaveBeenCalled(2)
+    expect(consumer.ctx.stroke).toHaveBeenCalled()
+    expect(consumer.ctx.fill).toHaveBeenCalled()
+  })
+
+  it('should render with hover', () => {
+    consumer.ctx = ctx
+    consumer.hover = true
+    consumer.dragged = true    
+    consumer.render()
+    expect(consumer.ctx.setLineDash).toHaveBeenCalled()
+    expect(consumer.ctx.beginPath).toHaveBeenCalled()
+    expect(consumer.ctx.rect).toHaveBeenCalled(2)
+    expect(consumer.ctx.lineWidth).toEqual(2)
+    expect(consumer.ctx.stroke).toHaveBeenCalled()
+    expect(consumer.ctx.fill).toHaveBeenCalled()
   })
 })
