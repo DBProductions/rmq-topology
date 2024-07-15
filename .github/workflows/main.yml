@@ -36,7 +36,7 @@ jobs:
         uses: irongut/CodeCoverageSummary@v1.3.0
         id: coverage
         with:
-          filename: coverage/cobertura-coverage.md
+          filename: coverage/cobertura-coverage.xml
           badge: true
           format: markdown
           output: both
