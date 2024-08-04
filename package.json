@@ -31,15 +31,15 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@vitest/coverage-istanbul": "^1.6.0",
+    "@vitest/coverage-istanbul": "^2.0.5",
     "clean-jsdoc-theme": "^4.3.0",
-    "cypress": "^13.12.0",
-    "eslint": "^9.5.0",
-    "jsdom": "^24.1.0",
-    "prettier": "^3.3.2",
+    "cypress": "^13.13.2",
+    "eslint": "^9.8.0",
+    "jsdom": "^24.1.1",
+    "prettier": "^3.3.3",
     "rollup-plugin-jsdoc": "^0.1.2",
-    "typescript": "^5.5.2",
-    "vitest": "^1.6.0"
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
   },
   "dependencies": {
     "node-static": "^0.7.11"

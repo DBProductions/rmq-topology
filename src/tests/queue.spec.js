@@ -86,7 +86,7 @@ describe('Queue', () => {
     maxLengthQueue.messageArrived(bindMsg)
     maxLengthQueue.messageArrived(bindMsg)
     maxLengthQueue.messageArrived(bindMsg)
-    expect(maxLengthQueue.messages.length).toEqual(2 )
+    expect(maxLengthQueue.messages.length).toEqual(2)
   })
 
   it('should correctly stay in the queue until a consumer got added', () => {
@@ -137,7 +137,7 @@ describe('Queue', () => {
   it('should render with hover', () => {
     queue.ctx = ctx
     queue.hover = true
-    queue.dragged = true    
+    queue.dragged = true
     queue.render()
     expect(queue.ctx.setLineDash).toHaveBeenCalled()
     expect(queue.ctx.beginPath).toHaveBeenCalled(2)
@@ -148,7 +148,7 @@ describe('Queue', () => {
 
   it('should render with dlx', () => {
     queue.ctx = ctx
-    queue.dlx = {x: 0, y: 0}
+    queue.dlx = { x: 0, y: 0 }
     queue.render()
     expect(queue.ctx.beginPath).toHaveBeenCalled(3)
     expect(queue.ctx.roundRect).toHaveBeenCalled(2)

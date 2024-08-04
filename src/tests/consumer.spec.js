@@ -81,7 +81,7 @@ describe('Consumer', () => {
   it('should render with hover', () => {
     consumer.ctx = ctx
     consumer.hover = true
-    consumer.dragged = true    
+    consumer.dragged = true
     consumer.render()
     expect(consumer.ctx.setLineDash).toHaveBeenCalled()
     expect(consumer.ctx.beginPath).toHaveBeenCalled()

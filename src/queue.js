@@ -149,13 +149,13 @@ class Queue extends BaseComponent {
   }
 
   render() {
-    // shadow    
+    // shadow
     this.ctx.globalAlpha = 0.4
     this.ctx.beginPath()
     this.ctx.fillStyle = '#000'
     this.ctx.roundRect(this.x - 23, this.y - 12, 50, 30, [10])
     this.ctx.fill()
-    
+
     this.ctx.globalAlpha = 1.0
     this.ctx.beginPath()
     // this.ctx.fillStyle = gradient;
