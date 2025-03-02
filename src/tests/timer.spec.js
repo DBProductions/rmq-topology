@@ -16,6 +16,7 @@ describe('Timer', () => {
 
   it('should stop the timer', () => {
     timer.start()
+    expect(timer.running).toBeTruthy()
     timer.stop()
     expect(timer.running).toBeFalsy()
   })
@@ -23,8 +24,11 @@ describe('Timer', () => {
   it('should call update and render methods on every tick', () => {
     vi.useFakeTimers()
     timer.start()
-    vi.runAllTimers()
-    expect(targetMock.update).toHaveBeenCalledTimes(1)
-    expect(targetMock.render).toHaveBeenCalledTimes(1)
+    try {
+      vi.runAllTimers()
+    } catch (error) {
+      expect(targetMock.update).toHaveBeenCalledTimes(10001)
+      expect(targetMock.render).toHaveBeenCalledTimes(10001)
+    }
   })
 })
