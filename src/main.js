@@ -7,24 +7,16 @@ import {
   clickOnCanvas
 } from './utils/canvas'
 
-import { getSettings, setSettings, displaySettings } from './utils/settings'
+import {
+  brokerDefaultSettings,
+  getSettings,
+  setSettings,
+  displaySettings
+} from './utils/settings'
 
 import { Examples } from './examples'
 import {} from './listener'
 
-const brokerDefaultSettings = {
-  host: 'localhost',
-  port: 5672,
-  management: `http://localhost:15672/api`,
-  vhost: '%2f',
-  username: 'guest',
-  password: 'guest',
-  asyncapi: {
-    title: 'RabbitMQ',
-    description: 'Broker description.',
-    version: '0.0.1'
-  }
-}
 if (getSettings() === null) {
   setSettings(brokerDefaultSettings)
 }

@@ -6,6 +6,7 @@ import RejectMessage from '../messages/rejectmessage'
 
 describe('Queue', () => {
   let queue
+  let stream
   let exchange
   let consumer1
   let consumer2
@@ -15,6 +16,7 @@ describe('Queue', () => {
 
   beforeEach(() => {
     queue = new Queue(0, 0)
+    stream = new Queue(0, 0, 'stream', 'stream')
     exchange = new Exchange(0, 0)
     scene = { lostMessages: 0, addActor: vi.fn(), removeActor: vi.fn() }
     consumer1 = new Consumer(0, 0)
@@ -79,8 +81,24 @@ describe('Queue', () => {
     expect(queue.messages.length).toEqual(1)
   })
 
+  it('should correctly stay in the stream', () => {
+    stream.addToScene(scene)
+    const bindMsg = new BindingMessage(0, 0, binding)
+    stream.messageArrived(bindMsg)
+    expect(stream.messages.length).toEqual(1)
+  })
+
+  it('should correctly stay in the stream when a consumer get added', () => {
+    stream.addToScene(scene)
+    const bindMsg = new BindingMessage(0, 0, binding)
+    stream.messageArrived(bindMsg)
+    expect(stream.messages.length).toEqual(1)
+    stream.addConsumer(consumer1)
+    expect(stream.messages.length).toEqual(1)
+  })
+
   it('should correctly stay in the queue until maximum length', () => {
-    const maxLengthQueue = new Queue(0, 0, null, null, exchange, null, 2)
+    const maxLengthQueue = new Queue(0, 0, null, null, null, exchange, null, 2)
     maxLengthQueue.addToScene(scene)
     const bindMsg = new BindingMessage(0, 0, binding)
     maxLengthQueue.messageArrived(bindMsg)
@@ -117,7 +135,7 @@ describe('Queue', () => {
   })
 
   it('should correctly route a rejected message when dlx exists', () => {
-    const dlxqueue = new Queue(0, 0, null, null, exchange)
+    const dlxqueue = new Queue(0, 0, null, null, null, exchange)
     dlxqueue.addConsumer(consumer1)
     dlxqueue.addToScene(scene)
     const rejectMsg = new RejectMessage(0, 0, queue)

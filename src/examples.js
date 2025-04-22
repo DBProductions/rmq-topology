@@ -247,6 +247,45 @@ const Examples = {
     queues: [{ x: 650, y: 170, name: 'Queue' }],
     bindings: [{ exchange: 0, queue: 0, routingKey: '' }]
   },
+  stream: {
+    description: 'Streams are an append-only log and does not remove messages.',
+    producers: [
+      {
+        x: 200,
+        y: 130,
+        name: 'Producer',
+        publishes: {
+          0: {
+            exchange: 'Exchange',
+            routingKey: 'Queue',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
+      }
+    ],
+    consumers: [
+      {
+        x: 800,
+        y: 130,
+        name: 'Consumer',
+        consumes: [0],
+        mode: 'ack'
+      }
+    ],
+    exchanges: [
+      {
+        x: 400,
+        y: 150,
+        name: 'Exchange',
+        type: 'direct'
+      }
+    ],
+    queues: [{ x: 650, y: 150, name: 'Queue', type: 'stream' }],
+    bindings: [{ exchange: 0, queue: 0, routingKey: '' }]
+  },
   'queue-ttl': {
     description:
       'Time to live for queues, messages which are staying longer are removed.',

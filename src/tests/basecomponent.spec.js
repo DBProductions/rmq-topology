@@ -20,4 +20,10 @@ describe('BaseComponent', () => {
     expect(baseComponentInstance.hover).toEqual(false)
     expect(baseComponentInstance.debug).toEqual(false)
   })
+
+  it('should add the instance to the scene when calling addToScene method', () => {
+    baseComponentInstance.addToScene(scene)
+    expect(scene.addActor).toHaveBeenCalled()
+    expect(scene.addActor).toHaveBeenCalledWith(baseComponentInstance)
+  })
 })

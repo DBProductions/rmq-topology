@@ -15,12 +15,18 @@ const displayQueue = (queue) => {
   document.querySelector('#queueMsgTtlField').value = ''
   document.querySelector('#queueMaxLengthField').value = ''
 
+  const selectType = document.querySelector('#queueTypeField')
+  selectType.options.length = 0
+  selectType.options[selectType.options.length] = new Option('quorum', 'quorum')
+  selectType.options[selectType.options.length] = new Option('stream', 'stream')
+
   let dlx = { id: null }
   //let dlxrk = ''
   if (queue) {
     document.querySelector('#deleteQueueForm').classList.remove('hidden')
     document.querySelector('#queueIdField').value = queue.id
     document.querySelector('#queueNameField').value = queue.name
+    document.querySelector('#queueTypeField').value = queue.type
     document.querySelector('#queueMsgTtlField').value = queue.msgTtl
     document.querySelector('#queueMaxLengthField').value = queue.maxLength
     if (queue.dlx) {
@@ -65,6 +71,7 @@ const sendQueueForm = (e) => {
 
   const id = document.querySelector('#queueIdField').value
   const name = document.querySelector('#queueNameField').value
+  const type = document.querySelector('#queueTypeField').value
   const msgTtl = document.querySelector('#queueMsgTtlField').value
   const dlx = document.querySelector('#queueDlxSelect').value
   const dlxrk = document.querySelector('#queueDlRoutingKey').value
@@ -77,6 +84,7 @@ const sendQueueForm = (e) => {
   } else if (id) {
     const queue = window.scene.getIdInScene(id)
     queue.name = name
+    queue.type = type
     queue.msgTtl = msgTtl
     queue.maxLength = maxLength
     queue.dlx = window.scene.getIdInScene(dlx)
@@ -85,7 +93,7 @@ const sendQueueForm = (e) => {
     const queues = window.scene.getObjectsInScene('Queue')
     const queueIndex = queues.findIndex((q) => q.name === name)
     if (queueIndex === -1) {
-      const Queue1 = new Queue(650, 30, name)
+      const Queue1 = new Queue(650, 30, name, type)
       Queue1.addToScene(window.scene)
       Queue1.msgTtl = msgTtl
       Queue1.dlx = window.scene.getIdInScene(dlx)

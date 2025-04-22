@@ -182,6 +182,9 @@ textarea {
   /*height: 250px;*/
   height: 30em;
 }
+textarea.import-export {
+  height: 40em;
+}
 input[type='text'],
 select,
 textarea {

@@ -38,6 +38,7 @@ const exportTopology = (e) => {
       x: val.x,
       y: val.y,
       name: val.name,
+      type: val.type,
       ttl: val.ttl,
       maxLength: val.maxLength
     }
@@ -126,7 +127,7 @@ const exportCurl = (e) => {
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const name = encodeURIComponent(val.name)
-    const args = {}
+    const args = {'x-queue-type': val.type}
     if (val.dlx) {
       args['x-dead-letter-exchange'] = val.dlx.name
       args['x-dead-letter-routing-key'] = val.dlxrk
@@ -190,7 +191,7 @@ const exportRabbitmqadmin = (e) => {
   })
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
-    const args = {}
+    const args = {"x-queue-type": val.type}
     if (val.dlx) {
       args['x-dead-letter-exchange'] = val.dlx.name
       args['x-dead-letter-routing-key'] = val.dlxrk
@@ -275,12 +276,11 @@ resource "rabbitmq_vhost" "vhost" {
   const queues = window.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
-    if (val.dlx || val.msgTtl || val.maxlength) {
       generatedString += `variable "${name}args" {
   default = <<EOF
   {
 `
-      const extra = []
+      const extra = [`"x-queue-type": "${val.type}"`]
       if (val.dlx) {
         extra.push(`"x-dead-letter-exchange": "${val.dlx.name}"`)
         extra.push(`"x-dead-letter-routing-key": "${val.dlxrk}"`)
@@ -297,7 +297,6 @@ resource "rabbitmq_vhost" "vhost" {
   EOF
 }
 `
-    }
     generatedString += `resource "rabbitmq_queue" "${name}" {
   name  = "${val.name}"
   vhost = "\${rabbitmq_vhost.vhost.name}"
@@ -305,10 +304,8 @@ resource "rabbitmq_vhost" "vhost" {
   settings {
     durable     = true
     auto_delete = false`
-  if (val.dlx || val.msgTtl || val.maxlength) {
     generatedString += `
     arguments_json = "\${var.${name}args}"`
-  }
   generatedString += `
   }
 }
@@ -381,9 +378,13 @@ channels:
 `  
   exchanges.forEach((val) => {
     if (val.type === 'topic') {
-      val.bindings.forEach((v) => {
+      val.bindings.forEach((v) => {                
         if (v.routingKey !== '#') {
-          generatedString += `  ${val.name.replaceAll(' ', '_')}_${v.routingKey}:
+          let nameAddition = ''
+          if (v.routingKey) {
+            nameAddition = '_' + v.routingKey
+          }
+          generatedString += `  ${val.name.replaceAll(' ', '_')}${nameAddition}          
     address: '${v.routingKey}'
     messages:
       event:
@@ -428,8 +429,9 @@ channels:
         is: queue
         queue:
           name: ${val.name}
+          type: ${val.type}
           durable: true
-          exclusive: true
+          exclusive: false
           autoDelete: false
 `
   })
@@ -438,10 +440,14 @@ channels:
   exchanges.forEach((val) => {    
     val.bindings.forEach((v) => {
       if (v.routingKey !== '#') {
+        let nameAddition = ''
+        if (v.routingKey) {
+          nameAddition = '_' + v.routingKey
+        }
     generatedString += `
   send${val.name}/${v.routingKey}:
     channel:
-      $ref: '#/channels/${val.name.replaceAll(' ', '_')}_${v.routingKey}'
+      $ref: '#/channels/${val.name.replaceAll(' ', '_')}${nameAddition}'
     action: send`
       }
     })

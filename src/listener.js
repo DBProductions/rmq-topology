@@ -40,97 +40,152 @@ import {
   deleteBindingForm
 } from './utils/binding'
 
-document
-  .querySelector('#newComponent')
-  .addEventListener('change', addNewComponent)
-
+const eventListener = [
+  {
+    selector: '#newComponent',
+    event: 'change',
+    handler: addNewComponent
+  }
+]
 // --- Export ---
-document.querySelector('#export').addEventListener('click', exportTopology)
-document.querySelector('#generateCurl').addEventListener('click', exportCurl)
-document
-  .querySelector('#generateRabbitmqadmin')
-  .addEventListener('click', exportRabbitmqadmin)
-document
-  .querySelector('#generateTerraform')
-  .addEventListener('click', exportTerraform)
-document
-  .querySelector('#generateAsyncApi')
-  .addEventListener('click', exportAsyncApi)
-
+eventListener.push(
+  {
+    selector: '#export',
+    event: 'click',
+    handler: exportTopology
+  },
+  {
+    selector: '#generateCurl',
+    event: 'click',
+    handler: exportCurl
+  },
+  {
+    selector: '#generateRabbitmqadmin',
+    event: 'click',
+    handler: exportRabbitmqadmin
+  },
+  {
+    selector: '#generateTerraform',
+    event: 'click',
+    handler: exportTerraform
+  },
+  {
+    selector: '#generateAsyncApi',
+    event: 'click',
+    handler: exportAsyncApi
+  }
+)
 // --- Producer ---
-document
-  .querySelector('#sendProducerForm')
-  .addEventListener('click', sendProducerForm)
-
-document
-  .querySelector('#cancelProducerForm')
-  .addEventListener('click', hideProducer)
-
-document
-  .querySelector('#deleteProducerForm')
-  .addEventListener('click', deleteProducerForm)
-
+eventListener.push(
+  {
+    selector: '#sendProducerForm',
+    event: 'click',
+    handler: sendProducerForm
+  },
+  {
+    selector: '#cancelProducerForm',
+    event: 'click',
+    handler: hideProducer
+  },
+  {
+    selector: '#deleteProducerForm',
+    event: 'click',
+    handler: deleteProducerForm
+  }
+)
 // --- Consumer ---
-document
-  .querySelector('#sendConsumerForm')
-  .addEventListener('click', sendConsumerForm)
-
-document
-  .querySelector('#cancelConsumerForm')
-  .addEventListener('click', hideConsumer)
-
-document
-  .querySelector('#deleteConsumerForm')
-  .addEventListener('click', deleteConsumerForm)
-
+eventListener.push(
+  {
+    selector: '#sendConsumerForm',
+    event: 'click',
+    handler: sendConsumerForm
+  },
+  {
+    selector: '#cancelConsumerForm',
+    event: 'click',
+    handler: hideConsumer
+  },
+  {
+    selector: '#deleteConsumerForm',
+    event: 'click',
+    handler: deleteConsumerForm
+  }
+)
 // --- Exchange ---
-document
-  .querySelector('#sendExchangeForm')
-  .addEventListener('click', sendExchangeForm)
-
-document
-  .querySelector('#cancelExchangeForm')
-  .addEventListener('click', hideExchange)
-
-document
-  .querySelector('#deleteExchangeForm')
-  .addEventListener('click', deleteExchangeForm)
-
+eventListener.push(
+  {
+    selector: '#sendExchangeForm',
+    event: 'click',
+    handler: sendExchangeForm
+  },
+  {
+    selector: '#cancelExchangeForm',
+    event: 'click',
+    handler: hideExchange
+  },
+  {
+    selector: '#deleteExchangeForm',
+    event: 'click',
+    handler: deleteExchangeForm
+  }
+)
 // --- Queue ---
-document
-  .querySelector('#sendQueueForm')
-  .addEventListener('click', sendQueueForm)
-
-document.querySelector('#cancelQueueForm').addEventListener('click', hideQueue)
-
-document
-  .querySelector('#deleteQueueForm')
-  .addEventListener('click', deleteQueueForm)
-
+eventListener.push(
+  {
+    selector: '#sendQueueForm',
+    event: 'click',
+    handler: sendQueueForm
+  },
+  {
+    selector: '#cancelQueueForm',
+    event: 'click',
+    handler: hideQueue
+  },
+  {
+    selector: '#deleteQueueForm',
+    event: 'click',
+    handler: deleteQueueForm
+  }
+)
 // --- Binding ---
-document
-  .querySelector('#sendBindingForm')
-  .addEventListener('click', sendBindingForm)
-
-document
-  .querySelector('#cancelBindingForm')
-  .addEventListener('click', hideBinding)
-
-document
-  .querySelector('#deleteBindingForm')
-  .addEventListener('click', deleteBindingForm)
-
+eventListener.push(
+  {
+    selector: '#sendBindingForm',
+    event: 'click',
+    handler: sendBindingForm
+  },
+  {
+    selector: '#cancelBindingForm',
+    event: 'click',
+    handler: hideBinding
+  },
+  {
+    selector: '#deleteBindingForm',
+    event: 'click',
+    handler: deleteBindingForm
+  }
+)
 // --- Settings ---
-document
-  .querySelector('#settingsTabs')
-  .addEventListener('click', changeSettingsTab)
+eventListener.push(
+  {
+    selector: '#settingsTabs',
+    event: 'click',
+    handler: changeSettingsTab
+  },
+  {
+    selector: '#sendSettingsForm',
+    event: 'click',
+    handler: sendSettingsForm
+  },
+  {
+    selector: '#cancelSettingsForm',
+    event: 'click',
+    handler: cancelSettingsForm
+  }
+)
 
-document
-  .querySelector('#sendSettingsForm')
-  .addEventListener('click', sendSettingsForm)
-
-document
-  .querySelector('#cancelSettingsForm')
-  .addEventListener('click', hideSettings)
+eventListener.forEach((v) => {
+  document.querySelector(v.selector).addEventListener(v.event, v.handler)
+})
 
 export {}

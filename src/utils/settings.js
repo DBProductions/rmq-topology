@@ -1,3 +1,17 @@
+const brokerDefaultSettings = {
+  host: 'localhost',
+  port: 5672,
+  management: `http://localhost:15672/api`,
+  vhost: '%2f',
+  username: 'guest',
+  password: 'guest',
+  asyncapi: {
+    title: 'RabbitMQ',
+    description: 'Broker description.',
+    version: '0.0.1'
+  }
+}
+
 /**
  * Gets the settings from loacalStorage and parse it as JSON.
  *
@@ -135,6 +149,7 @@ const hideSettings = (e) => {
 }
 
 export {
+  brokerDefaultSettings,
   getSettings,
   setSettings,
   changeSettingsTab,

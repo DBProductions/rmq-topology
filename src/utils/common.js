@@ -76,6 +76,7 @@ const createTopology = (ctx, conf) => {
         queue.x,
         queue.y,
         queue.name,
+        queue.type,
         queue.ttl,
         exchanges[queue.dlx],
         queue.dlxrk,

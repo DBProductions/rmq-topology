@@ -9,14 +9,16 @@ class Queue extends BaseComponent {
    * @param {number} x - x position of the queue
    * @param {number} y - y position of the queue
    * @param {string} name - optional identifier
+   * @param {string} type - optional identifier, `quorum` as default
    * @param {number} ttl - `x-message-ttl` Argument of the queue
    * @param {Exchange} dlx - Exchange object as `x-dead-letter-exchange` argument
    * @param {number} maxLength - `x-max-length` argument of the queue
    * @extends BaseComponent
    */
-  constructor(x, y, name, ttl, dlx, dlxrk, maxLength) {
+  constructor(x, y, name, type, ttl, dlx, dlxrk, maxLength) {
     super(x, y)
     this.name = name
+    this.type = type || 'quorum'
     this.msgTtl = ttl || ''
     this.dlx = dlx
     this.dlxrk = dlxrk || ''
@@ -42,7 +44,9 @@ class Queue extends BaseComponent {
       this.messages.forEach((val) => {
         val.msg.setConsumer(this.consumers[0])
       })
-      this.messages = []
+      if (this.type !== 'stream') {
+        this.messages = []
+      }
     }
   }
 
@@ -85,8 +89,25 @@ class Queue extends BaseComponent {
         this.scene.lostMessages += 1
       }
     } else {
-      // no consumer, message stays in the queue
-      if (this.consumers.length === 0) {
+      // stream or no consumer, message stays in the queue
+      if (this.type === 'stream') {
+        // deliver message to all consumer
+        this.consumers.forEach((v) => {
+          new QueueMessage(this.x, this.y, this, v, fillStyle).addToScene(
+            this.scene
+          )
+        })
+        this.messages.push({
+          ts: Date.now(),
+          msg: new QueueMessage(
+            this.x,
+            this.y,
+            this,
+            null,
+            fillStyle
+          ).addToScene(this.scene)
+        })
+      } else if (this.consumers.length === 0) {
         this.messages.push({
           ts: Date.now(),
           msg: new QueueMessage(
@@ -159,7 +180,11 @@ class Queue extends BaseComponent {
     this.ctx.globalAlpha = 1.0
     this.ctx.beginPath()
     // this.ctx.fillStyle = gradient;
-    this.ctx.fillStyle = '#ccc'
+    if (this.type === 'stream') {
+      this.ctx.fillStyle = '#eee'
+    } else {
+      this.ctx.fillStyle = '#ccc'
+    }
     this.ctx.setLineDash([])
     this.ctx.roundRect(this.x - 25, this.y - 15, 50, 30, [10])
     this.ctx.fill()

@@ -1,1 +1,5 @@
+coverage/block-navigation.js
+coverage/prettify.js
+coverage/sorter.js
+output/js/asyncapi-ui.min.js
 src/utils/exports.js
