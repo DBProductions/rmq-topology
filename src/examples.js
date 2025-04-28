@@ -199,7 +199,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 170,
+        y: 130,
         name: 'Producer',
         publishes: {
           0: {
@@ -248,7 +248,8 @@ const Examples = {
     bindings: [{ exchange: 0, queue: 0, routingKey: '' }]
   },
   stream: {
-    description: 'Streams are an append-only log and does not remove messages.',
+    description:
+      'Streams a specific type of queues they are an append-only log and does not remove messages.',
     producers: [
       {
         x: 200,
@@ -292,7 +293,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 100,
+        y: 130,
         name: 'Producer',
         publishes: {
           0: {
@@ -331,7 +332,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 100,
+        y: 130,
         name: 'Producer',
         publishes: {
           0: {
@@ -397,7 +398,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 100,
+        y: 130,
         name: 'Producer',
         publishes: {
           0: {
@@ -461,7 +462,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 100,
+        y: 130,
         name: 'Producer',
         publishes: {
           0: {
@@ -526,7 +527,7 @@ const Examples = {
     producers: [
       {
         x: 200,
-        y: 100,
+        y: 130,
         name: 'Producer',
         publishes: {
           0: {

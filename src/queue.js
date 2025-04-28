@@ -58,10 +58,10 @@ class Queue extends BaseComponent {
   removeConsumer(consumer) {
     const consumerIndex = this.consumers.findIndex((c) => c === consumer)
     if (consumerIndex !== -1) {
-      if (this.consumers.length === 1) {
-        this.consumers = []
-      } else {
+      if (this.consumers.length > 1) {
         this.consumers.splice(consumerIndex, 1)
+      } else {
+        this.consumers = []
       }
     }
   }

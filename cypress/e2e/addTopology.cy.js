@@ -74,5 +74,17 @@ describe('Topologies', () => {
 
     // stop
     cy.get('#animate').click()
+
+    cy.window().its('scene.actors[1].arrivedMessages').should('equal', 2)
+
+    // start
+    cy.get('#animate').click()
+
+    cy.wait(5000)
+
+    // stop
+    cy.get('#animate').click()
+
+    cy.window().its('scene.actors[1].arrivedMessages').should('equal', 7)
   })
 })

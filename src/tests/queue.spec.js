@@ -88,7 +88,7 @@ describe('Queue', () => {
     expect(stream.messages.length).toEqual(1)
   })
 
-  it('should correctly stay in the stream when a consumer get added', () => {
+  it('should correctly stay in the stream when a consumer got added', () => {
     stream.addToScene(scene)
     const bindMsg = new BindingMessage(0, 0, binding)
     stream.messageArrived(bindMsg)
