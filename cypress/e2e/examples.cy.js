@@ -260,6 +260,15 @@ describe('Test examples', () => {
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":170,"name":"Consumer 2","consumes":[0],"mode":"ack"},{"x":800,"y":260,"name":"Consumer 3","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":170,"name":"Queue","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
       )
     })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Work Queue')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange/q/Queue -d \'{"routing_key": , "arguments": {}}\'\n\n'
+      )
+    })
   })
 
   describe('Stream example', () => {
@@ -275,6 +284,15 @@ describe('Test examples', () => {
       cy.get('#ImExport').should(
         'have.value',
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":150,"name":"Queue","type":"stream","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
+      )
+    })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Stream')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"stream"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange/q/Queue -d \'{"routing_key": , "arguments": {}}\'\n\n'
       )
     })
   })
@@ -294,6 +312,15 @@ describe('Test examples', () => {
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[],"exchanges":[{"x":400,"y":130,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":130,"name":"Queue","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
       )
     })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Queue-Ttl')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum","x-message-ttl":3000}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange/q/Queue -d \'{"routing_key": , "arguments": {}}\'\n\n'
+      )
+    })
   })
 
   describe('Queue max length example', () => {
@@ -309,6 +336,15 @@ describe('Test examples', () => {
       cy.get('#ImExport').should(
         'have.value',
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[1],"mode":"reject"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":80,"name":"Exchange 1","type":"direct","alternate":null},{"x":400,"y":170,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":3,"dlx":1},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+      )
+    })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Queue-Max-Length')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%201 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%202 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum","x-dead-letter-exchange":"Exchange 2","x-dead-letter-routing-key":"Queue 2","x-max-length":3}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%201/q/Queue%201 -d \'{"routing_key": , "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%202/q/Queue%202 -d \'{"routing_key": , "arguments": {}}\'\n\n'
       )
     })
   })
@@ -328,6 +364,15 @@ describe('Test examples', () => {
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":180,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":80,"name":"Exchange 1","type":"direct","alternate":"Exchange 2"},{"x":450,"y":180,"name":"Exchange 2","type":"topic","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":200,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Alternate Exchange')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%201 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {"alternate-exchange":"Exchange 2"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%202 -d \'{"type": "topic", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%201/q/Queue%201 -d \'{"routing_key": , "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%202/q/Queue%202 -d \'{"routing_key": , "arguments": {}}\'\n\n'
+      )
+    })
   })
 
   describe('Dlx example', () => {
@@ -345,6 +390,15 @@ describe('Test examples', () => {
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":100,"name":"Consumer 1","consumes":[0],"mode":"reject"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":100,"name":"Exchange 1","type":"direct","alternate":null},{"x":400,"y":200,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":"","dlx":1},{"x":650,"y":200,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Dlx')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%201 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%202 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum","x-dead-letter-exchange":"Exchange 2","x-dead-letter-routing-key":"Queue 2"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%201/q/Queue%201 -d \'{"routing_key": , "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%202/q/Queue%202 -d \'{"routing_key": , "arguments": {}}\'\n\n'
+      )
+    })
   })
 
   describe('Retry example', () => {
@@ -360,6 +414,15 @@ describe('Test examples', () => {
       cy.get('#ImExport').should(
         'have.value',
         '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":100,"name":"Consumer 1","consumes":[0],"mode":"reject"}],"exchanges":[{"x":400,"y":100,"name":"Exchange 1","type":"direct","alternate":null},{"x":650,"y":200,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":"","dlx":1},{"x":400,"y":300,"name":"Queue 2","type":"quorum","maxLength":"","dlx":0}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+      )
+    })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Retry')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%201 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Exchange%202 -d \'{"type": "direct", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum","x-dead-letter-exchange":"Exchange 2","x-dead-letter-routing-key":"Queue 2"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum","x-dead-letter-exchange":"Exchange 1","x-dead-letter-routing-key":"Queue 1","x-message-ttl":3000}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%201/q/Queue%201 -d \'{"routing_key": , "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Exchange%202/q/Queue%202 -d \'{"routing_key": , "arguments": {}}\'\n\n'
       )
     })
   })

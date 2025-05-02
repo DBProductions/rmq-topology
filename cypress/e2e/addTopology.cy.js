@@ -2,6 +2,7 @@ describe('Topologies', () => {
   beforeEach(() => {
     cy.visit('/')
   })
+
   it('Add topology', () => {
     // producer
     cy.get('#newComponent').select('Producer')
