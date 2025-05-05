@@ -3,6 +3,7 @@
     "lint": "deno lint --fix",
     "format": "deno fmt",
     "test": "vitest run",
+    "bundle": "rollup -c",
     "dev": "deno run --watch main.ts"
   },
   "imports": {
