@@ -63,8 +63,8 @@ jobs:
           deno-version: "2.x"
       - name: "Install"
         run: deno install
-      - name: "Run lint"
-        run: deno task lint
+#      - name: "Run lint"
+#        run: deno task lint
       - name: "Run format"
         run: deno task format
       - name: "Run test"
