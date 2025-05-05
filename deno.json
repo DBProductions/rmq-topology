@@ -1,8 +1,8 @@
 {
   "tasks": {
-    "lint": "deno lint",
+    "lint": "deno lint --fix",
     "format": "deno fmt --check",
-    "test": "deno run npm:vitest",
+    "test": "vitest run",
     "dev": "deno run --watch main.ts"
   },
   "imports": {
