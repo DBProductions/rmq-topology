@@ -1,7 +1,7 @@
 {
   "tasks": {
     "lint": "deno lint --fix",
-    "format": "deno fmt --check",
+    "format": "deno fmt",
     "test": "vitest run",
     "dev": "deno run --watch main.ts"
   },
