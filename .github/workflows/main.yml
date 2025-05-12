@@ -69,8 +69,6 @@ jobs:
         run: deno task format
       - name: "Run test"
         run: deno task test
-      - name: "Run bundle"
-        run: deno task bundle
   bun:
     runs-on: ubuntu-latest
     steps:
