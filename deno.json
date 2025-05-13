@@ -4,6 +4,7 @@
     "format": "deno fmt",
     "test": "vitest run",
     "bundle": "rollup -c",
+    "cypress": "cypress run --headless --config video=false -b chrome",
     "dev": "deno run --watch main.ts"
   },
   "imports": {

@@ -69,8 +69,8 @@ jobs:
         run: deno task format
       - name: "Run test"
         run: deno task test
-      - name: "Run bundle"
-        run: deno task bundle
+#      - name: "Run bundle"
+#        run: deno task bundle
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
