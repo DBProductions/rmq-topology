@@ -1,13 +1,20 @@
 # RMQ Topology
 
 A small tool to simulate RabbitMQ topologies and see the message flow.  
-Have several examples of common use cases and messaging pattern.  
-It creates curl, rabbitmqadmin, Terraform and AsyncAPI definitions.  
+Have several examples of common use cases and messaging patterns.  
+It creates cURL, rabbitmqadmin, Terraform and AsyncAPI definitions.  
 
 [Demo Page](https://dbproductions.github.io/rmq-topology/)
 
 ![demo page screenshot](screenshot.png "Demo Page Screenshot")
 
+## Import/Export
+It's possible to export and import the definitions in a JSON format.  
+RabbitMQ schema definitions can be imported, but not all features are supported.
+
+![import export screenshot](screenshot-export.png "Demo Page Screenshot")
+
+## Used technologies
 The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/). [Vitest](https://vitest.dev/) and [Cypress](https://www.cypress.io/) run some tests.  
 
     node -v
