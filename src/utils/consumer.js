@@ -13,7 +13,7 @@ const displayConsumer = (consumer) => {
   document.querySelector('#consumerNameField').value = ''
   document.querySelector('#consumerConsumesFrom').innerHTML = ''
 
-  const queues = window.scene.getObjectsInScene('Queue')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
   const selectSource = document.querySelector('#consumerConsumesFromSelect')
   selectSource.options.length = 0
   selectSource.options[selectSource.options.length] = new Option('---', 0)
@@ -104,7 +104,7 @@ const sendConsumerForm = (e) => {
   })
 
   if (id) {
-    const consumer = window.scene.getIdInScene(id)
+    const consumer = globalThis.scene.getIdInScene(id)
 
     const queues = document.getElementsByName('consumerQueues[]')
     const idsToKeep = []
@@ -118,7 +118,7 @@ const sendConsumerForm = (e) => {
       (s) => idsToKeep.indexOf(s.id) === -1
     )
     removeQueues.forEach((rmQueue) => {
-      const actor = window.scene.getIdInScene(rmQueue.id)
+      const actor = globalThis.scene.getIdInScene(rmQueue.id)
       actor.removeConsumer(consumer)
     })
 
@@ -127,17 +127,17 @@ const sendConsumerForm = (e) => {
     consumer.queues = restQueues
 
     if (consumesFrom !== '0') {
-      consumer.addQueue(window.scene.getIdInScene(consumesFrom))
+      consumer.addQueue(globalThis.scene.getIdInScene(consumesFrom))
     }
   } else {
     const Consumer1 = new Consumer(800, 30, name, [])
-    Consumer1.addToScene(window.scene)
+    Consumer1.addToScene(globalThis.scene)
     if (consumesFrom !== '0') {
-      Consumer1.addQueue(window.scene.getIdInScene(consumesFrom))
+      Consumer1.addQueue(globalThis.scene.getIdInScene(consumesFrom))
     }
   }
 
-  window.scene.render()
+  globalThis.scene.render()
 
   document.querySelector('#consumerIdField').value = ''
   document.querySelector('#consumerNameField').value = ''
@@ -152,15 +152,15 @@ const sendConsumerForm = (e) => {
 const deleteConsumerForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const consumer = window.scene.getIdInScene(
+  const consumer = globalThis.scene.getIdInScene(
     document.querySelector('#consumerIdField').value
   )
   consumer.queues.forEach((rmQueue) => {
-    const actor = window.scene.getIdInScene(rmQueue.id)
+    const actor = globalThis.scene.getIdInScene(rmQueue.id)
     actor.removeConsumer(consumer)
   })
-  window.scene.removeActor(consumer)
-  window.scene.render()
+  globalThis.scene.removeActor(consumer)
+  globalThis.scene.render()
   document.querySelector('#consumerPanel').classList.remove('panel-wrap-out')
 }
 

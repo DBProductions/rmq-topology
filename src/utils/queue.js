@@ -36,7 +36,7 @@ const displayQueue = (queue) => {
     }
   }
 
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
   const selectDlx = document.querySelector('#queueDlxSelect')
   selectDlx.options.length = 0
   selectDlx.options[selectDlx.options.length] = new Option(
@@ -82,21 +82,21 @@ const sendQueueForm = (e) => {
     error = 'Name is required.'
     document.querySelector('#queueErr').innerHTML = error
   } else if (id) {
-    const queue = window.scene.getIdInScene(id)
+    const queue = globalThis.scene.getIdInScene(id)
     queue.name = name
     queue.type = type
     queue.msgTtl = msgTtl
     queue.maxLength = maxLength
-    queue.dlx = window.scene.getIdInScene(dlx)
+    queue.dlx = globalThis.scene.getIdInScene(dlx)
     queue.dlxrk = dlxrk
   } else {
-    const queues = window.scene.getObjectsInScene('Queue')
+    const queues = globalThis.scene.getObjectsInScene('Queue')
     const queueIndex = queues.findIndex((q) => q.name === name)
     if (queueIndex === -1) {
       const Queue1 = new Queue(650, 30, name, type)
-      Queue1.addToScene(window.scene)
+      Queue1.addToScene(globalThis.scene)
       Queue1.msgTtl = msgTtl
-      Queue1.dlx = window.scene.getIdInScene(dlx)
+      Queue1.dlx = globalThis.scene.getIdInScene(dlx)
       Queue1.dlxrk = dlxrk
     } else {
       error = `Queue with name '${name}' already exists.`
@@ -104,7 +104,7 @@ const sendQueueForm = (e) => {
     }
   }
 
-  window.scene.render()
+  globalThis.scene.render()
 
   if (!error) {
     document.querySelector('#queueIdField').value = ''
@@ -143,7 +143,7 @@ const hideQueue = (e) => {
 const deleteQueueForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const actor = window.scene.getIdInScene(
+  const actor = globalThis.scene.getIdInScene(
     document.querySelector('#queueIdField').value
   )
   actor.consumers.forEach((consumer) => {
@@ -152,11 +152,11 @@ const deleteQueueForm = (e) => {
   if (actor && actor.bindings) {
     actor.bindings.forEach((binding) => {
       binding.source.removeBinding(binding)
-      window.scene.removeActor(binding)
+      globalThis.scene.removeActor(binding)
     })
   }
-  window.scene.removeActor(actor)
-  window.scene.render()
+  globalThis.scene.removeActor(actor)
+  globalThis.scene.render()
   document.querySelector('#queuePanel').classList.remove('panel-wrap-out')
 }
 

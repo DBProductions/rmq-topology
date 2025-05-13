@@ -22,8 +22,8 @@ const displayBinding = (binding) => {
     destinationId = binding.destination.id
   }
 
-  const exchanges = window.scene.getObjectsInScene('Exchange')
-  const queues = window.scene.getObjectsInScene('Queue')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
 
   const selectSource = document.getElementById('bindingSource')
   selectSource.options.length = 0
@@ -75,11 +75,11 @@ const sendBindingForm = (e) => {
   const selectSource = document.getElementById('bindingSource').value
   const selectDestination = document.getElementById('bindingDestination').value
 
-  const ex = window.scene.actors.find((exc) => exc.id === selectSource)
-  const qu = window.scene.actors.find((q) => q.id === selectDestination)
+  const ex = globalThis.scene.actors.find((exc) => exc.id === selectSource)
+  const qu = globalThis.scene.actors.find((q) => q.id === selectDestination)
 
   if (id) {
-    const binding = window.scene.getIdInScene(id)
+    const binding = globalThis.scene.getIdInScene(id)
     binding.routingKey = routingKey
 
     binding.source = ex
@@ -89,10 +89,10 @@ const sendBindingForm = (e) => {
     // let e = window.scene.actors.find(e => e.id === selectSource);
     // let q = window.scene.actors.find(q => q.id === selectDestination);
     const Binding1 = new Binding(ex, qu, routingKey)
-    Binding1.addToScene(window.scene)
+    Binding1.addToScene(globalThis.scene)
   }
 
-  window.scene.render()
+  globalThis.scene.render()
 
   document.querySelector('#bindingIdField').value = ''
   document.querySelector('#bindingRoutingKeyField').value = ''
@@ -129,12 +129,12 @@ const hideBinding = (e) => {
 const deleteBindingForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  const actor = window.scene.getIdInScene(
+  const actor = globalThis.scene.getIdInScene(
     document.querySelector('#bindingIdField').value
   )
   actor.source.removeBinding(actor)
-  window.scene.removeActor(actor)
-  window.scene.render()
+  globalThis.scene.removeActor(actor)
+  globalThis.scene.render()
   document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
 }
 

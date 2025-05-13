@@ -27,7 +27,7 @@ const displayExchange = (exchange) => {
     '- Alternate Exchange',
     0
   )
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
 
   if (exchange) {
     Object.keys(exchanges).forEach((ex) => {
@@ -79,12 +79,12 @@ const sendExchangeForm = (e) => {
     error = 'Name is required.'
     document.querySelector('#exchangeErr').innerHTML = error
   } else if (id) {
-    const exchanges = window.scene.getObjectsInScene('Exchange')
+    const exchanges = globalThis.scene.getObjectsInScene('Exchange')
     const exchangeIdIndex = exchanges.findIndex((e) => e.id === id)
     const exchangeIndex = exchanges.findIndex((e) => e.name === name)
     if (exchangeIndex === -1 || exchangeIdIndex !== -1) {
-      const exchange = window.scene.getIdInScene(id)
-      const alternateExchange = window.scene.getIdInScene(alternate)
+      const exchange = globalThis.scene.getIdInScene(id)
+      const alternateExchange = globalThis.scene.getIdInScene(alternate)
       exchange.name = name
       exchange.type = type
       exchange.alternate = alternateExchange
@@ -93,19 +93,19 @@ const sendExchangeForm = (e) => {
       document.querySelector('#exchangeErr').innerHTML = error
     }
   } else {
-    const exchanges = window.scene.getObjectsInScene('Exchange')
+    const exchanges = globalThis.scene.getObjectsInScene('Exchange')
     const exchangeIndex = exchanges.findIndex((e) => e.name === name)
     if (exchangeIndex === -1) {
-      const alternateExchange = window.scene.getIdInScene(alternate)
+      const alternateExchange = globalThis.scene.getIdInScene(alternate)
       const Exchange1 = new Exchange(400, 30, name, type, alternateExchange)
-      Exchange1.addToScene(window.scene)
+      Exchange1.addToScene(globalThis.scene)
     } else {
       error = `Exchange with name '${name}' already exists.`
       document.querySelector('#exchangeErr').innerHTML = error
     }
   }
 
-  window.scene.render()
+  globalThis.scene.render()
 
   if (!error) {
     document.querySelector('#exchangeIdField').value = ''
@@ -142,19 +142,19 @@ const deleteExchangeForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
   const exchangeId = document.querySelector('#exchangeIdField').value
-  const exchange = window.scene.getIdInScene(exchangeId)
-  const producers = window.scene.getObjectsInScene('Producer')
+  const exchange = globalThis.scene.getIdInScene(exchangeId)
+  const producers = globalThis.scene.getObjectsInScene('Producer')
   producers.forEach((producer) => {
     producer.removeExchange(exchange)
   })
-  const bindings = window.scene.getObjectsInScene('Binding')
+  const bindings = globalThis.scene.getObjectsInScene('Binding')
   bindings.forEach((binding) => {
     if (exchangeId === binding.source.id) {
-      window.scene.removeActor(binding)
+      globalThis.scene.removeActor(binding)
     }
   })
-  window.scene.removeActor(window.scene.getIdInScene(exchangeId))
-  window.scene.render()
+  globalThis.scene.removeActor(globalThis.scene.getIdInScene(exchangeId))
+  globalThis.scene.render()
   document.querySelector('#exchangePanel').classList.remove('panel-wrap-out')
 }
 

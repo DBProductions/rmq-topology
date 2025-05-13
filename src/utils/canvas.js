@@ -20,12 +20,12 @@ import { displayBinding } from './binding'
 const mouseUpOnCanvas = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  if (!window.timer.running) {
-    window.scene.actors.map((obj) => {
+  if (!globalThis.timer.running) {
+    globalThis.scene.actors.map((obj) => {
       obj.dragged = false
       return true
     })
-    window.scene.render()
+    globalThis.scene.render()
   }
 }
 
@@ -37,7 +37,7 @@ const mouseUpOnCanvas = (e) => {
 const mouseDownOnCanvas = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  if (!window.timer.running) {
+  if (!globalThis.timer.running) {
     const ele = findPosition(e)
     if (ele) {
       ele.dragged = true
@@ -55,11 +55,13 @@ const mouseMoveOnCanvas = (e) => {
   e.preventDefault()
   e.stopPropagation()
   document.body.style.cursor = 'default'
-  if (!window.timer.running) {
+  if (!globalThis.timer.running) {
     const mx = e.clientX - e.target.offsetLeft
     const my = e.clientY - e.target.offsetTop
 
-    const draggedActor = window.scene.actors.filter((a) => a.dragged === true)
+    const draggedActor = globalThis.scene.actors.filter(
+      (a) => a.dragged === true
+    )
     if (draggedActor.length > 0) {
       const actor = draggedActor[0]
       document.body.style.cursor = 'pointer'
@@ -88,7 +90,7 @@ const mouseMoveOnCanvas = (e) => {
         }
       }
     } else {
-      window.scene.actors.forEach((val) => {
+      globalThis.scene.actors.forEach((val) => {
         val.hover = false
         const foundProducerConsumer = findSquare(val, mx, my)
         if (foundProducerConsumer) {
@@ -110,7 +112,7 @@ const mouseMoveOnCanvas = (e) => {
         }
       })
     }
-    window.scene.render()
+    globalThis.scene.render()
   }
 }
 

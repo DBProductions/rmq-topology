@@ -41,11 +41,11 @@ const linepointNearestMouse = (line, x, y) => {
  * @param {object} conf - configuration as JSON
  */
 const createTopology = (ctx, conf) => {
-  window.scene = new Scene(ctx, window.innerWidth, 450)
+  globalThis.scene = new Scene(ctx, globalThis.innerWidth, 450)
   if (conf.description) {
-    window.scene.description = conf.description
+    globalThis.scene.description = conf.description
   }
-  window.timer = new Timer(window.scene)
+  globalThis.timer = new Timer(globalThis.scene)
 
   const exchanges = []
   const queues = []
@@ -58,12 +58,12 @@ const createTopology = (ctx, conf) => {
         exchange.name,
         exchange.type
       )
-      newExchange.addToScene(window.scene)
+      newExchange.addToScene(globalThis.scene)
       exchanges.push(newExchange)
     })
     // alternate exchanges
     const alternateExchanges = conf.exchanges.filter((s) => s.alternate)
-    const currentExchanges = window.scene.getObjectsInScene('Exchange')
+    const currentExchanges = globalThis.scene.getObjectsInScene('Exchange')
     alternateExchanges.forEach((ex) => {
       const e = currentExchanges.filter((s) => s.name == ex.name)[0]
       const a = currentExchanges.filter((s) => s.name == ex.alternate)[0]
@@ -82,14 +82,14 @@ const createTopology = (ctx, conf) => {
         queue.dlxrk,
         queue.maxLength
       )
-      newQueue.addToScene(window.scene)
+      newQueue.addToScene(globalThis.scene)
       queues.push(newQueue)
     })
   }
   if (conf.producers) {
     conf.producers.forEach((producer) => {
       const newProducer = new Producer(producer.x, producer.y, producer.name)
-      const currentExchanges = window.scene.getObjectsInScene('Exchange')
+      const currentExchanges = globalThis.scene.getObjectsInScene('Exchange')
       for (const val in producer.publishes) {
         currentExchanges.forEach((ex) => {
           if (ex.name === producer.publishes[val].exchange) {
@@ -101,7 +101,7 @@ const createTopology = (ctx, conf) => {
           }
         })
       }
-      newProducer.addToScene(window.scene)
+      newProducer.addToScene(globalThis.scene)
     })
   }
   if (conf.consumers) {
@@ -116,7 +116,7 @@ const createTopology = (ctx, conf) => {
       consumer.consumes.forEach((val) => {
         newConsumer.addQueue(queues[val])
       })
-      newConsumer.addToScene(window.scene)
+      newConsumer.addToScene(globalThis.scene)
     })
   }
   if (conf.bindings) {
@@ -126,11 +126,11 @@ const createTopology = (ctx, conf) => {
         queues[binding.queue],
         binding.routingKey
       )
-      newBinding.addToScene(window.scene)
+      newBinding.addToScene(globalThis.scene)
     })
   }
 
-  window.scene.render()
+  globalThis.scene.render()
 }
 
 /**
@@ -276,7 +276,7 @@ const findPosition = (e, line = false) => {
   const mx = e.clientX - e.target.offsetLeft
   const my = e.clientY - e.target.offsetTop
   let obj
-  window.scene.actors.forEach((val) => {
+  globalThis.scene.actors.forEach((val) => {
     const foundProducerConsumer = findSquare(val, mx, my)
     if (foundProducerConsumer) {
       obj = foundProducerConsumer

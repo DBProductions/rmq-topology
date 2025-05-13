@@ -30,10 +30,10 @@ const config = {
   bindings: []
 }
 
-document.querySelector('#docLink').href = `${window.location.href}doc`
+document.querySelector('#docLink').href = `${globalThis.location.href}doc`
 
 const canvas = document.querySelector('#canvas')
-canvas.width = window.innerWidth
+canvas.width = globalThis.innerWidth
 canvas.height = 450
 const curCtx = canvas.getContext('2d')
 
@@ -50,21 +50,21 @@ document.querySelector('#exampleTopology').addEventListener('change', (e) => {
   e.stopPropagation()
   displayForm('')
   let restart = false
-  if (window.timer.running) {
-    window.timer.stop()
-    window.scene.purge()
-    window.scene.render()
+  if (globalThis.timer.running) {
+    globalThis.timer.stop()
+    globalThis.scene.purge()
+    globalThis.scene.render()
     restart = true
   }
   if (e.target.value !== 'Examples') {
     createTopology(curCtx, Examples[e.target.value.toLowerCase()])
     if (restart) {
-      window.timer.start()
+      globalThis.timer.start()
     }
   } else {
-    window.scene.purge()
-    window.scene.description = ''
-    window.scene.render()
+    globalThis.scene.purge()
+    globalThis.scene.description = ''
+    globalThis.scene.render()
   }
 })
 
@@ -73,10 +73,10 @@ animateBtn.addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
   if (animateBtn.innerHTML === '<i class="fas fa-play"></i> Start') {
-    window.timer.start()
+    globalThis.timer.start()
     animateBtn.innerHTML = '<i class="fas fa-stop"></i> Stop'
   } else {
-    window.timer.stop()
+    globalThis.timer.stop()
     animateBtn.innerHTML = '<i class="fas fa-play"></i> Start'
   }
 })

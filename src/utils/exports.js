@@ -18,7 +18,7 @@ const exportTopology = (e) => {
     queues: [],
     bindings: []
   }
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     let alternate = null
     if (val.alternate) {
@@ -32,7 +32,7 @@ const exportTopology = (e) => {
       alternate
     })
   })
-  const queues = window.scene.getObjectsInScene('Queue')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const q = {
       x: val.x,
@@ -48,7 +48,7 @@ const exportTopology = (e) => {
     }
     exports.queues.push(q)
   })
-  const bindings = window.scene.getObjectsInScene('Binding')
+  const bindings = globalThis.scene.getObjectsInScene('Binding')
   bindings.forEach((val) => {
     const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
     const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
@@ -60,7 +60,7 @@ const exportTopology = (e) => {
       })
     }
   })
-  const consumers = window.scene.getObjectsInScene('Consumer')
+  const consumers = globalThis.scene.getObjectsInScene('Consumer')
   consumers.forEach((val) => {
     const consumes = []
     val.queues.forEach((queue) => {
@@ -75,7 +75,7 @@ const exportTopology = (e) => {
       mode: val.mode
     })
   })
-  const producers = window.scene.getObjectsInScene('Producer')
+  const producers = globalThis.scene.getObjectsInScene('Producer')
   producers.forEach((val) => {
     const publishes = {}
     for (const key in val.publishes) {
@@ -113,7 +113,7 @@ const exportCurl = (e) => {
   const { username } = brokerSettings
   const { password } = brokerSettings
   const { vhost } = brokerSettings
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = encodeURIComponent(val.name)
     const args = {}
@@ -124,7 +124,7 @@ const exportCurl = (e) => {
       args
     )}}'\n\n`
   })
-  const queues = window.scene.getObjectsInScene('Queue')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const name = encodeURIComponent(val.name)
     const args = {'x-queue-type': val.type}
@@ -142,7 +142,7 @@ const exportCurl = (e) => {
       args
     )}}'\n\n`
   })
-  const bindings = window.scene.getObjectsInScene('Binding')
+  const bindings = globalThis.scene.getObjectsInScene('Binding')
   bindings.forEach((val) => {
     const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
     const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
@@ -180,7 +180,7 @@ const exportRabbitmqadmin = (e) => {
   if (vhost === '%2f') {
     vhost = '/'
   }
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     generatedString += `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare exchange `
     generatedString += `name="${val.name}" type="${val.type}" durable=true`
@@ -189,7 +189,7 @@ const exportRabbitmqadmin = (e) => {
     }
     generatedString += `\n\n`
   })
-  const queues = window.scene.getObjectsInScene('Queue')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const args = {"x-queue-type": val.type}
     if (val.dlx) {
@@ -208,7 +208,7 @@ const exportRabbitmqadmin = (e) => {
     }
     generatedString += '\n\n'
   })
-  const bindings = window.scene.getObjectsInScene('Binding')
+  const bindings = globalThis.scene.getObjectsInScene('Binding')
   bindings.forEach((val) => {
     const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id)
     const queueIndex = queues.findIndex((q) => q.id === val.destination.id)
@@ -259,7 +259,7 @@ resource "rabbitmq_vhost" "vhost" {
   name = "${vhost}"
 }
 `
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
   exchanges.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
     generatedString += `resource "rabbitmq_exchange" "${name}" {
@@ -273,7 +273,7 @@ resource "rabbitmq_vhost" "vhost" {
 }
 `
   })
-  const queues = window.scene.getObjectsInScene('Queue')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
   queues.forEach((val) => {
     const name = val.name.replace(/ /g, '-')
       generatedString += `variable "${name}args" {
@@ -312,7 +312,7 @@ resource "rabbitmq_vhost" "vhost" {
 `
   })
 
-  const bindings = window.scene.getObjectsInScene('Binding')
+  const bindings = globalThis.scene.getObjectsInScene('Binding')
   bindings.forEach((val) => {
     const srcName = val.source.name.replace(/ /g, '-')
     const destName = val.destination.name.replace(/ /g, '-')
@@ -349,8 +349,8 @@ const exportAsyncApi = (e) => {
   if (vhost === '%2f') {
     vhost = '/'
   }
-  const exchanges = window.scene.getObjectsInScene('Exchange')
-  const queues = window.scene.getObjectsInScene('Queue')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
 
   generatedString += `asyncapi: 3.0.0
 info:

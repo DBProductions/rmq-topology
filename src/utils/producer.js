@@ -20,7 +20,7 @@ const displayProducer = (producer) => {
   document.querySelector('#producerPublishTo').innerHTML = ''
   document.querySelector('#producerErr').innerHTML = ''
 
-  const exchanges = window.scene.getObjectsInScene('Exchange')
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
 
   const selectSource = document.getElementById('producerPublishToSelect')
   selectSource.options.length = 0
@@ -82,7 +82,7 @@ const sendProducerForm = (e) => {
   const routingKey = document.querySelector('#producerRoutingKeyField').value
   const publishTo = document.querySelector('#producerPublishToSelect').value
 
-  const exchange = window.scene.getIdInScene(publishTo)
+  const exchange = globalThis.scene.getIdInScene(publishTo)
 
   const message = {
     headers: {},
@@ -93,7 +93,7 @@ const sendProducerForm = (e) => {
   let error = false
 
   if (id) {
-    producer = window.scene.getIdInScene(id)
+    producer = globalThis.scene.getIdInScene(id)
 
     const exchanges = document.getElementsByName('producerExchanges[]')
 
@@ -129,10 +129,10 @@ const sendProducerForm = (e) => {
         document.querySelector('#producerErr').innerHTML = error
       }
     }
-    producer.addToScene(window.scene)
+    producer.addToScene(globalThis.scene)
   }
 
-  window.scene.render()
+  globalThis.scene.render()
 
   if (!error) {
     const producerParams = [
@@ -178,10 +178,12 @@ const hideProducer = (e) => {
 const deleteProducerForm = (e) => {
   e.preventDefault()
   e.stopPropagation()
-  window.scene.removeActor(
-    window.scene.getIdInScene(document.querySelector('#producerIdField').value)
+  globalThis.scene.removeActor(
+    globalThis.scene.getIdInScene(
+      document.querySelector('#producerIdField').value
+    )
   )
-  window.scene.render()
+  globalThis.scene.render()
   document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
 }
 

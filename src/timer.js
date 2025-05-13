@@ -40,7 +40,7 @@ class Timer {
         self.prevTime = curTime
         self.target.update(dt)
         self.target.render(dt)
-        window.requestAnimationFrame(self.tick)
+        globalThis.requestAnimationFrame(self.tick)
       }
     }
     self.tick()
