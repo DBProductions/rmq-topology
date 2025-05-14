@@ -5,9 +5,10 @@
     "test": "vitest run",
     "bundle": "rollup -c",
     "cypress": "cypress run --headless --config video=false -b chrome",
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --allow-net --allow-read --watch main.ts"
   },
   "imports": {
+    "@oak/oak": "jsr:@oak/oak@^17.1.4",
     "@std/assert": "jsr:@std/assert@1",
     "cypress": "npm:cypress"
   }
