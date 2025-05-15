@@ -3,7 +3,7 @@ import { Application, Router, send } from "@oak/oak";
 const app = new Application()
 const router = new Router()
 
-const ROOT_DIR = "./public", ROOT_DIR_PATH = "/public";
+const ROOT_DIR = "./public";
 
 app.use(async (ctx, next) => {
   await send(ctx, ctx.request.url.pathname, {

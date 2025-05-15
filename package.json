@@ -14,7 +14,7 @@
     "format": "npx prettier --write \"{,!(node_modules)/**/}*.{js,ts}\"",
     "bundle": "npx rollup -c",
     "release": "npm run format && npm run lint && npm test && npm run bundle && npm run run:cypress",
-    "start": "node index.js"
+    "start": "node server/index.js"
   },
   "keywords": [
     "rabbitmq",
