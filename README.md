@@ -18,6 +18,8 @@ RabbitMQ schema definitions can be imported, but not all features are supported.
 The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [JSDoc](https://jsdoc.app/) with the [clean-jsdoc-theme](https://ankdev.me/clean-jsdoc-theme/).  
 [Vitest](https://vitest.dev/) and [Cypress](https://www.cypress.io/) run some tests.  
 
+### Node
+
     node -v
     v21.5.0
     npm i
@@ -25,7 +27,25 @@ The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/),
     npm run bundle
     npm start
 
-    http://localhost:3000/
+### Bun
+
+   bun -v
+   1.2.13
+   bun i
+
+   bun run bundle
+   bun run start
+
+### Deno
+
+    deno -v
+    deno 2.3.1
+    deno install
+
+    deno task bundle
+    deno task start
+
+After a successful start the specific runtime serves the tool under `http://localhost:3000/`.
 
 ![workflow](https://github.com/DBProductions/rmq-topology/actions/workflows/main.yml/badge.svg)
 

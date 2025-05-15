@@ -75,7 +75,7 @@ jobs:
         with:
           install: false
           build: deno task bundle
-          start: deno task dev
+          start: deno task start
           wait-on: 'http://localhost:3000'
   bun:
     runs-on: ubuntu-latest
