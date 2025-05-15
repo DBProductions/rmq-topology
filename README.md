@@ -29,12 +29,11 @@ The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/),
 
 ### Bun
 
-   bun -v
-   1.2.13
-   bun i
-
-   bun run bundle
-   bun run start
+    bun -v
+    1.2.13
+    bun i
+    bun run bundle    
+    bun run start
 
 ### Deno
 
