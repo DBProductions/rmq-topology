@@ -64,10 +64,7 @@ jobs:
       - run: deno install
       - run: deno task format
       - run: deno task test
-#      - name: "Run lint"
-#        run: deno task lint
-#      - name: "Run bundle"
-#        run: deno task bundle
+      - run: deno task bundle
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
@@ -77,7 +74,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           install: false
-#          build: npm run bundle
+          build: deno task bundle
           start: deno task dev
           wait-on: 'http://localhost:3000'
   bun:
