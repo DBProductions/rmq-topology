@@ -32,6 +32,7 @@ The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/),
     bun -v
     1.2.13
     bun i
+    
     bun run bundle    
     bun run start
 
@@ -44,7 +45,7 @@ The project uses [Rollup](https://rollupjs.org/), [ESLint](https://eslint.org/),
     deno task bundle
     deno task start
 
-After a successful start the specific runtime serves the tool under `http://localhost:3000/`.
+The specified runtime serves the tool at http://localhost:3000/ upon successful startup.
 
 ![workflow](https://github.com/DBProductions/rmq-topology/actions/workflows/main.yml/badge.svg)
 

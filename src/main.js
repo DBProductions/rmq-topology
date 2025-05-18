@@ -34,7 +34,7 @@ document.querySelector('#docLink').href = `${globalThis.location.href}doc`
 
 const canvas = document.querySelector('#canvas')
 canvas.width = globalThis.innerWidth
-canvas.height = 450
+canvas.height = 480
 const curCtx = canvas.getContext('2d')
 
 // creates the scene with timer and bind it to the window object.

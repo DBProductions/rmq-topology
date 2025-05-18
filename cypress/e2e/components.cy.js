@@ -36,7 +36,7 @@ describe('Test components', () => {
       cy.window().its('scene.actors.length').should('equal', 0)
     })
 
-    it('Add producer and add two exchanges to it', () => {
+    it('Add producer with two exchanges added to it', () => {
       // exchanges
       cy.get('#newComponent').select('Exchange')
       cy.get('#exchangeNameField').type('e1').should('have.value', 'e1')

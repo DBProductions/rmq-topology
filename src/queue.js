@@ -40,12 +40,17 @@ class Queue extends BaseComponent {
       this.consumers.push(consumer)
     }
     // consumer added then deliver messages if present
-    if (this.consumers.length > 0 && this.messages.length > 0) {
-      this.messages.forEach((val) => {
-        val.msg.setConsumer(this.consumers[0])
-      })
+    if (this.messages.length > 0) {
       if (this.type !== 'stream') {
+        this.messages.forEach((val) => {
+          val.msg.setConsumer(consumer)
+        })
         this.messages = []
+      } else {
+        const clonedMessages = this.messages.map((a) => ({ ...a }))
+        clonedMessages.forEach((val) => {
+          val.msg.setConsumer(consumer)
+        })
       }
     }
   }
@@ -219,6 +224,20 @@ class Queue extends BaseComponent {
       this.x - `${this.messages.length} msgs`.length,
       this.y + this.radius + 20
     )
+    if (this.msgTtl !== '') {
+      this.ctx.fillText(
+        `ttl: ${this.msgTtl}`,
+        this.x - `ttl: ${this.msgTtl}`.length,
+        this.y + this.radius + 30
+      )
+    }
+    if (this.maxLength !== '') {
+      this.ctx.fillText(
+        `max: ${this.maxLength}`,
+        this.x - `max: ${this.maxLength}`.length,
+        this.y + this.radius + 30
+      )
+    }
   }
 }
 
