@@ -12,6 +12,7 @@ class Queue extends BaseComponent {
    * @param {string} type - optional identifier, `quorum` as default
    * @param {number} ttl - `x-message-ttl` Argument of the queue
    * @param {Exchange} dlx - Exchange object as `x-dead-letter-exchange` argument
+   * @param {string} dlxrk - String as `x-dead-letter-routing-key` argument
    * @param {number} maxLength - `x-max-length` argument of the queue
    * @extends BaseComponent
    */

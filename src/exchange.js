@@ -9,7 +9,7 @@ class Exchange extends BaseComponent {
    * @param {number} x - x position of the exchange
    * @param {number} y - y position of the exchange
    * @param {string} name - identifier
-   * @param {string} type - exchange type
+   * @param {string} type - exchange type, `direct` as default
    * @param {Exchange} alternate - alternate exchange
    * @extends BaseComponent
    */
