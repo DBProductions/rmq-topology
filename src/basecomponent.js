@@ -3,6 +3,7 @@ import Base from './base'
 class BaseComponent extends Base {
   /**
    * Base component class for other components.
+   * It generates the UUID to identify the component and set default values.
    *
    * @param {number} x - x position
    * @param {number} y - y position

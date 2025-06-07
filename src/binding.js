@@ -24,7 +24,7 @@ class Binding extends BaseComponent {
   }
 
   /**
-   * Sets x and y for the source and destination property.
+   * Sets x1, x2, y1 and y2 for the source and destination property.
    */
   setCoords() {
     this.x1 = this.source.x
@@ -39,24 +39,17 @@ class Binding extends BaseComponent {
    * @param {string} text - text to draw as label
    */
   drawLabel(text) {
-    const alignment = 'center'
     const dx = this.x2 - this.x1
     const dy = this.y2 - this.y1
     const p = { x: this.x1, y: this.y1 }
     const pad = 1 / 2
 
     this.ctx.save()
-    this.ctx.textAlign = alignment
+    this.ctx.textAlign = 'center'
     this.ctx.translate(p.x + dx * pad, p.y + dy * pad)
     this.ctx.rotate(Math.atan2(dy, dx + 3))
     this.ctx.fillText(text, 0, 0)
     this.ctx.restore()
-  }
-
-  update() {
-    this.setCoords()
-    this.dx = this.x2 - this.x1
-    this.dy = this.y2 - this.y1
   }
 
   /**

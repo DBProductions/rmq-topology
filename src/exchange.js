@@ -79,7 +79,7 @@ class Exchange extends BaseComponent {
         sendMsg = true
       }
     })
-    // no bindings, message is lost
+    // no bindings, no sending
     if (this.bindings.length === 0) {
       sendMsg = false
     }

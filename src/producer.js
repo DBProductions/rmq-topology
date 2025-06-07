@@ -22,16 +22,11 @@ class Producer extends BaseComponent {
     this.curDelay = 0
     this.spawnTime = 1.0 // seconds
     this.fullSpawnTime = this.spawnTime
-
-    var letters = '012345'.split('')
-    var color = `#${letters[Math.round(Math.random() * 5)]}`
-    letters = '0123456789ABCDEF'.split('')
-    for (var i = 0; i < 5; i++) {
-      color += letters[Math.round(Math.random() * 15)]
+    let color = '#'
+    for (var i = 0; i < 6; i++) {
+      color += Math.floor(Math.random() * 10)
     }
-    //this.color = `#${Math.floor(Math.random() * 16777215).toString(16)}`
     this.color = color
-
     this.publishedMessages = 0
     this.publishes = publishes || {}
     this.customHeaders = []
