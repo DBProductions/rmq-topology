@@ -36,7 +36,7 @@ describe('Test components', () => {
       cy.window().its('scene.actors.length').should('equal', 0)
     })
 
-    it('Add producer with two exchanges added to it', () => {
+    it('Add producer and two exchanges to publish', () => {
       // exchanges
       cy.get('#newComponent').select('Exchange')
       cy.get('#exchangeNameField').type('e1').should('have.value', 'e1')
@@ -153,6 +153,10 @@ describe('Test components', () => {
       cy.get('#exchangeNameField').type('Exchange')
       cy.get('#sendExchangeForm').click()
 
+      cy.get('#exchangeErr').should(
+        'have.text',
+        "Exchange with name 'Exchange' already exists."
+      )
       cy.window().its('scene.actors.length').should('equal', 1)
     })
   })
@@ -190,6 +194,24 @@ describe('Test components', () => {
       cy.get('#deleteQueueForm').click()
 
       cy.window().its('scene.actors.length').should('equal', 0)
+    })
+
+    it('Queue name must be unique', () => {
+      cy.get('#newComponent').select('Queue')
+      cy.get('#queueNameField').type('Queue')
+      cy.get('#sendQueueForm').click()
+
+      cy.window().its('scene.actors.length').should('equal', 1)
+
+      cy.get('#newComponent').select('Queue')
+      cy.get('#queueNameField').type('Queue')
+      cy.get('#sendQueueForm').click()
+
+      cy.get('#queueErr').should(
+        'have.text',
+        "Queue with name 'Queue' already exists."
+      )
+      cy.window().its('scene.actors.length').should('equal', 1)
     })
   })
 })

@@ -102,7 +102,7 @@ describe('Exchange', () => {
     expect(scene.lostMessages).toEqual(1)
   })
 
-  it('should handle arriving messages on exchange without binding and alternate', () => {
+  it('should handle arriving messages on exchange without binding but alternate', () => {
     const alternateExchange = new Exchange(1, 1, 'alt-exchange', 'direct')
     exchange.setAlternate(alternateExchange)
     exchange.removeBinding(binding)
