@@ -1,6 +1,6 @@
 {
   "name": "rmq-topology",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A small tool to simulate RabbitMQ topologies and see the message flow.",
   "main": "index.js",
   "type": "module",
@@ -33,12 +33,12 @@
   "devDependencies": {
     "@vitest/coverage-istanbul": "^3.2.4",
     "clean-jsdoc-theme": "^4.3.0",
-    "cypress": "^15.1.0",
-    "eslint": "^9.34.0",
+    "cypress": "^15.4.0",
+    "eslint": "^9.37.0",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "rollup-plugin-jsdoc": "^0.1.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "node-static": "^0.7.11",

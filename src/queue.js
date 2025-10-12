@@ -14,6 +14,9 @@ class Queue extends BaseComponent {
    * @param {Exchange} dlx - Exchange object as `x-dead-letter-exchange` argument
    * @param {string} dlxrk - String as `x-dead-letter-routing-key` argument
    * @param {number} maxLength - `x-max-length` argument of the queue
+   * @property {object} bindings - List of bindings to the queue
+   * @property {object} consumers - List of connected consumers
+   * @property {object} messages - List of messages in the queue
    * @extends BaseComponent
    */
   constructor(x, y, name, type, ttl, dlx, dlxrk, maxLength) {

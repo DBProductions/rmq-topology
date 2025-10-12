@@ -10,16 +10,20 @@ class Consumer extends BaseComponent {
    * @param {string} name - optional identifier
    * @param {*} consumes
    * @param {string} mode - ack or reject
+   * @property {number} arrivedMessages - Number of arrived messages
+   * @property {number} width - Width of the square
+   * @property {number} height - Height of the square
+   * @property {object} queues - List of queues to the consumer
    * @extends BaseComponent
    */
   constructor(x, y, name, consumes, mode) {
     super(x, y)
     this.name = name
+    this.consumes = consumes
     this.mode = mode || 'ack'
     this.arrivedMessages = 0
     this.width = 30
     this.height = 30
-    this.consumes = consumes
     this.queues = []
   }
 

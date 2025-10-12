@@ -11,15 +11,17 @@ class Exchange extends BaseComponent {
    * @param {string} name - identifier
    * @param {string} type - exchange type, `direct` as default
    * @param {Exchange} alternate - alternate exchange
+   * @property {number} radius - Has a constant value of 15
+   * @property {object} bindings - List of bindings to the exchange
    * @extends BaseComponent
    */
   constructor(x, y, name, type, alternate) {
     super(x, y)
     this.name = name
     this.type = type || 'direct'
+    this.alternate = alternate || null
     this.radius = 15
     this.bindings = []
-    this.alternate = alternate || null
   }
 
   /**

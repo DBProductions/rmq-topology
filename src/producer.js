@@ -9,11 +9,14 @@ class Producer extends BaseComponent {
    * @param {number} y - y position of the producer
    * @param {string} name - optional identifier
    * @param {(object|Array)} publishes - list of exchanges to publish to
+   * @property {number} width - Width of the square
+   * @property {number} height - Height of the square
    * @extends BaseComponent
    */
   constructor(x, y, name, publishes) {
     super(x, y)
     this.name = name
+    this.publishes = publishes || {}
     this.width = 20
     this.height = 20
     this.lastSpawn = +new Date()
@@ -28,7 +31,6 @@ class Producer extends BaseComponent {
     }
     this.color = color
     this.publishedMessages = 0
-    this.publishes = publishes || {}
     this.customHeaders = []
     this.debug = false
   }
