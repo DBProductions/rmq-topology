@@ -102,6 +102,9 @@ class Exchange extends BaseComponent {
     this.scene.removeActor(msg)
   }
 
+  /**
+   * Render the exchange.
+   */
   render() {
     if (this.alternate) {
       this.ctx.beginPath()

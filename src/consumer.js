@@ -57,7 +57,7 @@ class Consumer extends BaseComponent {
   }
 
   /**
-   * Handler for arriving messages. Checks the mode and reject or count the arrived messages.
+   * Handler for arriving messages. Checks the mode and reject or count the arrived messages and remove it from the scene.
    *
    * @param {QueueMessage} msg - message object
    */
@@ -74,6 +74,9 @@ class Consumer extends BaseComponent {
     this.scene.removeActor(msg)
   }
 
+  /**
+   * Render the consumer and draw lines to every queue from the list.
+   */
   render() {
     this.ctx.setLineDash([])
     // shadow

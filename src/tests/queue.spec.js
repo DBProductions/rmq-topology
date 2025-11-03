@@ -10,6 +10,7 @@ describe('Queue', () => {
   let exchange
   let consumer1
   let consumer2
+  let consumer3
   let scene
   let ctx
   let binding
@@ -21,6 +22,7 @@ describe('Queue', () => {
     scene = { lostMessages: 0, addActor: vi.fn(), removeActor: vi.fn() }
     consumer1 = new Consumer(0, 0)
     consumer2 = { id: 'consumer2' }
+    consumer3 = { id: 'consumer3' }
     binding = { destination: { x: 0, y: 0 } }
     ctx = {
       beginPath: vi.fn(),
@@ -59,19 +61,23 @@ describe('Queue', () => {
     expect(queue.consumers).toEqual([consumer1, consumer2])
   })
 
-  it('should correctly remove a consumer from the queue', () => {
+  it('should correctly remove consumer from the queue', () => {
     queue.addConsumer(consumer1)
     expect(queue.consumers).toEqual([consumer1])
     queue.removeConsumer(consumer1)
     expect(queue.consumers).toEqual([])
-  })
 
-  it('should correctly remove a consumer from the queue', () => {
     queue.addConsumer(consumer1)
     queue.addConsumer(consumer2)
     expect(queue.consumers).toEqual([consumer1, consumer2])
     queue.removeConsumer(consumer1)
     expect(queue.consumers).toEqual([consumer2])
+
+    queue.addConsumer(consumer1)
+    queue.addConsumer(consumer3)
+    expect(queue.consumers).toEqual([consumer2, consumer1, consumer3])
+    queue.removeConsumer(consumer1)
+    expect(queue.consumers).toEqual([consumer2, consumer3])
   })
 
   it('should correctly stay in the queue', () => {
