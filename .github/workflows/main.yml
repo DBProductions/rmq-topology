@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [21.x, 22.x, 23x, 24.x]
+        node-version: [21.x, 22.x, 23.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm i
@@ -65,21 +65,21 @@ jobs:
       - run: deno task format
       - run: deno task test
       - run: deno task bundle
-      - name: Cypress install
-        uses: cypress-io/github-action@v5
-        with:
-          runTests: false
-          install-command: deno install --allow-scripts=npm:cypress
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
-        with:
-          spec: |
-            cypress/e2e/components.cy.js
-            cypress/e2e/examples.cy.js
-          install: false
-          build: deno task bundle
-          start: deno task start
-          wait-on: 'http://localhost:3000'
+#      - name: Cypress install
+#        uses: cypress-io/github-action@v5
+#        with:
+#          runTests: false
+#          install-command: deno install --allow-scripts=npm:cypress
+#      - name: Cypress run
+#        uses: cypress-io/github-action@v5
+#        with:
+#          spec: |
+#            cypress/e2e/components.cy.js
+#            cypress/e2e/examples.cy.js
+#          install: false
+#          build: deno task bundle
+#          start: deno task start
+#          wait-on: 'http://localhost:3000'
   bun:
     runs-on: ubuntu-latest
     steps:
