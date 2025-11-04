@@ -61,7 +61,7 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: "2.x"
-      - run: deno install
+      - run: deno install --allow-scripts=npm:cypress
       - run: deno task format
       - run: deno task test
       - run: deno task bundle
