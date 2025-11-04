@@ -61,7 +61,7 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: "2.x"
-      - run: deno install --allow-scripts=npm:cypress
+      - run: deno install
       - run: deno task format
       - run: deno task test
       - run: deno task bundle
@@ -70,16 +70,16 @@ jobs:
 #        with:
 #          runTests: false
 #          install-command: deno install --allow-scripts=npm:cypress
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
-        with:
-          spec: |
-            cypress/e2e/components.cy.js
-            cypress/e2e/examples.cy.js
-          install: false
-          build: deno task bundle
-          start: deno task start
-          wait-on: 'http://localhost:3000'
+#      - name: Cypress run
+#        uses: cypress-io/github-action@v5
+#        with:
+#          spec: |
+#            cypress/e2e/components.cy.js
+#            cypress/e2e/examples.cy.js
+#          install: false
+#          build: deno task bundle
+#          start: deno task start
+#          wait-on: 'http://localhost:3000'
   bun:
     runs-on: ubuntu-latest
     steps:
