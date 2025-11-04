@@ -70,16 +70,16 @@ jobs:
 #        with:
 #          runTests: false
 #          install-command: deno install --allow-scripts=npm:cypress
-#      - name: Cypress run
-#        uses: cypress-io/github-action@v5
-#        with:
-#          spec: |
-#            cypress/e2e/components.cy.js
-#            cypress/e2e/examples.cy.js
-#          install: false
-#          build: deno task bundle
-#          start: deno task start
-#          wait-on: 'http://localhost:3000'
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          spec: |
+            cypress/e2e/components.cy.js
+            cypress/e2e/examples.cy.js
+          install: false
+          build: deno task bundle
+          start: deno task start
+          wait-on: 'http://localhost:3000'
   bun:
     runs-on: ubuntu-latest
     steps:
@@ -87,6 +87,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
       - name: Cypress install
         uses: cypress-io/github-action@v5
         with:
