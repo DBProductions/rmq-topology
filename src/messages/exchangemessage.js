@@ -12,6 +12,8 @@ class ExchangeMessage extends BaseMessage {
    * @param {boolean} rejected - rejected message
    * @param {number} radius - radius of the circle
    * @param {string} fillColor - hex color code to fill the circle
+   * @property {number} targetX - x of the exchange
+   * @property {number} targetY - y of the exchange
    * @extends BaseMessage
    */
   constructor(

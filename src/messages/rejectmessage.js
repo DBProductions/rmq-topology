@@ -7,6 +7,8 @@ class RejectMessage extends BaseMessage {
    * @param {number} x - x position of the message
    * @param {number} y - y position of the message
    * @param {Queue} queue - Queue object
+   * @property {number} targetX - x of the consumer
+   * @property {number} targetY - y of the consumer
    * @extends BaseMessage
    */
   constructor(x, y, queue) {

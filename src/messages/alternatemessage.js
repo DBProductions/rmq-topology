@@ -8,6 +8,8 @@ class AlternateMessage extends BaseMessage {
    * @param {number} y - y position of the message
    * @param {Exchange} exchange - Binding object
    * @param {string} fillColor - hex color code to fill the circle
+   * @property {number} targetX - x of the binding destination
+   * @property {number} targetY - y of the binding destination
    * @extends BaseMessage
    */
   constructor(x, y, exchange, routingKey, fillColor) {

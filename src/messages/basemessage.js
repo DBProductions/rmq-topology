@@ -8,6 +8,12 @@ class BaseMessage extends Base {
    * @param {number} y - y position
    * @param {integer} radius - radius of the circle
    * @param {string} fillStyle - hex color code to fill the circle
+   * @property {string} id - unique identifier
+   * @property {number} x - x position
+   * @property {number} y - y position
+   * @property {Object} message -  message object
+   * @property {Object} message.headers - message headers
+   * @property {Object} message.body - message body
    * @extends Base
    */
   constructor(x, y, radius, fillStyle) {

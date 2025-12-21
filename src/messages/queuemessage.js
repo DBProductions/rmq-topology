@@ -9,6 +9,8 @@ class QueueMessage extends BaseMessage {
    * @param {Queue} queue - Queue object
    * @param {Consumer} consumer - Consumer object
    * @param {string} fillStyle
+   * @property {number} targetX - x of the consumer
+   * @property {number} targetY - y of the consumer
    * @extends BaseMessage
    */
   constructor(x, y, queue, consumer, fillStyle) {
