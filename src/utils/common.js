@@ -1,15 +1,15 @@
-import Producer from '../producer'
-import Consumer from '../consumer'
-import Exchange from '../exchange'
-import Queue from '../queue'
-import Binding from '../binding'
-import Scene from '../scene'
-import Timer from '../timer'
-import { displayProducer } from './producer'
-import { displayConsumer } from './consumer'
-import { displayExchange } from './exchange'
-import { displayQueue } from './queue'
-import { displayBinding } from './binding'
+import Producer from "../producer";
+import Consumer from "../consumer";
+import Exchange from "../exchange";
+import Queue from "../queue";
+import Binding from "../binding";
+import Scene from "../scene";
+import Timer from "../timer";
+import { displayProducer } from "./producer";
+import { displayConsumer } from "./consumer";
+import { displayExchange } from "./exchange";
+import { displayQueue } from "./queue";
+import { displayBinding } from "./binding";
 
 /**
  * Calculates the point on the line that's nearest to the mouse position.
@@ -21,17 +21,17 @@ import { displayBinding } from './binding'
  * @returns {object}
  */
 const linepointNearestMouse = (line, x, y) => {
-  const lerp = (a, b, c) => a + c * (b - a)
-  const dx = line.x1 - line.x0
-  const dy = line.y1 - line.y0
-  const t = ((x - line.x0) * dx + (y - line.y0) * dy) / (dx * dx + dy * dy)
-  const lineX = lerp(line.x0, line.x1, t)
-  const lineY = lerp(line.y0, line.y1, t)
+  const lerp = (a, b, c) => a + c * (b - a);
+  const dx = line.x1 - line.x0;
+  const dy = line.y1 - line.y0;
+  const t = ((x - line.x0) * dx + (y - line.y0) * dy) / (dx * dx + dy * dy);
+  const lineX = lerp(line.x0, line.x1, t);
+  const lineY = lerp(line.y0, line.y1, t);
   return {
     x: lineX,
-    y: lineY
-  }
-}
+    y: lineY,
+  };
+};
 
 /**
  * Creates the topology shown on the canvas.
@@ -41,14 +41,14 @@ const linepointNearestMouse = (line, x, y) => {
  * @param {object} conf - configuration as JSON
  */
 const createTopology = (ctx, conf) => {
-  globalThis.scene = new Scene(ctx, globalThis.innerWidth, 450)
+  globalThis.scene = new Scene(ctx, globalThis.innerWidth, 450);
   if (conf.description) {
-    globalThis.scene.description = conf.description
+    globalThis.scene.description = conf.description;
   }
-  globalThis.timer = new Timer(globalThis.scene)
+  globalThis.timer = new Timer(globalThis.scene);
 
-  const exchanges = []
-  const queues = []
+  const exchanges = [];
+  const queues = [];
 
   if (conf.exchanges) {
     conf.exchanges.forEach((exchange) => {
@@ -56,19 +56,19 @@ const createTopology = (ctx, conf) => {
         exchange.x,
         exchange.y,
         exchange.name,
-        exchange.type
-      )
-      newExchange.addToScene(globalThis.scene)
-      exchanges.push(newExchange)
-    })
+        exchange.type,
+      );
+      newExchange.addToScene(globalThis.scene);
+      exchanges.push(newExchange);
+    });
     // alternate exchanges
-    const alternateExchanges = conf.exchanges.filter((s) => s.alternate)
-    const currentExchanges = globalThis.scene.getObjectsInScene('Exchange')
+    const alternateExchanges = conf.exchanges.filter((s) => s.alternate);
+    const currentExchanges = globalThis.scene.getObjectsInScene("Exchange");
     alternateExchanges.forEach((ex) => {
-      const e = currentExchanges.filter((s) => s.name == ex.name)[0]
-      const a = currentExchanges.filter((s) => s.name == ex.alternate)[0]
-      e.setAlternate(a)
-    })
+      const e = currentExchanges.filter((s) => s.name == ex.name)[0];
+      const a = currentExchanges.filter((s) => s.name == ex.alternate)[0];
+      e.setAlternate(a);
+    });
   }
   if (conf.queues) {
     conf.queues.forEach((queue) => {
@@ -80,29 +80,29 @@ const createTopology = (ctx, conf) => {
         queue.ttl,
         exchanges[queue.dlx],
         queue.dlxrk,
-        queue.maxLength
-      )
-      newQueue.addToScene(globalThis.scene)
-      queues.push(newQueue)
-    })
+        queue.maxLength,
+      );
+      newQueue.addToScene(globalThis.scene);
+      queues.push(newQueue);
+    });
   }
   if (conf.producers) {
     conf.producers.forEach((producer) => {
-      const newProducer = new Producer(producer.x, producer.y, producer.name)
-      const currentExchanges = globalThis.scene.getObjectsInScene('Exchange')
+      const newProducer = new Producer(producer.x, producer.y, producer.name);
+      const currentExchanges = globalThis.scene.getObjectsInScene("Exchange");
       for (const val in producer.publishes) {
         currentExchanges.forEach((ex) => {
           if (ex.name === producer.publishes[val].exchange) {
             newProducer.addMessageToExchange(
               ex,
               producer.publishes[val].routingKey,
-              producer.publishes[val].message
-            )
+              producer.publishes[val].message,
+            );
           }
-        })
+        });
       }
-      newProducer.addToScene(globalThis.scene)
-    })
+      newProducer.addToScene(globalThis.scene);
+    });
   }
   if (conf.consumers) {
     conf.consumers.forEach((consumer) => {
@@ -111,27 +111,27 @@ const createTopology = (ctx, conf) => {
         consumer.y,
         consumer.name,
         consumer.consumes,
-        consumer.mode
-      )
+        consumer.mode,
+      );
       consumer.consumes.forEach((val) => {
-        newConsumer.addQueue(queues[val])
-      })
-      newConsumer.addToScene(globalThis.scene)
-    })
+        newConsumer.addQueue(queues[val]);
+      });
+      newConsumer.addToScene(globalThis.scene);
+    });
   }
   if (conf.bindings) {
     conf.bindings.forEach((binding) => {
       const newBinding = new Binding(
         exchanges[binding.exchange],
         queues[binding.queue],
-        binding.routingKey
-      )
-      newBinding.addToScene(globalThis.scene)
-    })
+        binding.routingKey,
+      );
+      newBinding.addToScene(globalThis.scene);
+    });
   }
 
-  globalThis.scene.render()
-}
+  globalThis.scene.render();
+};
 
 /**
  * Adds the CSS class to the selected one and remove it from all other ones.
@@ -139,18 +139,18 @@ const createTopology = (ctx, conf) => {
  * @param {string} form
  */
 const displayForm = (form) => {
-  const formsCollection = document.getElementsByTagName('form')
+  const formsCollection = document.getElementsByTagName("form");
   for (let i = 0; i < formsCollection.length; i += 1) {
     document
       .querySelector(`#${formsCollection[i].id}`)
-      .parentNode.parentNode.classList.remove('panel-wrap-out')
+      .parentNode.parentNode.classList.remove("panel-wrap-out");
     if (`${form.toLowerCase()}Form` === formsCollection[i].id) {
       document
         .querySelector(`#${formsCollection[i].id}`)
-        .parentNode.parentNode.classList.add('panel-wrap-out')
+        .parentNode.parentNode.classList.add("panel-wrap-out");
     }
   }
-}
+};
 
 /**
  * Decides which component have to be displayed to get created.
@@ -158,30 +158,30 @@ const displayForm = (form) => {
  * @param {object} e - Event object
  */
 const addNewComponent = (e) => {
-  e.preventDefault()
-  e.stopPropagation()
-  displayForm(e.target.value)
+  e.preventDefault();
+  e.stopPropagation();
+  displayForm(e.target.value);
   switch (e.target.value) {
-    case 'Producer':
-      displayProducer()
-      break
-    case 'Consumer':
-      displayConsumer()
-      break
-    case 'Exchange':
-      displayExchange()
-      break
-    case 'Queue':
-      displayQueue()
-      break
-    case 'Binding':
-      displayBinding()
-      break
+    case "Producer":
+      displayProducer();
+      break;
+    case "Consumer":
+      displayConsumer();
+      break;
+    case "Exchange":
+      displayExchange();
+      break;
+    case "Queue":
+      displayQueue();
+      break;
+    case "Binding":
+      displayBinding();
+      break;
     default:
-      break
+      break;
   }
-  e.target.selectedIndex = 0
-}
+  e.target.selectedIndex = 0;
+};
 
 /**
  * Current mouse position inside of a cirle.
@@ -191,15 +191,15 @@ const addNewComponent = (e) => {
  * @returns {object}
  */
 const findCircle = (val, mx, my) => {
-  let found
-  if (val.constructor.name === 'Exchange' || val.constructor.name === 'Queue') {
-    const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2))
+  let found;
+  if (val.constructor.name === "Exchange" || val.constructor.name === "Queue") {
+    const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2));
     if (d <= val.radius) {
-      found = val
+      found = val;
     }
   }
-  return found
-}
+  return found;
+};
 
 /**
  * Current mouse position inside of a square.
@@ -209,10 +209,10 @@ const findCircle = (val, mx, my) => {
  * @returns {object}
  */
 const findSquare = (val, mx, my) => {
-  let found
+  let found;
   if (
-    val.constructor.name === 'Producer' ||
-    val.constructor.name === 'Consumer'
+    val.constructor.name === "Producer" ||
+    val.constructor.name === "Consumer"
   ) {
     if (
       mx >= val.x &&
@@ -220,11 +220,11 @@ const findSquare = (val, mx, my) => {
       my >= val.y &&
       my <= val.y + val.height
     ) {
-      found = val
+      found = val;
     }
   }
-  return found
-}
+  return found;
+};
 
 /**
  * Current mouse position over a line.
@@ -234,37 +234,37 @@ const findSquare = (val, mx, my) => {
  * @returns {object}
  */
 const findLine = (val, mx, my) => {
-  let found
+  let found;
   const line = {
     x0: val.x1,
     x1: val.x2,
     y0: val.y1,
-    y1: val.y2
-  }
+    y1: val.y2,
+  };
 
-  let x1
-  let x2
+  let x1;
+  let x2;
   if (line.x0 > line.x1) {
-    x1 = line.x1
-    x2 = line.x0
+    x1 = line.x1;
+    x2 = line.x0;
   } else {
-    x1 = line.x0
-    x2 = line.x1
+    x1 = line.x0;
+    x2 = line.x1;
   }
   if (mx > x1 && mx < x2) {
     // determine how close the mouse must be to the line
     // for the mouse to be inside the line
-    const tolerance = 3
-    const linepoint = linepointNearestMouse(line, mx, my)
-    const dx = mx - linepoint.x
-    const dy = my - linepoint.y
-    const distance = Math.abs(Math.sqrt(dx * dx + dy * dy))
+    const tolerance = 3;
+    const linepoint = linepointNearestMouse(line, mx, my);
+    const dx = mx - linepoint.x;
+    const dy = my - linepoint.y;
+    const distance = Math.abs(Math.sqrt(dx * dx + dy * dy));
     if (distance < tolerance) {
-      found = val
+      found = val;
     }
   }
-  return found
-}
+  return found;
+};
 
 /**
  * Find the actor in the scene from the current mouse position.
@@ -273,35 +273,35 @@ const findLine = (val, mx, my) => {
  * @returns {object} - undefined or the found actor in scene
  */
 const findPosition = (e, line = false) => {
-  const mx = e.clientX - e.target.offsetLeft
-  const my = e.clientY - e.target.offsetTop
-  let obj
+  const mx = e.clientX - e.target.offsetLeft;
+  const my = e.clientY - e.target.offsetTop;
+  let obj;
   globalThis.scene.actors.forEach((val) => {
-    const foundProducerConsumer = findSquare(val, mx, my)
+    const foundProducerConsumer = findSquare(val, mx, my);
     if (foundProducerConsumer) {
-      obj = foundProducerConsumer
+      obj = foundProducerConsumer;
     }
-    const foundExchangeQueue = findCircle(val, mx, my)
+    const foundExchangeQueue = findCircle(val, mx, my);
     if (foundExchangeQueue) {
-      obj = foundExchangeQueue
+      obj = foundExchangeQueue;
     }
     if (line) {
-      const foundLine = findLine(val, mx, my)
+      const foundLine = findLine(val, mx, my);
       if (foundLine) {
-        obj = foundLine
+        obj = foundLine;
       }
     }
-  })
-  return obj
-}
+  });
+  return obj;
+};
 
 export {
-  linepointNearestMouse,
+  addNewComponent,
   createTopology,
   displayForm,
-  addNewComponent,
   findCircle,
-  findSquare,
   findLine,
-  findPosition
-}
+  findPosition,
+  findSquare,
+  linepointNearestMouse,
+};

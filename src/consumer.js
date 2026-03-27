@@ -1,5 +1,5 @@
-import BaseComponent from './basecomponent'
-import RejectMessage from './messages/rejectmessage'
+import BaseComponent from "./basecomponent";
+import RejectMessage from "./messages/rejectmessage";
 
 class Consumer extends BaseComponent {
   /**
@@ -17,14 +17,14 @@ class Consumer extends BaseComponent {
    * @extends BaseComponent
    */
   constructor(x, y, name, consumes, mode) {
-    super(x, y)
-    this.name = name
-    this.consumes = consumes
-    this.mode = mode || 'ack'
-    this.arrivedMessages = 0
-    this.width = 30
-    this.height = 30
-    this.queues = []
+    super(x, y);
+    this.name = name;
+    this.consumes = consumes;
+    this.mode = mode || "ack";
+    this.arrivedMessages = 0;
+    this.width = 30;
+    this.height = 30;
+    this.queues = [];
   }
 
   /**
@@ -33,10 +33,10 @@ class Consumer extends BaseComponent {
    * @param {Queue} queue - Queue object
    */
   addQueue(queue) {
-    const queueIndex = this.queues.findIndex((e) => e === queue)
+    const queueIndex = this.queues.findIndex((e) => e === queue);
     if (queueIndex === -1) {
-      queue.addConsumer(this)
-      this.queues.push(queue)
+      queue.addConsumer(this);
+      this.queues.push(queue);
     }
   }
 
@@ -46,12 +46,12 @@ class Consumer extends BaseComponent {
    * @param {Queue} queue - Queue object
    */
   removeQueue(queue) {
-    const queueIndex = this.queues.findIndex((e) => e === queue)
+    const queueIndex = this.queues.findIndex((e) => e === queue);
     if (queueIndex !== -1) {
       if (this.queues.length === 1) {
-        this.queues = []
+        this.queues = [];
       } else {
-        this.queues.splice(queueIndex, 1)
+        this.queues.splice(queueIndex, 1);
       }
     }
   }
@@ -62,71 +62,71 @@ class Consumer extends BaseComponent {
    * @param {QueueMessage} msg - message object
    */
   messageArrived(msg) {
-    if (this.mode === 'reject') {
+    if (this.mode === "reject") {
       new RejectMessage(
         this.x + this.width / 2,
         this.y + this.height / 2,
-        msg.queue
-      ).addToScene(this.scene)
+        msg.queue,
+      ).addToScene(this.scene);
     } else {
-      this.arrivedMessages += 1
+      this.arrivedMessages += 1;
     }
-    this.scene.removeActor(msg)
+    this.scene.removeActor(msg);
   }
 
   /**
    * Render the consumer and draw lines to every queue from the list.
    */
   render() {
-    this.ctx.setLineDash([])
+    this.ctx.setLineDash([]);
     // shadow
-    this.ctx.globalAlpha = 0.4
-    this.ctx.beginPath()
-    this.ctx.fillStyle = '#000'
-    this.ctx.rect(this.x + 2, this.y + 2, this.width, this.height)
-    this.ctx.fill()
+    this.ctx.globalAlpha = 0.4;
+    this.ctx.beginPath();
+    this.ctx.fillStyle = "#000";
+    this.ctx.rect(this.x + 2, this.y + 2, this.width, this.height);
+    this.ctx.fill();
 
-    this.ctx.globalAlpha = 1.0
-    this.ctx.beginPath()
-    this.ctx.strokeStyle = '#000'
-    this.ctx.lineWidth = 1
+    this.ctx.globalAlpha = 1.0;
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = "#000";
+    this.ctx.lineWidth = 1;
     if (this.hover) {
-      this.ctx.lineWidth = 2
+      this.ctx.lineWidth = 2;
     }
-    this.ctx.rect(this.x, this.y, this.width, this.height)
-    this.ctx.stroke()
+    this.ctx.rect(this.x, this.y, this.width, this.height);
+    this.ctx.stroke();
 
     if (this.dragged) {
-      this.ctx.fillStyle = '#ccc'
-      this.ctx.fill()
+      this.ctx.fillStyle = "#ccc";
+      this.ctx.fill();
     } else {
-      this.ctx.fillStyle = '#fff'
-      this.ctx.fill()
+      this.ctx.fillStyle = "#fff";
+      this.ctx.fill();
     }
 
-    this.ctx.font = '10px Arial'
-    this.ctx.fillStyle = '#000'
+    this.ctx.font = "10px Arial";
+    this.ctx.fillStyle = "#000";
     this.ctx.fillText(
       `${this.name} (${this.mode})`,
       this.x - `${this.name} (${this.mode})`.length,
-      this.y + this.height + 10
-    )
+      this.y + this.height + 10,
+    );
     this.ctx.fillText(
       `${this.arrivedMessages} msgs arrived`,
       this.x - `${this.arrivedMessages} msgs arrived`.length,
-      this.y + this.height + 20
-    )
+      this.y + this.height + 20,
+    );
 
     this.queues.forEach((val) => {
-      this.ctx.beginPath()
-      this.ctx.strokeStyle = '#aaa'
-      this.ctx.setLineDash([4, 4])
-      this.ctx.lineWidth = 1
-      this.ctx.moveTo(this.x + this.width / 2, this.y + this.height / 2)
-      this.ctx.lineTo(val.x, val.y)
-      this.ctx.stroke()
-    })
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = "#aaa";
+      this.ctx.setLineDash([4, 4]);
+      this.ctx.lineWidth = 1;
+      this.ctx.moveTo(this.x + this.width / 2, this.y + this.height / 2);
+      this.ctx.lineTo(val.x, val.y);
+      this.ctx.stroke();
+    });
   }
 }
 
-export default Consumer
+export default Consumer;

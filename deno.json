@@ -1,4 +1,12 @@
 {
+  "fmt": {
+    "exclude": [
+      "node_modules/**",
+      "coverage/**",
+      "output/**",
+      "public/css/all.min.css"
+    ]
+  },
   "tasks": {
     "lint": "deno lint --fix",
     "format": "deno fmt",

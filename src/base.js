@@ -6,8 +6,8 @@ class Base {
    * @param {number} y - y position
    */
   constructor(x, y) {
-    this.x = x
-    this.y = y
+    this.x = x;
+    this.y = y;
   }
 
   /**
@@ -17,10 +17,10 @@ class Base {
    * @returns {object} this
    */
   addToScene(scene) {
-    this.scene = scene
-    this.ctx = scene.ctx
-    scene.addActor(this)
-    return this
+    this.scene = scene;
+    this.ctx = scene.ctx;
+    scene.addActor(this);
+    return this;
   }
 
   /**
@@ -33,11 +33,10 @@ class Base {
       (
         c ^
         (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-      ).toString(16)
-    )
+      ).toString(16));
   }
 
   update(dt) {}
 }
 
-export default Base
+export default Base;

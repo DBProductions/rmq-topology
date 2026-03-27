@@ -5,17 +5,17 @@ class Timer {
    * @param {object} target
    */
   constructor(target) {
-    this.running = false
-    this.target = target
+    this.running = false;
+    this.target = target;
   }
 
   /**
    * Start the timer.
    */
   start() {
-    this.running = true
-    this.prevTime = +new Date() / 1000
-    this.tick()
+    this.running = true;
+    this.prevTime = +new Date() / 1000;
+    this.tick();
   }
 
   /**
@@ -23,7 +23,7 @@ class Timer {
    */
   stop() {
     if (this.running) {
-      this.running = false
+      this.running = false;
     }
   }
 
@@ -31,20 +31,20 @@ class Timer {
    * Tick of the timer.
    */
   tick() {
-    const self = this
+    const self = this;
     self.tick = () => {
       if (self.running) {
-        const curTime = +new Date() / 1000
-        const dt = curTime - self.prevTime
-        self.time += dt
-        self.prevTime = curTime
-        self.target.update(dt)
-        self.target.render(dt)
-        globalThis.requestAnimationFrame(self.tick)
+        const curTime = +new Date() / 1000;
+        const dt = curTime - self.prevTime;
+        self.time += dt;
+        self.prevTime = curTime;
+        self.target.update(dt);
+        self.target.render(dt);
+        globalThis.requestAnimationFrame(self.tick);
       }
-    }
-    self.tick()
+    };
+    self.tick();
   }
 }
 
-export default Timer
+export default Timer;
