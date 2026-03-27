@@ -13,7 +13,7 @@
     "lint:fix": "npx eslint ./src --fix",
     "format": "npx prettier --write \"{,!(node_modules)/**/}*.{js,ts}\"",
     "bundle": "npx rollup --config rollup.config.mjs",
-    "release": "npm run format && npm run lint && npm test && npm run bundle && npm run run:cypress",
+    "release": "npm run format && npm run lint && npm test && npm run bundle && npm run start & sleep 2 && npm run run:cypress && pkill -f 'node server/index.js'",
     "start": "node server/index.js"
   },
   "keywords": [

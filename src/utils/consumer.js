@@ -1,4 +1,4 @@
-import Consumer from "../consumer";
+import Consumer from '../consumer'
 
 /**
  * Display the form to create or edit consumer component.
@@ -6,68 +6,66 @@ import Consumer from "../consumer";
  * @param {Consumer} consumer - Consumer object
  */
 const displayConsumer = (consumer) => {
-  document.querySelector("#deleteConsumerForm").classList.add("hidden");
-  document.querySelector("#consumerPanel").classList.add("panel-wrap-out");
+  document.querySelector('#deleteConsumerForm').classList.add('hidden')
+  document.querySelector('#consumerPanel').classList.add('panel-wrap-out')
 
-  document.querySelector("#consumerIdField").value = "";
-  document.querySelector("#consumerNameField").value = "";
-  document.querySelector("#consumerConsumesFrom").innerHTML = "";
+  document.querySelector('#consumerIdField').value = ''
+  document.querySelector('#consumerNameField').value = ''
+  document.querySelector('#consumerConsumesFrom').innerHTML = ''
 
-  const queues = globalThis.scene.getObjectsInScene("Queue");
-  const selectSource = document.querySelector("#consumerConsumesFromSelect");
-  selectSource.options.length = 0;
-  selectSource.options[selectSource.options.length] = new Option("---", 0);
+  const queues = globalThis.scene.getObjectsInScene('Queue')
+  const selectSource = document.querySelector('#consumerConsumesFromSelect')
+  selectSource.options.length = 0
+  selectSource.options[selectSource.options.length] = new Option('---', 0)
   Object.keys(queues).forEach((queue) => {
     if (consumer && consumer.queues) {
       const presentQueue = consumer.queues.findIndex(
-        (s) => s.id === queues[queue].id,
-      );
+        (s) => s.id === queues[queue].id
+      )
       if (presentQueue === -1) {
         selectSource.options[selectSource.options.length] = new Option(
           queues[queue].name,
-          queues[queue].id,
-        );
+          queues[queue].id
+        )
       }
     } else {
       selectSource.options[selectSource.options.length] = new Option(
         queues[queue].name,
-        queues[queue].id,
-      );
+        queues[queue].id
+      )
     }
-  });
+  })
 
   if (consumer) {
-    document.querySelector("#deleteConsumerForm").classList.remove("hidden");
-    document.querySelector("#consumerIdField").value = consumer.id;
-    document.querySelector("#consumerNameField").value = consumer.name;
+    document.querySelector('#deleteConsumerForm').classList.remove('hidden')
+    document.querySelector('#consumerIdField').value = consumer.id
+    document.querySelector('#consumerNameField').value = consumer.name
 
-    const modes = document.getElementsByName("consumerMode");
+    const modes = document.getElementsByName('consumerMode')
     modes.forEach((val) => {
       if (consumer.mode === val.value) {
-        val.checked = true;
+        val.checked = true
       }
-    });
+    })
 
-    let queuesDom = "";
+    let queuesDom = ''
     consumer.queues.forEach((queue) => {
-      queuesDom += `<div id="${queue.id}" class="row">`;
-      queuesDom +=
-        `<input type="hidden" name="consumerQueues[]" value="${queue.id}">`;
-      queuesDom += `<div class="flex-left">${queue.name}</div>`;
-      queuesDom +=
-        `<div class="flex-right"><a href="#" data-id="${queue.id}" class="queueDeleteLink">&times;</a></div>`;
-      queuesDom += "</div>";
-    });
-    document.querySelector("#consumerConsumesFrom").innerHTML = queuesDom;
-    document.querySelectorAll(".queueDeleteLink").forEach((item) => {
-      item.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.target.parentNode.parentNode.remove();
-      });
-    });
+      queuesDom += `<div id="${queue.id}" class="row">`
+      queuesDom += `<input type="hidden" name="consumerQueues[]" value="${queue.id}">`
+      queuesDom += `<div class="flex-left">${queue.name}</div>`
+      queuesDom += `<div class="flex-right"><a href="#" data-id="${queue.id}" class="queueDeleteLink">&times;</a></div>`
+      queuesDom += '</div>'
+    })
+    document.querySelector('#consumerConsumesFrom').innerHTML = queuesDom
+    document.querySelectorAll('.queueDeleteLink').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        e.target.parentNode.parentNode.remove()
+      })
+    })
   }
-};
+}
 
 /**
  * Reset form values and remove CSS class from the consumer panel.
@@ -75,76 +73,76 @@ const displayConsumer = (consumer) => {
  * @param {object} e - Event object
  */
 const hideConsumer = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const settingsParams = ["#consumerIdField", "#consumerNameField"];
+  e.preventDefault()
+  e.stopPropagation()
+  const settingsParams = ['#consumerIdField', '#consumerNameField']
   settingsParams.forEach((p) => {
-    document.querySelector(p).value = "";
-  });
-  document.querySelector("#consumerPanel").classList.remove("panel-wrap-out");
-};
+    document.querySelector(p).value = ''
+  })
+  document.querySelector('#consumerPanel').classList.remove('panel-wrap-out')
+}
 
 /**
  * Sends the form to create or edit a consumer component.
  * @param {object} e - Event object
  */
 const sendConsumerForm = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const id = document.querySelector("#consumerIdField").value;
-  const name = document.querySelector("#consumerNameField").value;
-  const modes = document.getElementsByName("consumerMode");
+  e.preventDefault()
+  e.stopPropagation()
+  const id = document.querySelector('#consumerIdField').value
+  const name = document.querySelector('#consumerNameField').value
+  const modes = document.getElementsByName('consumerMode')
   const consumesFrom = document.querySelector(
-    "#consumerConsumesFromSelect",
-  ).value;
+    '#consumerConsumesFromSelect'
+  ).value
 
-  let mode;
+  let mode
   modes.forEach((val) => {
     if (val.checked) {
-      mode = val.value;
+      mode = val.value
     }
-  });
+  })
 
   if (id) {
-    const consumer = globalThis.scene.getIdInScene(id);
+    const consumer = globalThis.scene.getIdInScene(id)
 
-    const queues = document.getElementsByName("consumerQueues[]");
-    const idsToKeep = [];
+    const queues = document.getElementsByName('consumerQueues[]')
+    const idsToKeep = []
     queues.forEach((queue) => {
-      idsToKeep.push(queue.value);
-    });
+      idsToKeep.push(queue.value)
+    })
     const restQueues = consumer.queues.filter(
-      (s) => idsToKeep.indexOf(s.id) !== -1,
-    );
+      (s) => idsToKeep.indexOf(s.id) !== -1
+    )
     const removeQueues = consumer.queues.filter(
-      (s) => idsToKeep.indexOf(s.id) === -1,
-    );
+      (s) => idsToKeep.indexOf(s.id) === -1
+    )
     removeQueues.forEach((rmQueue) => {
-      const actor = globalThis.scene.getIdInScene(rmQueue.id);
-      actor.removeConsumer(consumer);
-    });
+      const actor = globalThis.scene.getIdInScene(rmQueue.id)
+      actor.removeConsumer(consumer)
+    })
 
-    consumer.name = name;
-    consumer.mode = mode;
-    consumer.queues = restQueues;
+    consumer.name = name
+    consumer.mode = mode
+    consumer.queues = restQueues
 
-    if (consumesFrom !== "0") {
-      consumer.addQueue(globalThis.scene.getIdInScene(consumesFrom));
+    if (consumesFrom !== '0') {
+      consumer.addQueue(globalThis.scene.getIdInScene(consumesFrom))
     }
   } else {
-    const Consumer1 = new Consumer(800, 30, name, []);
-    Consumer1.addToScene(globalThis.scene);
-    if (consumesFrom !== "0") {
-      Consumer1.addQueue(globalThis.scene.getIdInScene(consumesFrom));
+    const Consumer1 = new Consumer(800, 30, name, [])
+    Consumer1.addToScene(globalThis.scene)
+    if (consumesFrom !== '0') {
+      Consumer1.addQueue(globalThis.scene.getIdInScene(consumesFrom))
     }
   }
 
-  globalThis.scene.render();
+  globalThis.scene.render()
 
-  document.querySelector("#consumerIdField").value = "";
-  document.querySelector("#consumerNameField").value = "";
-  document.querySelector("#consumerPanel").classList.remove("panel-wrap-out");
-};
+  document.querySelector('#consumerIdField').value = ''
+  document.querySelector('#consumerNameField').value = ''
+  document.querySelector('#consumerPanel').classList.remove('panel-wrap-out')
+}
 
 /**
  * Remove consumer from the scene, render and remove CSS class from the consumer panel.
@@ -152,18 +150,18 @@ const sendConsumerForm = (e) => {
  * @param {object} e - Event object
  */
 const deleteConsumerForm = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault()
+  e.stopPropagation()
   const consumer = globalThis.scene.getIdInScene(
-    document.querySelector("#consumerIdField").value,
-  );
+    document.querySelector('#consumerIdField').value
+  )
   consumer.queues.forEach((rmQueue) => {
-    const actor = globalThis.scene.getIdInScene(rmQueue.id);
-    actor.removeConsumer(consumer);
-  });
-  globalThis.scene.removeActor(consumer);
-  globalThis.scene.render();
-  document.querySelector("#consumerPanel").classList.remove("panel-wrap-out");
-};
+    const actor = globalThis.scene.getIdInScene(rmQueue.id)
+    actor.removeConsumer(consumer)
+  })
+  globalThis.scene.removeActor(consumer)
+  globalThis.scene.render()
+  document.querySelector('#consumerPanel').classList.remove('panel-wrap-out')
+}
 
-export { deleteConsumerForm, displayConsumer, hideConsumer, sendConsumerForm };
+export { deleteConsumerForm, displayConsumer, hideConsumer, sendConsumerForm }

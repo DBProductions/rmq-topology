@@ -1,4 +1,4 @@
-import Base from "../base";
+import Base from '../base'
 
 class BaseMessage extends Base {
   /**
@@ -17,31 +17,31 @@ class BaseMessage extends Base {
    * @extends Base
    */
   constructor(x, y, radius, fillStyle) {
-    super(x, y);
-    this.id = this.createUUID();
-    this.x = x;
-    this.y = y;
-    this.radius = radius || 3;
-    this.fillStyle = fillStyle || "#c82124";
-    this.dist = null;
-    this.rad = null;
-    this.angle = null;
-    this.thrust = 5;
+    super(x, y)
+    this.id = this.createUUID()
+    this.x = x
+    this.y = y
+    this.radius = radius || 3
+    this.fillStyle = fillStyle || '#c82124'
+    this.dist = null
+    this.rad = null
+    this.angle = null
+    this.thrust = 5
     this.message = {
       headers: {},
-      body: {},
-    };
+      body: {}
+    }
   }
 
   /**
    * Renders a circle representing the message.
    */
   render() {
-    this.ctx.beginPath();
-    this.ctx.fillStyle = this.fillStyle;
-    this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-    this.ctx.fill();
+    this.ctx.beginPath()
+    this.ctx.fillStyle = this.fillStyle
+    this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
+    this.ctx.fill()
   }
 }
 
-export default BaseMessage;
+export default BaseMessage

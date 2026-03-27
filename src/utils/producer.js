@@ -1,4 +1,4 @@
-import Producer from "../producer";
+import Producer from '../producer'
 
 /**
  * Display the form to create or edit a producer component.
@@ -6,76 +6,76 @@ import Producer from "../producer";
  * @param {Producer} producer - Producer object
  */
 const displayProducer = (producer) => {
-  document.querySelector("#deleteProducerForm").classList.add("hidden");
-  document.querySelector("#producerPanel").classList.add("panel-wrap-out");
+  document.querySelector('#deleteProducerForm').classList.add('hidden')
+  document.querySelector('#producerPanel').classList.add('panel-wrap-out')
 
   const producerParams = [
-    "#producerIdField",
-    "#producerNameField",
-    "#producerRoutingKeyField",
-  ];
+    '#producerIdField',
+    '#producerNameField',
+    '#producerRoutingKeyField'
+  ]
   producerParams.forEach((p) => {
-    document.querySelector(p).value = "";
-  });
-  document.querySelector("#producerPublishTo").innerHTML = "";
-  document.querySelector("#producerErr").innerHTML = "";
+    document.querySelector(p).value = ''
+  })
+  document.querySelector('#producerPublishTo').innerHTML = ''
+  document.querySelector('#producerErr').innerHTML = ''
 
-  const exchanges = globalThis.scene.getObjectsInScene("Exchange");
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
 
-  const selectSource = document.getElementById("producerPublishToSelect");
-  selectSource.options.length = 0;
+  const selectSource = document.getElementById('producerPublishToSelect')
+  selectSource.options.length = 0
   selectSource.options[selectSource.options.length] = new Option(
-    "- Exchanges",
-    0,
-  );
+    '- Exchanges',
+    0
+  )
   Object.keys(exchanges).forEach((exchange) => {
     selectSource.options[selectSource.options.length] = new Option(
       exchanges[exchange].name,
-      exchanges[exchange].id,
-    );
-  });
+      exchanges[exchange].id
+    )
+  })
 
   if (producer) {
-    document.querySelector("#deleteProducerForm").classList.remove("hidden");
-    document.querySelector("#producerIdField").value = producer.id;
-    document.querySelector("#producerNameField").value = producer.name;
-    let exchangesDom = "";
+    document.querySelector('#deleteProducerForm').classList.remove('hidden')
+    document.querySelector('#producerIdField').value = producer.id
+    document.querySelector('#producerNameField').value = producer.name
+    let exchangesDom = ''
     for (var key in producer.publishes) {
       exchangesDom += `<div id="${
         producer.publishes[key].exchange.id
-      }" class="row">`;
+      }" class="row">`
       exchangesDom += `<input type="hidden" name="producerExchanges[]" value="${
         producer.publishes[key].exchange.id
-      }" data-routing-key="${producer.publishes[key].routingKey}">`;
+      }" data-routing-key="${producer.publishes[key].routingKey}">`
       exchangesDom += `<div class="flex-left">${
         producer.publishes[key].exchange.name
-      }<br><small>${producer.publishes[key].routingKey}</small></div>`;
+      }<br><small>${producer.publishes[key].routingKey}</small></div>`
       exchangesDom += `<div class="flex-right"><a href="#" data-id="${
         producer.publishes[key].exchange.id
-      }" class="exchangeDeleteLink">&times;</a></div>`;
-      exchangesDom += "</div>";
+      }" class="exchangeDeleteLink">&times;</a></div>`
+      exchangesDom += '</div>'
     }
-    document.querySelector("#producerPublishTo").innerHTML = exchangesDom;
-    document.querySelectorAll(".exchangeDeleteLink").forEach((item) => {
-      item.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.target.parentNode.parentNode.remove();
-        selectSource.options.length = 0;
+    document.querySelector('#producerPublishTo').innerHTML = exchangesDom
+    document.querySelectorAll('.exchangeDeleteLink').forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        e.target.parentNode.parentNode.remove()
+        selectSource.options.length = 0
         selectSource.options[selectSource.options.length] = new Option(
-          "- Exchanges",
-          0,
-        );
+          '- Exchanges',
+          0
+        )
         Object.keys(exchanges).forEach((exchange) => {
           selectSource.options[selectSource.options.length] = new Option(
             exchanges[exchange].name,
-            exchanges[exchange].id,
-          );
-        });
-      });
-    });
+            exchanges[exchange].id
+          )
+        })
+      })
+    })
   }
-};
+}
 
 /**
  * Sends the form to create or edit a producer component.
@@ -83,79 +83,79 @@ const displayProducer = (producer) => {
  * @param {object} e - Event object
  */
 const sendProducerForm = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const id = document.querySelector("#producerIdField").value;
-  const name = document.querySelector("#producerNameField").value;
-  const routingKey = document.querySelector("#producerRoutingKeyField").value;
-  const publishTo = document.querySelector("#producerPublishToSelect").value;
+  e.preventDefault()
+  e.stopPropagation()
+  const id = document.querySelector('#producerIdField').value
+  const name = document.querySelector('#producerNameField').value
+  const routingKey = document.querySelector('#producerRoutingKeyField').value
+  const publishTo = document.querySelector('#producerPublishToSelect').value
 
-  const exchange = globalThis.scene.getIdInScene(publishTo);
+  const exchange = globalThis.scene.getIdInScene(publishTo)
 
   const message = {
     headers: {},
-    body: {},
-  };
+    body: {}
+  }
 
-  let producer;
-  let error = false;
+  let producer
+  let error = false
 
   if (id) {
-    producer = globalThis.scene.getIdInScene(id);
+    producer = globalThis.scene.getIdInScene(id)
 
-    const exchanges = document.getElementsByName("producerExchanges[]");
+    const exchanges = document.getElementsByName('producerExchanges[]')
 
-    const keepExchanges = {};
+    const keepExchanges = {}
     for (const key in producer.publishes) {
       exchanges.forEach((exchange) => {
         if (
           exchange.value === producer.publishes[key].exchange.id &&
           producer.publishes[key].routingKey === exchange.dataset.routingKey
         ) {
-          keepExchanges[key] = producer.publishes[key];
+          keepExchanges[key] = producer.publishes[key]
         }
-      });
+      })
     }
-    producer.name = name;
-    producer.publishes = keepExchanges;
+    producer.name = name
+    producer.publishes = keepExchanges
 
     if (exchange) {
       if (!producer.exchangeWithRoutingKeyExists(exchange, routingKey)) {
-        producer.addMessageToExchange(exchange, routingKey, message);
+        producer.addMessageToExchange(exchange, routingKey, message)
       } else {
-        error = "Already exists.";
-        document.querySelector("#producerErr").innerHTML = error;
+        error = 'Already exists.'
+        document.querySelector('#producerErr').innerHTML = error
       }
     }
   } else {
-    producer = new Producer(200, 30, name, {});
+    producer = new Producer(200, 30, name, {})
     if (exchange) {
       if (!producer.exchangeWithRoutingKeyExists(exchange, routingKey)) {
-        producer.addMessageToExchange(exchange, routingKey, message);
+        producer.addMessageToExchange(exchange, routingKey, message)
       } else {
-        error = "Already exists.";
-        document.querySelector("#producerErr").innerHTML = error;
+        error = 'Already exists.'
+        document.querySelector('#producerErr').innerHTML = error
       }
     }
-    producer.addToScene(globalThis.scene);
+    producer.addToScene(globalThis.scene)
   }
 
-  globalThis.scene.render();
+  globalThis.scene.render()
 
   if (!error) {
     const producerParams = [
-      "#producerIdField",
-      "#producerNameField",
-      "#producerRoutingKeyField",
-    ];
+      '#producerIdField',
+      '#producerNameField',
+      '#producerRoutingKeyField'
+    ]
     producerParams.forEach((p) => {
-      document.querySelector(p).value = "";
-    });
-    document.querySelector("#producerPublishTo").innerHTML = "";
-    document.querySelector("#producerErr").innerHTML = "";
-    document.querySelector("#producerPanel").classList.remove("panel-wrap-out");
+      document.querySelector(p).value = ''
+    })
+    document.querySelector('#producerPublishTo').innerHTML = ''
+    document.querySelector('#producerErr').innerHTML = ''
+    document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
   }
-};
+}
 
 /**
  * Reset form values and remove CSS class from the producer panel.
@@ -163,20 +163,20 @@ const sendProducerForm = (e) => {
  * @param {object} e - Event object
  */
 const hideProducer = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault()
+  e.stopPropagation()
   const producerParams = [
-    "#producerIdField",
-    "#producerNameField",
-    "#producerRoutingKeyField",
-  ];
+    '#producerIdField',
+    '#producerNameField',
+    '#producerRoutingKeyField'
+  ]
   producerParams.forEach((p) => {
-    document.querySelector(p).value = "";
-  });
-  document.querySelector("#producerPublishTo").innerHTML = "";
-  document.querySelector("#producerErr").innerHTML = "";
-  document.querySelector("#producerPanel").classList.remove("panel-wrap-out");
-};
+    document.querySelector(p).value = ''
+  })
+  document.querySelector('#producerPublishTo').innerHTML = ''
+  document.querySelector('#producerErr').innerHTML = ''
+  document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
+}
 
 /**
  * Remove producer from the scene, render and remove CSS class from the producer panel.
@@ -184,15 +184,15 @@ const hideProducer = (e) => {
  * @param {object} e - Event object
  */
 const deleteProducerForm = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault()
+  e.stopPropagation()
   globalThis.scene.removeActor(
     globalThis.scene.getIdInScene(
-      document.querySelector("#producerIdField").value,
-    ),
-  );
-  globalThis.scene.render();
-  document.querySelector("#producerPanel").classList.remove("panel-wrap-out");
-};
+      document.querySelector('#producerIdField').value
+    )
+  )
+  globalThis.scene.render()
+  document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
+}
 
-export { deleteProducerForm, displayProducer, hideProducer, sendProducerForm };
+export { deleteProducerForm, displayProducer, hideProducer, sendProducerForm }

@@ -1,4 +1,4 @@
-import Base from "./base";
+import Base from './base'
 
 class BaseComponent extends Base {
   /**
@@ -10,14 +10,14 @@ class BaseComponent extends Base {
    * @extends Base
    */
   constructor(x, y) {
-    super(x, y);
-    this.id = this.createUUID();
-    this.x = x;
-    this.y = y;
-    this.dragged = false;
-    this.hover = false;
-    this.debug = false;
+    super(x, y)
+    this.id = this.createUUID()
+    this.x = x
+    this.y = y
+    this.dragged = false
+    this.hover = false
+    this.debug = false
   }
 }
 
-export default BaseComponent;
+export default BaseComponent

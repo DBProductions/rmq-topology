@@ -1,4 +1,4 @@
-import BaseMessage from "./basemessage";
+import BaseMessage from './basemessage'
 
 class ExchangeMessage extends BaseMessage {
   /**
@@ -24,15 +24,15 @@ class ExchangeMessage extends BaseMessage {
     message,
     rejected,
     radius,
-    fillColor,
+    fillColor
   ) {
-    super(x, y, radius, fillColor);
-    this.exchange = exchange;
-    this.routingKey = routingKey;
-    this.message = message;
-    this.rejected = rejected || false;
-    this.targetX = this.exchange.x;
-    this.targetY = this.exchange.y;
+    super(x, y, radius, fillColor)
+    this.exchange = exchange
+    this.routingKey = routingKey
+    this.message = message
+    this.rejected = rejected || false
+    this.targetX = this.exchange.x
+    this.targetY = this.exchange.y
   }
 
   /**
@@ -40,21 +40,21 @@ class ExchangeMessage extends BaseMessage {
    * When the target gets reached the method of an arriving messages gets called.
    */
   update() {
-    this.dx = this.targetX - this.x;
-    this.dy = this.targetY - this.y;
-    this.dist = Math.sqrt(this.dx * this.dx + this.dy * this.dy);
-    this.rad = Math.atan2(this.dy, this.dx);
-    this.angle = (this.rad / Math.PI) * 180;
+    this.dx = this.targetX - this.x
+    this.dy = this.targetY - this.y
+    this.dist = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
+    this.rad = Math.atan2(this.dy, this.dx)
+    this.angle = (this.rad / Math.PI) * 180
 
-    const velX = (this.dx / this.dist) * this.thrust;
-    const velY = (this.dy / this.dist) * this.thrust;
+    const velX = (this.dx / this.dist) * this.thrust
+    const velY = (this.dy / this.dist) * this.thrust
     if (this.dist > 3) {
-      this.x += velX;
-      this.y += velY;
+      this.x += velX
+      this.y += velY
     } else {
-      this.exchange.messageArrived(this);
+      this.exchange.messageArrived(this)
     }
   }
 }
 
-export default ExchangeMessage;
+export default ExchangeMessage

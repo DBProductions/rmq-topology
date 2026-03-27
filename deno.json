@@ -7,6 +7,17 @@
       "public/css/all.min.css"
     ]
   },
+  "lint": {
+    "exclude": [
+      "node_modules/**",
+      "coverage/**",
+      "output/**",
+      "cypress/**",
+      "cypress.config.js",
+      "src/**",
+      "public/**"
+    ]
+  },
   "tasks": {
     "lint": "deno lint --fix",
     "format": "deno fmt",

@@ -1,24 +1,24 @@
-import { configDefaults, defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [],
   test: {
-    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     globals: true,
-    environment: "jsdom",
+    environment: 'jsdom',
     coverage: {
-      provider: "istanbul",
-      reporter: ["text", "json", "html", "cobertura"],
+      provider: 'istanbul',
+      reporter: ['text', 'json', 'html', 'cobertura'],
       exclude: [
         ...configDefaults.exclude,
-        "output/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-        "public/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-        "src/utils/**/*",
-        "src/examples.js",
-        "src/listener.js",
-        "src/main.js",
-        "index.js",
-      ],
-    },
-  },
-});
+        'output/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        'public/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+        'src/utils/**/*',
+        'src/examples.js',
+        'src/listener.js',
+        'src/main.js',
+        'index.js'
+      ]
+    }
+  }
+})

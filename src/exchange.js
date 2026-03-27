@@ -1,6 +1,6 @@
-import BaseComponent from "./basecomponent";
-import BindingMessage from "./messages/bindingmessage";
-import AlternateMessage from "./messages/alternatemessage";
+import BaseComponent from './basecomponent'
+import BindingMessage from './messages/bindingmessage'
+import AlternateMessage from './messages/alternatemessage'
 
 class Exchange extends BaseComponent {
   /**
@@ -16,12 +16,12 @@ class Exchange extends BaseComponent {
    * @extends BaseComponent
    */
   constructor(x, y, name, type, alternate) {
-    super(x, y);
-    this.name = name;
-    this.type = type || "direct";
-    this.alternate = alternate || null;
-    this.radius = 15;
-    this.bindings = [];
+    super(x, y)
+    this.name = name
+    this.type = type || 'direct'
+    this.alternate = alternate || null
+    this.radius = 15
+    this.bindings = []
   }
 
   /**
@@ -30,7 +30,7 @@ class Exchange extends BaseComponent {
    * @param {Exchange} alternate - alternate exchange
    */
   setAlternate(exchange) {
-    this.alternate = exchange;
+    this.alternate = exchange
   }
 
   /**
@@ -39,12 +39,12 @@ class Exchange extends BaseComponent {
    * @param {Binding} binding - Binding object
    */
   removeBinding(binding) {
-    const bindingIndex = this.bindings.findIndex((c) => c === binding);
+    const bindingIndex = this.bindings.findIndex((c) => c === binding)
     if (bindingIndex !== -1) {
       if (this.bindings.length === 1) {
-        this.bindings = [];
+        this.bindings = []
       } else {
-        this.bindings.splice(bindingIndex, 1);
+        this.bindings.splice(bindingIndex, 1)
       }
     }
   }
@@ -55,35 +55,35 @@ class Exchange extends BaseComponent {
    * @param {ExchangeMessage} msg
    */
   messageArrived(msg) {
-    const { routingKey, fillStyle } = msg;
-    let sendMsg = false;
+    const { routingKey, fillStyle } = msg
+    let sendMsg = false
     this.bindings.forEach((val) => {
-      if (this.type === "topic") {
+      if (this.type === 'topic') {
         // TODO: more specific to handle * or #
-        if (val.routingKey === routingKey || val.routingKey === "#") {
+        if (val.routingKey === routingKey || val.routingKey === '#') {
           new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-            this.scene,
-          );
-          sendMsg = true;
+            this.scene
+          )
+          sendMsg = true
         }
-      } else if (this.type === "direct") {
+      } else if (this.type === 'direct') {
         if (val.destination.name === routingKey) {
           new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-            this.scene,
-          );
-          sendMsg = true;
+            this.scene
+          )
+          sendMsg = true
         }
         // fanout
       } else {
         new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-          this.scene,
-        );
-        sendMsg = true;
+          this.scene
+        )
+        sendMsg = true
       }
-    });
+    })
     // no bindings, no sending
     if (this.bindings.length === 0) {
-      sendMsg = false;
+      sendMsg = false
     }
     if (this.alternate && !sendMsg) {
       new AlternateMessage(
@@ -91,15 +91,15 @@ class Exchange extends BaseComponent {
         this.y,
         this.alternate,
         routingKey,
-        fillStyle,
-      ).addToScene(this.scene);
-      sendMsg = true;
+        fillStyle
+      ).addToScene(this.scene)
+      sendMsg = true
     }
     // message not send, then it's lost
     if (!sendMsg) {
-      this.scene.lostMessages += 1;
+      this.scene.lostMessages += 1
     }
-    this.scene.removeActor(msg);
+    this.scene.removeActor(msg)
   }
 
   /**
@@ -107,50 +107,50 @@ class Exchange extends BaseComponent {
    */
   render() {
     if (this.alternate) {
-      this.ctx.beginPath();
-      this.ctx.strokeStyle = "#000";
-      this.ctx.setLineDash([3, 3]);
-      this.ctx.lineWidth = 1;
-      this.ctx.moveTo(this.x, this.y);
-      this.ctx.lineTo(this.alternate.x, this.alternate.y);
-      this.ctx.stroke();
+      this.ctx.beginPath()
+      this.ctx.strokeStyle = '#000'
+      this.ctx.setLineDash([3, 3])
+      this.ctx.lineWidth = 1
+      this.ctx.moveTo(this.x, this.y)
+      this.ctx.lineTo(this.alternate.x, this.alternate.y)
+      this.ctx.stroke()
     }
     // shadow
-    this.ctx.globalAlpha = 0.4;
-    this.ctx.beginPath();
-    this.ctx.fillStyle = "#000";
-    this.ctx.arc(this.x + 2, this.y + 2, this.radius, 0, 2 * Math.PI);
-    this.ctx.fill();
+    this.ctx.globalAlpha = 0.4
+    this.ctx.beginPath()
+    this.ctx.fillStyle = '#000'
+    this.ctx.arc(this.x + 2, this.y + 2, this.radius, 0, 2 * Math.PI)
+    this.ctx.fill()
 
-    this.ctx.globalAlpha = 1.0;
-    this.ctx.beginPath();
+    this.ctx.globalAlpha = 1.0
+    this.ctx.beginPath()
     // this.ctx.fillStyle = gradient;
-    this.ctx.fillStyle = "#ccc";
-    this.ctx.setLineDash([]);
-    this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-    this.ctx.fill();
+    this.ctx.fillStyle = '#ccc'
+    this.ctx.setLineDash([])
+    this.ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI)
+    this.ctx.fill()
 
     if (this.dragged) {
-      this.ctx.stroke();
+      this.ctx.stroke()
     }
 
     if (this.hover) {
-      this.ctx.stroke();
+      this.ctx.stroke()
     }
 
-    this.ctx.font = "10px Arial";
-    this.ctx.fillStyle = "#000";
+    this.ctx.font = '10px Arial'
+    this.ctx.fillStyle = '#000'
     this.ctx.fillText(
       this.name,
       this.x - this.radius,
-      this.y + this.radius + 10,
-    );
+      this.y + this.radius + 10
+    )
     this.ctx.fillText(
       this.type,
       this.x - this.radius,
-      this.y + this.radius + 22,
-    );
+      this.y + this.radius + 22
+    )
   }
 }
 
-export default Exchange;
+export default Exchange

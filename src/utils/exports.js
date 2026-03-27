@@ -16,7 +16,7 @@ const exportTopology = (e) => {
     consumers: [],
     exchanges: [],
     queues: [],
-    bindings: [],
+    bindings: []
   };
   const exchanges = globalThis.scene.getObjectsInScene("Exchange");
   exchanges.forEach((val) => {
@@ -29,7 +29,7 @@ const exportTopology = (e) => {
       y: val.y,
       name: val.name,
       type: val.type,
-      alternate,
+      alternate
     });
   });
   const queues = globalThis.scene.getObjectsInScene("Queue");
@@ -40,7 +40,7 @@ const exportTopology = (e) => {
       name: val.name,
       type: val.type,
       ttl: val.ttl,
-      maxLength: val.maxLength,
+      maxLength: val.maxLength
     };
     if (val.dlx) {
       const exchangeIndex = exchanges.findIndex((e) => e.id === val.dlx.id);
@@ -56,7 +56,7 @@ const exportTopology = (e) => {
       exports.bindings.push({
         exchange: exchangeIndex,
         queue: queueIndex,
-        routingKey: val.routingKey,
+        routingKey: val.routingKey
       });
     }
   });
@@ -72,7 +72,7 @@ const exportTopology = (e) => {
       y: val.y,
       name: val.name,
       consumes,
-      mode: val.mode,
+      mode: val.mode
     });
   });
   const producers = globalThis.scene.getObjectsInScene("Producer");
@@ -82,14 +82,14 @@ const exportTopology = (e) => {
       publishes[key] = {
         exchange: val.publishes[key].exchange.name,
         routingKey: val.publishes[key].routingKey,
-        message: val.publishes[key].message,
+        message: val.publishes[key].message
       };
     }
     exports.producers.push({
       x: val.x,
       y: val.y,
       name: val.name,
-      publishes,
+      publishes
     });
   });
 
@@ -123,7 +123,7 @@ const exportCurl = (e) => {
     generatedString +=
       `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/exchanges/${vhost}/${name} -d '{"type": "${val.type}", "auto_delete": false, "durable": true, "internal": false, "arguments": ${
         JSON.stringify(
-          args,
+          args
         )
       }}'\n\n`;
   });
@@ -144,7 +144,7 @@ const exportCurl = (e) => {
     generatedString +=
       `curl -u ${username}:${password} -i -H "content-type:application/json" -XPUT ${management}/queues/${vhost}/${name} -d '{"auto_delete": false, "durable": true, "arguments": ${
         JSON.stringify(
-          args,
+          args
         )
       }}'\n\n`;
   });
@@ -158,7 +158,7 @@ const exportCurl = (e) => {
       generatedString +=
         `curl -u ${username}:${password} -i -H "content-type:application/json" -XPOST ${management}/bindings/${vhost}/e/${
           encodeURIComponent(
-            exchange.name,
+            exchange.name
           )
         }/q/${
           encodeURIComponent(queue.name)
@@ -524,5 +524,5 @@ export {
   exportCurl,
   exportRabbitmqadmin,
   exportTerraform,
-  exportTopology,
+  exportTopology
 };

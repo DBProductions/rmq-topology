@@ -1,4 +1,4 @@
-import Binding from "../binding";
+import Binding from '../binding'
 
 /**
  * Display the form to create or edit binding component.
@@ -6,61 +6,60 @@ import Binding from "../binding";
  * @param {Binding} binding - Binding object
  */
 const displayBinding = (binding) => {
-  document.querySelector("#deleteBindingForm").classList.add("hidden");
-  document.querySelector("#bindingPanel").classList.add("panel-wrap-out");
+  document.querySelector('#deleteBindingForm').classList.add('hidden')
+  document.querySelector('#bindingPanel').classList.add('panel-wrap-out')
 
-  document.querySelector("#bindingIdField").value = "";
-  document.querySelector("#bindingRoutingKeyField").value = "";
+  document.querySelector('#bindingIdField').value = ''
+  document.querySelector('#bindingRoutingKeyField').value = ''
 
-  let sourceId = null;
-  let destinationId = null;
+  let sourceId = null
+  let destinationId = null
   if (binding) {
-    document.querySelector("#deleteBindingForm").classList.remove("hidden");
-    document.querySelector("#bindingIdField").value = binding.id;
-    document.querySelector("#bindingRoutingKeyField").value =
-      binding.routingKey;
-    sourceId = binding.source.id;
-    destinationId = binding.destination.id;
+    document.querySelector('#deleteBindingForm').classList.remove('hidden')
+    document.querySelector('#bindingIdField').value = binding.id
+    document.querySelector('#bindingRoutingKeyField').value = binding.routingKey
+    sourceId = binding.source.id
+    destinationId = binding.destination.id
   }
 
-  const exchanges = globalThis.scene.getObjectsInScene("Exchange");
-  const queues = globalThis.scene.getObjectsInScene("Queue");
+  const exchanges = globalThis.scene.getObjectsInScene('Exchange')
+  const queues = globalThis.scene.getObjectsInScene('Queue')
 
-  const selectSource = document.getElementById("bindingSource");
-  selectSource.options.length = 0;
+  const selectSource = document.getElementById('bindingSource')
+  selectSource.options.length = 0
   Object.keys(exchanges).forEach((exchange) => {
     if (sourceId === exchanges[exchange].id) {
       selectSource.options[selectSource.options.length] = new Option(
         exchanges[exchange].name,
         exchanges[exchange].id,
         false,
-        true,
-      );
+        true
+      )
     } else {
       selectSource.options[selectSource.options.length] = new Option(
         exchanges[exchange].name,
-        exchanges[exchange].id,
-      );
+        exchanges[exchange].id
+      )
     }
-  });
-  const selectDestination = document.getElementById("bindingDestination");
-  selectDestination.options.length = 0;
+  })
+  const selectDestination = document.getElementById('bindingDestination')
+  selectDestination.options.length = 0
   Object.keys(queues).forEach((queue) => {
     if (destinationId === queues[queue].id) {
       selectDestination.options[selectDestination.options.length] = new Option(
         queues[queue].name,
         queues[queue].id,
         false,
-        true,
-      );
+        true
+      )
     } else {
       selectDestination.options[selectDestination.options.length] = new Option(
         queues[queue].name,
-        queues[queue].id,
-      );
+        queues[queue].id
+      )
     }
-  });
-};
+  })
+}
 
 /**
  * Sends the form to create or edit an binding component.
@@ -68,39 +67,39 @@ const displayBinding = (binding) => {
  * @param {object} e - Event object
  */
 const sendBindingForm = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const id = document.querySelector("#bindingIdField").value;
-  const routingKey = document.querySelector("#bindingRoutingKeyField").value;
+  e.preventDefault()
+  e.stopPropagation()
+  const id = document.querySelector('#bindingIdField').value
+  const routingKey = document.querySelector('#bindingRoutingKeyField').value
 
-  const selectSource = document.getElementById("bindingSource").value;
-  const selectDestination = document.getElementById("bindingDestination").value;
+  const selectSource = document.getElementById('bindingSource').value
+  const selectDestination = document.getElementById('bindingDestination').value
 
-  const ex = globalThis.scene.actors.find((exc) => exc.id === selectSource);
-  const qu = globalThis.scene.actors.find((q) => q.id === selectDestination);
+  const ex = globalThis.scene.actors.find((exc) => exc.id === selectSource)
+  const qu = globalThis.scene.actors.find((q) => q.id === selectDestination)
 
   if (id) {
-    const binding = globalThis.scene.getIdInScene(id);
-    binding.routingKey = routingKey;
+    const binding = globalThis.scene.getIdInScene(id)
+    binding.routingKey = routingKey
 
-    binding.source = ex;
-    binding.destination = qu;
-    binding.setCoords();
+    binding.source = ex
+    binding.destination = qu
+    binding.setCoords()
   } else {
     // let e = window.scene.actors.find(e => e.id === selectSource);
     // let q = window.scene.actors.find(q => q.id === selectDestination);
-    const Binding1 = new Binding(ex, qu, routingKey);
-    Binding1.addToScene(globalThis.scene);
+    const Binding1 = new Binding(ex, qu, routingKey)
+    Binding1.addToScene(globalThis.scene)
   }
 
-  globalThis.scene.render();
+  globalThis.scene.render()
 
-  document.querySelector("#bindingIdField").value = "";
-  document.querySelector("#bindingRoutingKeyField").value = "";
-  document.getElementById("bindingSource").value = "";
-  document.getElementById("bindingDestination").value = "";
-  document.querySelector("#bindingPanel").classList.remove("panel-wrap-out");
-};
+  document.querySelector('#bindingIdField').value = ''
+  document.querySelector('#bindingRoutingKeyField').value = ''
+  document.getElementById('bindingSource').value = ''
+  document.getElementById('bindingDestination').value = ''
+  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
+}
 
 /**
  * Reset form values and remove CSS class from the binding panel.
@@ -108,19 +107,19 @@ const sendBindingForm = (e) => {
  * @param {object} e - Event object
  */
 const hideBinding = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault()
+  e.stopPropagation()
   const settingsParams = [
-    "#bindingIdField",
-    "#bindingRoutingKeyField",
-    "#bindingSource",
-    "#bindingDestination",
-  ];
+    '#bindingIdField',
+    '#bindingRoutingKeyField',
+    '#bindingSource',
+    '#bindingDestination'
+  ]
   settingsParams.forEach((p) => {
-    document.querySelector(p).value = "";
-  });
-  document.querySelector("#bindingPanel").classList.remove("panel-wrap-out");
-};
+    document.querySelector(p).value = ''
+  })
+  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
+}
 
 /**
  * Removes a binding.
@@ -128,15 +127,15 @@ const hideBinding = (e) => {
  * @param {object} e - Event object
  */
 const deleteBindingForm = (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  e.preventDefault()
+  e.stopPropagation()
   const actor = globalThis.scene.getIdInScene(
-    document.querySelector("#bindingIdField").value,
-  );
-  actor.source.removeBinding(actor);
-  globalThis.scene.removeActor(actor);
-  globalThis.scene.render();
-  document.querySelector("#bindingPanel").classList.remove("panel-wrap-out");
-};
+    document.querySelector('#bindingIdField').value
+  )
+  actor.source.removeBinding(actor)
+  globalThis.scene.removeActor(actor)
+  globalThis.scene.render()
+  document.querySelector('#bindingPanel').classList.remove('panel-wrap-out')
+}
 
-export { deleteBindingForm, displayBinding, hideBinding, sendBindingForm };
+export { deleteBindingForm, displayBinding, hideBinding, sendBindingForm }
