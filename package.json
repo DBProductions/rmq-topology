@@ -32,11 +32,11 @@
   "license": "ISC",
   "devDependencies": {
     "@vitest/coverage-istanbul": "^4.1.9",
-    "clean-jsdoc-theme": "^5.0.2",
-    "cypress": "^15.17.0",
-    "eslint": "^10.5.0",
+    "clean-jsdoc-theme": "^5.0.5",
+    "cypress": "^15.18.0",
+    "eslint": "^10.6.0",
     "jsdom": "^29.1.1",
-    "prettier": "^3.8.4",
+    "prettier": "^3.8.5",
     "rollup-plugin-jsdoc": "^0.1.2",
     "typescript": "^6.0.3"
   },

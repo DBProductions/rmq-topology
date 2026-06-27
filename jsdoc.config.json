@@ -1,4 +1,5 @@
 {
+  "plugins": ["plugins/markdown"],
   "source": {
     "include": ["src", "src/utils", "src/messages"],
     "exclude": [],
@@ -8,7 +9,7 @@
   "create_style": "nav{background: yellow}",
   "add_scripts": "function foo(){console.log('foo')}",
   "opts": {
-    "template": "node_modules/clean-jsdoc-theme",
+    "template": "node_modules/clean-jsdoc-theme/dist",
     "encoding": "utf8",
     "destination": "./public/doc/",
     "theme_opts": {

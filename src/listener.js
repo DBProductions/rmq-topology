@@ -180,7 +180,7 @@ eventListener.push(
   {
     selector: '#cancelSettingsForm',
     event: 'click',
-    handler: cancelSettingsForm
+    handler: hideSettings
   }
 )
 

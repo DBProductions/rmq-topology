@@ -23,13 +23,29 @@ class BaseMessage extends Base {
     this.y = y
     this.radius = radius || 3
     this.fillStyle = fillStyle || '#c82124'
-    this.dist = null
-    this.rad = null
-    this.angle = null
     this.thrust = 5
     this.message = {
       headers: {},
       body: {}
+    }
+  }
+
+  /**
+   * Moves the message toward a target position. Calls onArrival when reached.
+   *
+   * @param {number} targetX
+   * @param {number} targetY
+   * @param {Function} onArrival
+   */
+  moveToTarget(targetX, targetY, onArrival) {
+    const dx = targetX - this.x
+    const dy = targetY - this.y
+    const dist = Math.sqrt(dx * dx + dy * dy)
+    if (dist > 3) {
+      this.x += (dx / dist) * this.thrust
+      this.y += (dy / dist) * this.thrust
+    } else {
+      onArrival()
     }
   }
 

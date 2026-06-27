@@ -2,6 +2,21 @@ import BaseComponent from './basecomponent'
 import BindingMessage from './messages/bindingmessage'
 import AlternateMessage from './messages/alternatemessage'
 
+const topicMatch = (bindingKey, routingKey) => {
+  const bk = bindingKey.split('.')
+  const rk = routingKey ? routingKey.split('.') : []
+  let bi = 0
+  let ri = 0
+  while (bi < bk.length) {
+    if (bk[bi] === '#') return true
+    if (ri >= rk.length) return false
+    if (bk[bi] !== '*' && bk[bi] !== rk[ri]) return false
+    bi++
+    ri++
+  }
+  return ri === rk.length
+}
+
 class Exchange extends BaseComponent {
   /**
    * Exchange class represents a component which receives messages and route them to queues.
@@ -59,8 +74,7 @@ class Exchange extends BaseComponent {
     let sendMsg = false
     this.bindings.forEach((val) => {
       if (this.type === 'topic') {
-        // TODO: more specific to handle * or #
-        if (val.routingKey === routingKey || val.routingKey === '#') {
+        if (topicMatch(val.routingKey, routingKey)) {
           new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
             this.scene
           )
@@ -153,4 +167,5 @@ class Exchange extends BaseComponent {
   }
 }
 
+export { topicMatch }
 export default Exchange

@@ -88,11 +88,17 @@ document.querySelector('#settings').addEventListener('click', (e) => {
   displaySettings()
 })
 
-document.querySelector('#copyBtn').addEventListener('click', (e) => {
+document.querySelector('#copyBtn').addEventListener('click', async (e) => {
   e.preventDefault()
   e.stopPropagation()
-  document.querySelector('#ImExport').select()
-  document.execCommand('copy')
+  try {
+    await navigator.clipboard.writeText(
+      document.querySelector('#ImExport').value
+    )
+  } catch {
+    document.querySelector('#ImExport').select()
+    document.execCommand('copy')
+  }
 })
 
 document.querySelector('#cancelBtn').addEventListener('click', (e) => {

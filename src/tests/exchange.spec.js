@@ -1,4 +1,4 @@
-import Exchange from '../exchange'
+import Exchange, { topicMatch } from '../exchange'
 import Queue from '../queue'
 import Binding from '../binding'
 import ExchangeMessage from '../messages/exchangemessage'
@@ -128,5 +128,47 @@ describe('Exchange', () => {
     expect(exchange.ctx.beginPath).toHaveBeenCalled()
     expect(exchange.ctx.fill).toHaveBeenCalled(2)
     expect(exchange.ctx.stroke).toHaveBeenCalled(2)
+  })
+})
+
+describe('topicMatch', () => {
+  it('should match # wildcard with anything', () => {
+    expect(topicMatch('#', 'x.y.z')).toBe(true)
+    expect(topicMatch('#', '')).toBe(true)
+  })
+
+  it('should match a.# with a, a.b, a.b.c but not b', () => {
+    expect(topicMatch('a.#', 'a')).toBe(true)
+    expect(topicMatch('a.#', 'a.b')).toBe(true)
+    expect(topicMatch('a.#', 'a.b.c')).toBe(true)
+    expect(topicMatch('a.#', 'b')).toBe(false)
+  })
+
+  it('should match a.* with a.b but not a or a.b.c', () => {
+    expect(topicMatch('a.*', 'a.b')).toBe(true)
+    expect(topicMatch('a.*', 'a')).toBe(false)
+    expect(topicMatch('a.*', 'a.b.c')).toBe(false)
+  })
+
+  it('should match *.b.* with a.b.c but not a.b', () => {
+    expect(topicMatch('*.b.*', 'a.b.c')).toBe(true)
+    expect(topicMatch('*.b.*', 'a.b')).toBe(false)
+  })
+
+  it('should match exact routing keys', () => {
+    expect(topicMatch('a.b.c', 'a.b.c')).toBe(true)
+    expect(topicMatch('a.b.c', 'a.b')).toBe(false)
+  })
+
+  it('should match * with single word but not empty routing key', () => {
+    expect(topicMatch('*', 'x')).toBe(true)
+    expect(topicMatch('*', '')).toBe(false)
+    expect(topicMatch('*', 'x.y')).toBe(false)
+  })
+
+  it('should match empty routing key only with #', () => {
+    expect(topicMatch('#', '')).toBe(true)
+    expect(topicMatch('*', '')).toBe(false)
+    expect(topicMatch('a', '')).toBe(false)
   })
 })

@@ -21,18 +21,9 @@ class AlternateMessage extends BaseMessage {
   }
 
   update() {
-    this.dx = this.targetX - this.x
-    this.dy = this.targetY - this.y
-    this.dist = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
-    this.rad = Math.atan2(this.dy, this.dx)
-    this.angle = (this.rad / Math.PI) * 180
-
-    if (this.dist > 3) {
-      this.x += (this.dx / this.dist) * this.thrust
-      this.y += (this.dy / this.dist) * this.thrust
-    } else {
+    this.moveToTarget(this.targetX, this.targetY, () => {
       this.exchange.messageArrived(this)
-    }
+    })
   }
 }
 
