@@ -88,7 +88,7 @@ document.querySelector('#settings').addEventListener('click', (e) => {
   displaySettings()
 })
 
-document.querySelector('#copyBtn').addEventListener('click', async (e) => {
+document.querySelector('#copyBtn').addEventListener('click', async(e) => {
   e.preventDefault()
   e.stopPropagation()
   try {
