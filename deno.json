@@ -22,7 +22,7 @@
     "lint": "deno lint --fix",
     "format": "deno fmt",
     "test": "vitest run",
-    "bundle": "rollup --config rollup-deno.config.mjs",
+    "bundle": "npx rollup --config rollup-deno.config.mjs",
     "cypress": "cypress run --headless --config video=false -b chrome",
     "start": "deno run --allow-net --allow-read --watch server/main.ts"
   },
