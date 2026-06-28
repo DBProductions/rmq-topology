@@ -24,7 +24,8 @@
     "test": "vitest run",
     "bundle": "npx rollup --config rollup-deno.config.mjs",
     "cypress": "cypress run --headless --config video=false -b chrome",
-    "start": "deno run --allow-net --allow-read --watch server/main.ts"
+    "start": "deno run --allow-net --allow-read --watch server/main.ts",
+    "start:ci": "deno run --allow-net --allow-read --allow-env --allow-run server/main.ts"
   },
   "imports": {
     "@oak/oak": "jsr:@oak/oak@^17.1.4",
