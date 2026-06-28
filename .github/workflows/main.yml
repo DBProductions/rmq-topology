@@ -41,12 +41,12 @@ jobs:
           format: markdown
           output: both
       - name: Cypress install
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v7
         with:
           runTests: false
           install-command: npm i
       - name: Cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v7
         with:
           install: false
           build: npm run bundle
@@ -66,12 +66,12 @@ jobs:
       - run: deno task test
       - run: deno task bundle
       - name: Cypress install
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v7
         with:
           runTests: false
           install-command: deno install --allow-scripts
       - name: Cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v7
         with:
           spec: |
             cypress/e2e/components.cy.js
@@ -90,7 +90,7 @@ jobs:
         with:
           bun-version: latest
       - name: Cypress install
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v7
         with:
           runTests: false
           install-command: bun i
@@ -99,7 +99,7 @@ jobs:
       - run: bun run format
       - run: bun run bundle
       - name: Cypress run
-        uses: cypress-io/github-action@v5
+        uses: cypress-io/github-action@v7
         with:
           install: false
           build: bun run bundle
