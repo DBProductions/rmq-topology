@@ -19,7 +19,12 @@ const brokerDefaultSettings = {
  */
 const getSettings = () => {
   const data = localStorage.getItem('rmqSettings')
-  return JSON.parse(data)
+  if (!data) return null
+  try {
+    return JSON.parse(data)
+  } catch {
+    return null
+  }
 }
 
 /**

@@ -1,3 +1,5 @@
+import Binding from './binding'
+
 class Scene {
   /**
    * The scene includes the actors and call their update and render methods.
@@ -51,10 +53,10 @@ class Scene {
    * @param {Object} actor
    */
   removeActor(actor) {
-    this.actors.splice(
-      this.actors.findIndex((o) => o === actor),
-      1
-    )
+    const idx = this.actors.findIndex((o) => o === actor)
+    if (idx !== -1) {
+      this.actors.splice(idx, 1)
+    }
   }
 
   /**
@@ -123,7 +125,7 @@ class Scene {
 
     const allBindings = []
     const noneBindings = []
-    const myFilter = (s) => s.constructor.name === 'Binding'
+    const myFilter = (s) => s instanceof Binding
     this.actors.forEach((e, idx, arr) =>
       (myFilter(e, idx, arr) ? allBindings : noneBindings).push(e)
     )

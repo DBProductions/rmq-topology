@@ -3,6 +3,8 @@ import BindingMessage from './messages/bindingmessage'
 import AlternateMessage from './messages/alternatemessage'
 
 const topicMatch = (bindingKey, routingKey) => {
+  if (!bindingKey && !routingKey) return true
+  if (!bindingKey) return false
   const bk = bindingKey.split('.')
   const rk = routingKey ? routingKey.split('.') : []
   let bi = 0
@@ -60,6 +62,9 @@ class Exchange extends BaseComponent {
         this.bindings = []
       } else {
         this.bindings.splice(bindingIndex, 1)
+      }
+      if (this.binding === binding) {
+        this.binding = null
       }
     }
   }

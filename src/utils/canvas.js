@@ -12,6 +12,12 @@ import { displayExchange } from './exchange'
 import { displayQueue } from './queue'
 import { displayBinding } from './binding'
 
+import Producer from '../producer'
+import Consumer from '../consumer'
+import Exchange from '../exchange'
+import Queue from '../queue'
+import Binding from '../binding'
+
 /**
  * Handles mouse up event on the canvas to stop dragging of actors.
  *
@@ -65,10 +71,10 @@ const mouseMoveOnCanvas = (e) => {
     if (draggedActor.length > 0) {
       const actor = draggedActor[0]
       document.body.style.cursor = 'pointer'
-      if (actor.constructor.name === 'Producer') {
+      if (actor instanceof Producer) {
         actor.x = mx - actor.width / 2
         actor.y = my - actor.height / 2
-      } else if (actor.constructor.name === 'Consumer') {
+      } else if (actor instanceof Consumer) {
         actor.x = mx - actor.width / 2
         actor.y = my - actor.height / 2
       } else {
@@ -103,7 +109,7 @@ const mouseMoveOnCanvas = (e) => {
           val.hover = true
         }
 
-        if (val.constructor.name === 'Binding') {
+        if (val instanceof Binding) {
           const foundLine = findLine(val, mx, my)
           if (foundLine) {
             document.body.style.cursor = 'pointer'
@@ -125,26 +131,18 @@ const clickOnCanvas = (e) => {
   e.preventDefault()
   e.stopPropagation()
   const ele = findPosition(e, true)
-  if (ele && ele.constructor) {
+  if (ele) {
     displayForm(ele.constructor.name)
-    switch (ele.constructor.name) {
-      case 'Producer':
-        displayProducer(ele)
-        break
-      case 'Exchange':
-        displayExchange(ele)
-        break
-      case 'Queue':
-        displayQueue(ele)
-        break
-      case 'Binding':
-        displayBinding(ele)
-        break
-      case 'Consumer':
-        displayConsumer(ele)
-        break
-      default:
-        console.log(ele.constructor.name)
+    if (ele instanceof Producer) {
+      displayProducer(ele)
+    } else if (ele instanceof Exchange) {
+      displayExchange(ele)
+    } else if (ele instanceof Queue) {
+      displayQueue(ele)
+    } else if (ele instanceof Binding) {
+      displayBinding(ele)
+    } else if (ele instanceof Consumer) {
+      displayConsumer(ele)
     }
   }
 }

@@ -167,13 +167,12 @@ document.querySelector('#importRmqBtn').addEventListener('click', (e) => {
     n = 1
     jsonStr.queues.forEach((v) => {
       if (!v.name.includes('federation')) {
-        console.log(v.arguments)
         let ttl = null
         let dlx = null
-        if (v.arguments['x-message-ttl']) {
+        if (v.arguments?.['x-message-ttl']) {
           ttl = v.arguments['x-message-ttl']
         }
-        if (v.arguments['x-dead-letter-exchange']) {
+        if (v.arguments?.['x-dead-letter-exchange']) {
           dlx = topologyStr.exchanges.findIndex(
             (o) => o.name === v.arguments['x-dead-letter-exchange']
           )

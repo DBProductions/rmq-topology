@@ -17,26 +17,28 @@ const MIME = {
   '.map': 'application/json'
 }
 
-http.createServer((req, res) => {
-  let filePath = path.join(ROOT, req.url === '/' ? 'index.html' : req.url)
-  filePath = path.normalize(filePath)
+http
+  .createServer((req, res) => {
+    let filePath = path.join(ROOT, req.url === '/' ? 'index.html' : req.url)
+    filePath = path.normalize(filePath)
 
-  if (!filePath.startsWith(ROOT)) {
-    res.writeHead(403)
-    res.end()
-    return
-  }
-
-  const ext = path.extname(filePath)
-  const contentType = MIME[ext] || 'application/octet-stream'
-
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(404)
-      res.end('Not found')
+    if (!filePath.startsWith(ROOT)) {
+      res.writeHead(403)
+      res.end()
       return
     }
-    res.writeHead(200, { 'Content-Type': contentType })
-    res.end(data)
+
+    const ext = path.extname(filePath)
+    const contentType = MIME[ext] || 'application/octet-stream'
+
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        res.writeHead(404)
+        res.end('Not found')
+        return
+      }
+      res.writeHead(200, { 'Content-Type': contentType })
+      res.end(data)
+    })
   })
-}).listen(process.env.PORT || 3000)
+  .listen(process.env.PORT || 3000)

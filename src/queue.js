@@ -1,6 +1,7 @@
 import BaseComponent from './basecomponent'
 import ExchangeMessage from './messages/exchangemessage'
 import QueueMessage from './messages/queuemessage'
+import RejectMessage from './messages/rejectmessage'
 
 class Queue extends BaseComponent {
   /**
@@ -23,7 +24,7 @@ class Queue extends BaseComponent {
     super(x, y)
     this.name = name
     this.type = type || 'quorum'
-    this.msgTtl = ttl || ''
+    this.msgTtl = ttl ?? ''
     this.dlx = dlx
     this.dlxrk = dlxrk || ''
     this.maxLength = maxLength || ''
@@ -82,7 +83,7 @@ class Queue extends BaseComponent {
    */
   messageArrived(msg) {
     const { fillStyle } = msg
-    if (msg.constructor.name === 'RejectMessage') {
+    if (msg instanceof RejectMessage) {
       if (this.dlx) {
         new ExchangeMessage(
           this.x,

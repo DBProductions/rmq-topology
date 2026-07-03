@@ -192,7 +192,7 @@ const addNewComponent = (e) => {
  */
 const findCircle = (val, mx, my) => {
   let found
-  if (val.constructor.name === 'Exchange' || val.constructor.name === 'Queue') {
+  if (val instanceof Exchange || val instanceof Queue) {
     const d = Math.floor(Math.sqrt((val.x - mx) ** 2 + (val.y - my) ** 2))
     if (d <= val.radius) {
       found = val
@@ -210,10 +210,7 @@ const findCircle = (val, mx, my) => {
  */
 const findSquare = (val, mx, my) => {
   let found
-  if (
-    val.constructor.name === 'Producer' ||
-    val.constructor.name === 'Consumer'
-  ) {
+  if (val instanceof Producer || val instanceof Consumer) {
     if (
       mx >= val.x &&
       mx <= val.x + val.width &&
