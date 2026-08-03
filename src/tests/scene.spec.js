@@ -1,5 +1,6 @@
 import Scene from '../scene'
 import Exchange from '../exchange'
+import Binding from '../binding'
 
 describe('Scene', () => {
   let scene
@@ -83,11 +84,30 @@ describe('Scene', () => {
   })
 
   it('should render binding actors first, followed by non-binding actors', () => {
-    scene.addActor(bindingActor)
+    const bindingCtx = {
+      beginPath: vi.fn(),
+      strokeStyle: '',
+      setLineDash: vi.fn(),
+      lineWidth: 0,
+      moveTo: vi.fn(),
+      lineTo: vi.fn(),
+      stroke: vi.fn(),
+      save: vi.fn(),
+      textAlign: '',
+      translate: vi.fn(),
+      rotate: vi.fn(),
+      fillText: vi.fn(),
+      restore: vi.fn()
+    }
+    const src = { x: 0, y: 0, bindings: [] }
+    const dest = { x: 10, y: 10, bindings: [] }
+    const realBinding = new Binding(src, dest, 'rk')
+    realBinding.ctx = bindingCtx
+    const renderSpy = vi.spyOn(realBinding, 'render')
+    scene.addActor(realBinding)
     scene.addActor(actor1)
     scene.render()
-    //expect(bindingActor.render).toHaveBeenCalledBefore(actor1.render);
-    expect(bindingActor.render).toHaveBeenCalledTimes(1)
+    expect(renderSpy).toHaveBeenCalledTimes(1)
     expect(actor1.render).toHaveBeenCalledTimes(1)
   })
 
@@ -104,5 +124,28 @@ describe('Scene', () => {
     scene.render() // First render
     scene.render() // Second render
     expect(actor1.render).toHaveBeenCalledTimes(2)
+  })
+
+  it('should render the scene description', () => {
+    scene.description = 'Test topology'
+    scene.render()
+    expect(scene.ctx.fillText).toHaveBeenCalledWith(
+      'Test topology',
+      expect.any(Number),
+      expect.any(Number)
+    )
+  })
+
+  it('should not render description when empty', () => {
+    scene.description = ''
+    scene.addActor(actor1)
+    scene.render()
+    expect(actor1.render).toHaveBeenCalled()
+  })
+
+  it('should store width and height', () => {
+    const s = new Scene(ctx, 800, 600)
+    expect(s.width).toEqual(800)
+    expect(s.height).toEqual(600)
   })
 })

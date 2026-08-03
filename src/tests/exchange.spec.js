@@ -129,6 +129,34 @@ describe('Exchange', () => {
     expect(exchange.ctx.fill).toHaveBeenCalled(2)
     expect(exchange.ctx.stroke).toHaveBeenCalled(2)
   })
+
+  it('should render dashed line to alternate exchange', () => {
+    const altExchange = new Exchange(50, 50, 'alt', 'direct')
+    exchange.setAlternate(altExchange)
+    exchange.ctx = ctx
+    exchange.render()
+    expect(ctx.beginPath).toHaveBeenCalled()
+    expect(ctx.setLineDash).toHaveBeenCalledWith([3, 3])
+    expect(ctx.moveTo).toHaveBeenCalledWith(exchange.x, exchange.y)
+    expect(ctx.lineTo).toHaveBeenCalledWith(altExchange.x, altExchange.y)
+  })
+
+  it('should set this.binding to null when removing the active binding', () => {
+    const exchange2 = new Exchange(0, 0, 'ex2', 'direct')
+    const queue2 = new Queue(0, 0, 'q2')
+    const binding2 = new Binding(exchange2, queue2, 'rk')
+    exchange2.binding = binding2
+    exchange2.removeBinding(binding2)
+    expect(exchange2.binding).toBeNull()
+  })
+
+  it('should remove one binding while keeping others', () => {
+    const queue2 = new Queue(0, 0, 'q2')
+    const binding2 = new Binding(exchange, queue2, 'rk2')
+    exchange.removeBinding(binding)
+    expect(exchange.bindings).toContainEqual(binding2)
+    expect(exchange.bindings).not.toContainEqual(binding)
+  })
 })
 
 describe('topicMatch', () => {
@@ -170,5 +198,20 @@ describe('topicMatch', () => {
     expect(topicMatch('#', '')).toBe(true)
     expect(topicMatch('*', '')).toBe(false)
     expect(topicMatch('a', '')).toBe(false)
+  })
+
+  it('should return true when both bindingKey and routingKey are empty/null', () => {
+    expect(topicMatch(null, null)).toBe(true)
+    expect(topicMatch(undefined, undefined)).toBe(true)
+    expect(topicMatch('', '')).toBe(true)
+  })
+
+  it('should return false when bindingKey is null/undefined but routingKey exists', () => {
+    expect(topicMatch(null, 'a.b')).toBe(false)
+    expect(topicMatch(undefined, 'a.b')).toBe(false)
+  })
+
+  it('should handle routingKey with fewer segments than bindingKey', () => {
+    expect(topicMatch('a.b.c', 'a.b')).toBe(false)
   })
 })

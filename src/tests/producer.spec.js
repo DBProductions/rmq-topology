@@ -119,4 +119,60 @@ describe('Producer', () => {
     expect(producer.ctx.rect).toHaveBeenCalled(2)
     expect(producer.ctx.stroke).toHaveBeenCalled()
   })
+
+  it('should render with dragged fill color', () => {
+    const calls = []
+    const trackingCtx = new Proxy(ctx, {
+      set(target, prop, value) {
+        if (prop === 'fillStyle') calls.push(value)
+        target[prop] = value
+        return true
+      }
+    })
+    producer.ctx = trackingCtx
+    producer.dragged = true
+    producer.render()
+    expect(calls).toContain('#ccc')
+  })
+
+  it('should render with default fill color when not dragged', () => {
+    const calls = []
+    const trackingCtx = new Proxy(ctx, {
+      set(target, prop, value) {
+        if (prop === 'fillStyle') calls.push(value)
+        target[prop] = value
+        return true
+      }
+    })
+    producer.ctx = trackingCtx
+    producer.dragged = false
+    producer.render()
+    expect(calls).toContain('#fff')
+  })
+
+  it('should render with hover lineWidth', () => {
+    producer.ctx = ctx
+    producer.hover = true
+    producer.render()
+    expect(ctx.lineWidth).toEqual(2)
+  })
+
+  it('should render lines to published exchanges', () => {
+    producer.addToScene(scene)
+    producer.addMessageToExchange(exchange, 'x.y')
+    producer.ctx = ctx
+    producer.render()
+    expect(ctx.setLineDash).toHaveBeenCalledWith([3, 3])
+    expect(ctx.moveTo).toHaveBeenCalled()
+    expect(ctx.lineTo).toHaveBeenCalledWith(exchange.x, exchange.y)
+  })
+
+  it('should handle update when message is null and assign default', () => {
+    producer.addToScene(scene)
+    producer.publishes[0] = { exchange, routingKey: 'x.y', message: null }
+    producer.update(2)
+    expect(producer.publishes[0].message).toBeDefined()
+    expect(producer.publishes[0].message.headers).toBeDefined()
+    expect(producer.publishes[0].message.body).toEqual({})
+  })
 })

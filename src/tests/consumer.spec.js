@@ -90,4 +90,47 @@ describe('Consumer', () => {
     expect(consumer.ctx.stroke).toHaveBeenCalled()
     expect(consumer.ctx.fill).toHaveBeenCalled()
   })
+
+  it('should splice queue from list when removing from multiple', () => {
+    const queue2 = new Queue(2, 2)
+    consumer.addQueue(queue)
+    consumer.addQueue(queue2)
+    expect(consumer.queues.length).toBe(2)
+    consumer.removeQueue(queue)
+    expect(consumer.queues.length).toBe(1)
+    expect(consumer.queues[0]).toBe(queue2)
+  })
+
+  it('should create RejectMessage when in reject mode', () => {
+    consumer.addToScene(scene)
+    consumer.mode = 'reject'
+    consumer.messageArrived(qm)
+    expect(scene.removeActor).toHaveBeenCalled()
+    expect(consumer.arrivedMessages).toBe(0)
+  })
+
+  it('should render dashed lines to connected queues', () => {
+    consumer.addQueue(queue)
+    queue.ctx = ctx
+    consumer.ctx = ctx
+    consumer.render()
+    expect(ctx.setLineDash).toHaveBeenCalledWith([4, 4])
+    expect(ctx.moveTo).toHaveBeenCalled()
+    expect(ctx.lineTo).toHaveBeenCalledWith(queue.x, queue.y)
+  })
+
+  it('should render with default fill when not dragged', () => {
+    const calls = []
+    const trackingCtx = new Proxy(ctx, {
+      set(target, prop, value) {
+        if (prop === 'fillStyle') calls.push(value)
+        target[prop] = value
+        return true
+      }
+    })
+    consumer.ctx = trackingCtx
+    consumer.dragged = false
+    consumer.render()
+    expect(calls).toContain('#fff')
+  })
 })

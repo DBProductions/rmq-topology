@@ -179,4 +179,109 @@ describe('Queue', () => {
     expect(queue.ctx.stroke).toHaveBeenCalled()
     expect(queue.ctx.fill).toHaveBeenCalled()
   })
+
+  it('should render stream type with different fill color', () => {
+    const calls = []
+    const trackingCtx = new Proxy(ctx, {
+      set(target, prop, value) {
+        if (prop === 'fillStyle') calls.push(value)
+        target[prop] = value
+        return true
+      }
+    })
+    stream.ctx = trackingCtx
+    stream.render()
+    expect(calls).toContain('#eee')
+  })
+
+  it('should render with msgTtl label', () => {
+    queue.ctx = ctx
+    queue.msgTtl = 5000
+    queue.render()
+    expect(ctx.fillText).toHaveBeenCalledWith(
+      'ttl: 5000',
+      expect.any(Number),
+      expect.any(Number)
+    )
+  })
+
+  it('should render with maxLength label', () => {
+    queue.ctx = ctx
+    queue.maxLength = 10
+    queue.render()
+    expect(ctx.fillText).toHaveBeenCalledWith(
+      'max: 10',
+      expect.any(Number),
+      expect.any(Number)
+    )
+  })
+
+  it('should deliver stream messages to multiple consumers', () => {
+    stream.addToScene(scene)
+    const consumer2 = new Consumer(5, 5)
+    const bindMsg = new BindingMessage(0, 0, binding)
+    stream.addConsumer(consumer1)
+    stream.addConsumer(consumer2)
+    stream.messageArrived(bindMsg)
+    expect(stream.messages.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('should deliver stream message to all consumers when message arrives', () => {
+    stream.addToScene(scene)
+    const bindMsg = new BindingMessage(0, 0, binding)
+    stream.messageArrived(bindMsg)
+    stream.addConsumer(consumer1)
+    stream.addConsumer(consumer2)
+    const bindMsg2 = new BindingMessage(0, 0, binding)
+    stream.messageArrived(bindMsg2)
+    expect(stream.messages.length).toBeGreaterThanOrEqual(1)
+  })
+
+  it('should expire messages via update when msgTtl exceeded without DLX', () => {
+    queue.addToScene(scene)
+    queue.msgTtl = 1
+    const bindMsg = new BindingMessage(0, 0, binding)
+    queue.messageArrived(bindMsg)
+    expect(queue.messages.length).toEqual(1)
+    vi.useFakeTimers()
+    vi.advanceTimersByTime(2000)
+    queue.update()
+    expect(queue.messages.length).toEqual(0)
+    expect(scene.lostMessages).toEqual(1)
+    vi.useRealTimers()
+  })
+
+  it('should expire messages via update when msgTtl exceeded with DLX', () => {
+    const dlxQueue = new Queue(0, 0, null, null, null, exchange)
+    dlxQueue.addToScene(scene)
+    dlxQueue.msgTtl = 1
+    const bindMsg = new BindingMessage(0, 0, { destination: { x: 0, y: 0 } })
+    dlxQueue.messageArrived(bindMsg)
+    expect(dlxQueue.messages.length).toEqual(1)
+    vi.useFakeTimers()
+    vi.advanceTimersByTime(2000)
+    dlxQueue.update()
+    expect(dlxQueue.messages.length).toEqual(0)
+    expect(scene.removeActor).toHaveBeenCalled()
+    vi.useRealTimers()
+  })
+
+  it('should not expire messages when msgTtl not exceeded', () => {
+    queue.addToScene(scene)
+    queue.msgTtl = 100000
+    const bindMsg = new BindingMessage(0, 0, binding)
+    queue.messageArrived(bindMsg)
+    expect(queue.messages.length).toEqual(1)
+    queue.update()
+    expect(queue.messages.length).toEqual(1)
+  })
+
+  it('should not run TTL logic when msgTtl is empty', () => {
+    queue.addToScene(scene)
+    queue.msgTtl = ''
+    const bindMsg = new BindingMessage(0, 0, binding)
+    queue.messageArrived(bindMsg)
+    queue.update()
+    expect(queue.messages.length).toEqual(1)
+  })
 })
