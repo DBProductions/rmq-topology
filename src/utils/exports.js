@@ -38,10 +38,12 @@ const exportTopology = (e) => {
       x: val.x,
       y: val.y,
       name: val.name,
-      type: val.type,
-      ttl: val.ttl,
-      maxLength: val.maxLength
+      type: val.type
     };
+    if (val.msgTtl) {
+      q.ttl = val.msgTtl;
+    }
+    q.maxLength = val.maxLength;
     if (val.dlx) {
       const exchangeIndex = exchanges.findIndex((e) => e.id === val.dlx.id);
       q.dlx = exchangeIndex;
@@ -162,7 +164,7 @@ const exportCurl = (e) => {
           )
         }/q/${
           encodeURIComponent(queue.name)
-        } -d '{"routing_key": ${val.routingKey}, "arguments": {}}'\n\n`;
+        } -d '{"routing_key": ${JSON.stringify(val.routingKey)}, "arguments": {}}'\n\n`;
     }
   });
   document.querySelector("#ImExport").value = generatedString;

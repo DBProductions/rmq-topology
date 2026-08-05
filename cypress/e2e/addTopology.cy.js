@@ -3,7 +3,7 @@ describe('Topologies', () => {
     cy.visit('/')
   })
 
-  it.skip('Add topology', () => {
+  it('Add topology', () => {
     // producer
     cy.get('#newComponent').select('Producer')
 
@@ -71,7 +71,7 @@ describe('Topologies', () => {
     // start
     cy.get('#animate').click()
 
-    cy.wait(5000)
+    cy.wait(2500)
 
     // stop
     cy.get('#animate').click()

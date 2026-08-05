@@ -3,7 +3,7 @@ describe('UI Component', () => {
     cy.visit('/')
   })
 
-  it.skip('Start Stop Timer', () => {
+  it('Start Stop Timer', () => {
     cy.get('#animate')
       .invoke('text')
       .then((t) => expect(t.trim()).to.equal('Start'))

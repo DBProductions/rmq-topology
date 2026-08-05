@@ -33,12 +33,12 @@
   "devDependencies": {
     "@vitest/coverage-istanbul": "^4.1.10",
     "clean-jsdoc-theme": "^5.1.1",
-    "cypress": "^15.19.0",
+    "cypress": "^15.20.0",
     "eslint": "^10.8.0",
     "jsdom": "^30.0.1",
     "prettier": "^3.9.6",
     "rollup-plugin-jsdoc": "^0.1.2",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "vitest": "^4.1.10"

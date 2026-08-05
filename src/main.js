@@ -72,12 +72,12 @@ const animateBtn = document.querySelector('#animate')
 animateBtn.addEventListener('click', (e) => {
   e.preventDefault()
   e.stopPropagation()
-  if (animateBtn.innerHTML === '<i class="fas fa-play"></i> Start') {
-    globalThis.timer.start()
-    animateBtn.innerHTML = '<i class="fas fa-stop"></i> Stop'
-  } else {
+  if (globalThis.timer.running) {
     globalThis.timer.stop()
     animateBtn.innerHTML = '<i class="fas fa-play"></i> Start'
+  } else {
+    globalThis.timer.start()
+    animateBtn.innerHTML = '<i class="fas fa-stop"></i> Stop'
   }
 })
 
