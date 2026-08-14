@@ -456,19 +456,27 @@ channels:
 
   generatedString += `operations:`;
   exchanges.forEach((val) => {
-    val.bindings.forEach((v) => {
-      if (v.routingKey !== "#") {
-        let nameAddition = "";
-        if (v.routingKey) {
-          nameAddition = "_" + v.routingKey;
-        }
-        generatedString += `
+    if (val.type === "topic") {
+      val.bindings.forEach((v) => {
+        if (v.routingKey !== "#") {
+          let nameAddition = "";
+          if (v.routingKey) {
+            nameAddition = "_" + v.routingKey;
+          }
+          generatedString += `
   send${val.name}/${v.routingKey}:
     channel:
       $ref: '#/channels/${val.name.replaceAll(" ", "_")}${nameAddition}'
     action: send`;
-      }
-    });
+        }
+      });
+    } else if (val.bindings.some((v) => v.routingKey !== "#")) {
+      generatedString += `
+  send${val.name}/:
+    channel:
+      $ref: '#/channels/${val.name.replaceAll(" ", "_")}'
+    action: send`;
+    }
   });
 
   queues.forEach((val) => {

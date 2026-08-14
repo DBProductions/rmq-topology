@@ -415,6 +415,52 @@ describe('exportAsyncApi', () => {
     expect(out).not.toContain('Exchange_')
   })
 
+  it('emits a single send operation for a fanout exchange with many bindings', () => {
+    const exchange = factory.exchange({ name: 'Exchange', type: 'fanout' })
+    const queue = factory.queue({ name: 'Queue' })
+    const bindings = [1, 2, 3].map((n) =>
+      factory.binding({
+        id: `b${n}`,
+        source: exchange,
+        destination: queue,
+        routingKey: ''
+      })
+    )
+    exchange.bindings = bindings
+    setScene({ exchanges: [exchange], queues: [queue], bindings })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+
+    expect(out.split('sendExchange/:').length - 1).toBe(1)
+    expect(out).toContain("type: 'fanout'")
+  })
+
+  it('emits a single send operation for a direct exchange with many bindings', () => {
+    const exchange = factory.exchange({ name: 'Exchange', type: 'direct' })
+    const queue = factory.queue({ name: 'Queue' })
+    const bindings = [
+      factory.binding({
+        id: 'b1',
+        source: exchange,
+        destination: queue,
+        routingKey: 'Queue'
+      }),
+      factory.binding({
+        id: 'b2',
+        source: exchange,
+        destination: queue,
+        routingKey: 'other'
+      })
+    ]
+    exchange.bindings = bindings
+    setScene({ exchanges: [exchange], queues: [queue], bindings })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+
+    expect(out.split('sendExchange/').length - 1).toBe(1)
+    expect(out).not.toContain('sendExchange/other:')
+  })
+
   it('does not append a trailing underscore for a topic exchange with empty routing key', () => {
     const exchange = factory.exchange({ name: 'Exchange', type: 'topic' })
     const queue = factory.queue()

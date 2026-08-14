@@ -52,9 +52,14 @@ class Queue extends BaseComponent {
         })
         this.messages = []
       } else {
-        const clonedMessages = this.messages.map((a) => ({ ...a }))
-        clonedMessages.forEach((val) => {
-          val.msg.setConsumer(consumer)
+        this.messages.forEach((val) => {
+          new QueueMessage(
+            this.x,
+            this.y,
+            this,
+            consumer,
+            val.msg.fillStyle
+          ).addToScene(this.scene)
         })
       }
     }

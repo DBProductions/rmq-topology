@@ -103,6 +103,29 @@ describe('Queue', () => {
     expect(stream.messages.length).toEqual(1)
   })
 
+  it('replays retained messages to every joining consumer without mutating stored entries', () => {
+    const addedActors = []
+    scene.addActor = vi.fn((actor) => addedActors.push(actor))
+    stream.addToScene(scene)
+    const consumer2 = new Consumer(5, 5)
+    const bindMsg = new BindingMessage(0, 0, binding)
+    stream.messageArrived(bindMsg)
+    stream.messageArrived(bindMsg)
+    expect(stream.messages.length).toEqual(2)
+
+    stream.addConsumer(consumer1)
+    stream.addConsumer(consumer2)
+
+    expect(
+      addedActors.filter((actor) => actor.consumer === consumer1).length
+    ).toEqual(2)
+    expect(
+      addedActors.filter((actor) => actor.consumer === consumer2).length
+    ).toEqual(2)
+    expect(stream.messages.every((m) => m.msg.consumer === null)).toBe(true)
+    expect(stream.messages.length).toEqual(2)
+  })
+
   it('should correctly stay in the queue until maximum length', () => {
     const maxLengthQueue = new Queue(0, 0, null, null, null, exchange, null, 2)
     maxLengthQueue.addToScene(scene)
