@@ -62,7 +62,11 @@ class Producer extends BaseComponent {
       }
     }
     if (!this.exchangeWithRoutingKeyExists(exchange, routingKey)) {
-      this.publishes[Object.keys(this.publishes).length] = {
+      let index = 0
+      while (Object.prototype.hasOwnProperty.call(this.publishes, index)) {
+        index += 1
+      }
+      this.publishes[index] = {
         exchange,
         routingKey,
         message

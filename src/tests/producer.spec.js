@@ -167,6 +167,20 @@ describe('Producer', () => {
     expect(ctx.lineTo).toHaveBeenCalledWith(exchange.x, exchange.y)
   })
 
+  it('should not overwrite an existing publish when a slot was freed', () => {
+    const exchangeB = new Exchange(1, 1, 'b', 'direct')
+    const exchangeC = new Exchange(2, 2, 'c', 'direct')
+    const exchangeD = new Exchange(3, 3, 'd', 'direct')
+    producer.addMessageToExchange(exchange, 'a')
+    producer.addMessageToExchange(exchangeB, 'b')
+    producer.addMessageToExchange(exchangeC, 'c')
+    producer.removeExchange(exchangeB)
+    producer.addMessageToExchange(exchangeD, 'd')
+    expect(producer.publishes[1].exchange).toEqual(exchangeD)
+    expect(producer.publishes[2].exchange).toEqual(exchangeC)
+    expect(Object.keys(producer.publishes).length).toEqual(3)
+  })
+
   it('should handle update when message is null and assign default', () => {
     producer.addToScene(scene)
     producer.publishes[0] = { exchange, routingKey: 'x.y', message: null }
