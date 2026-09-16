@@ -21,6 +21,17 @@ describe('Timer', () => {
     expect(timer.running).toBeFalsy()
   })
 
+  it('should stay stopped when stopped twice', () => {
+    timer.stop()
+    expect(timer.running).toBeFalsy()
+  })
+
+  it('should not update the target when the timer is not running', () => {
+    timer.tick()
+    expect(targetMock.update).not.toHaveBeenCalled()
+    expect(targetMock.render).not.toHaveBeenCalled()
+  })
+
   it('should call update and render methods on every tick', () => {
     vi.useFakeTimers()
     timer.start()

@@ -51,6 +51,12 @@ describe('Scene', () => {
     expect(scene.actors).not.toContainEqual(actor1)
   })
 
+  it('should keep the scene unchanged when removing a non-existing actor', () => {
+    scene.addActor(actor1)
+    scene.removeActor(actor2)
+    expect(scene.actors).toHaveLength(1)
+  })
+
   it('should purge scene', () => {
     scene.addActor(actor1)
     scene.addActor(actor2)
@@ -68,6 +74,11 @@ describe('Scene', () => {
     scene.addActor(exchange)
     const foundActor = scene.getObjectsInScene('Exchange')
     expect(foundActor).toEqual([exchange])
+  })
+
+  it('should return an empty array when no object matches', () => {
+    scene.addActor(exchange)
+    expect(scene.getObjectsInScene('Producer')).toEqual([])
   })
 
   it('should return an empty array if no actor with the given id is found', () => {
@@ -141,6 +152,21 @@ describe('Scene', () => {
     scene.addActor(actor1)
     scene.render()
     expect(actor1.render).toHaveBeenCalled()
+  })
+
+  it('should sum the DOM offsets of all offset parents', () => {
+    const canvas = document.createElement('canvas')
+    const branch = document.createElement('div')
+    const root = document.createElement('div')
+    Object.defineProperty(canvas, 'offsetLeft', { value: 40 })
+    Object.defineProperty(canvas, 'offsetTop', { value: 30 })
+    Object.defineProperty(branch, 'offsetLeft', { value: 5 })
+    Object.defineProperty(branch, 'offsetTop', { value: 4 })
+    Object.defineProperty(canvas, 'offsetParent', { value: branch })
+    Object.defineProperty(branch, 'offsetParent', { value: root })
+    const nestedScene = new Scene({ canvas }, 0, 0)
+    expect(nestedScene.curleft).toEqual(45)
+    expect(nestedScene.curtop).toEqual(34)
   })
 
   it('should store width and height', () => {
