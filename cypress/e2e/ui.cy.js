@@ -57,9 +57,35 @@ describe('UI Component', () => {
     cy.get('#imexportPanel').should('be.visible')
     cy.get('#ImExport').clear()
     cy.get('#ImExport').type(
-      '{{}"rabbit_version":"4.0.4","rabbitmq_version":"4.0.4","product_name":"RabbitMQ","product_version":"4.0.4","users":[],"vhosts":[],"permissions":[],"topic_permissions":[],"parameters":[],"global_parameters":[],"policies":[],"queues":[{{}"name":"system-events","vhost":"vhost","durable":true,"auto_delete":false,"arguments":{{}"x-queue-type":"quorum"}}],"exchanges":[{{}"name":"events","vhost":"vhost","type":"topic","durable":true,"auto_delete":false,"internal":false,"arguments":{{}}}],"bindings":[{{}"source":"events","vhost":"vhost","destination":"system-events","destination_type":"queue","routing_key":"#"}]}'
+      '{{}"rabbit_version":"4.0.4","queues":[{{}"name":"system-events","vhost":"vhost","durable":true,"auto_delete":false,"arguments":{{}"x-queue-type":"quorum","x-message-ttl":30000,"x-dead-letter-exchange":"err-events","x-dead-letter-routing-key":"err","x-max-length":5}},{{}"name":"classic-queue","vhost":"vhost","durable":true,"auto_delete":false,"arguments":{{}}},{{}"name":"stream-events","vhost":"vhost","durable":true,"auto_delete":false,"arguments":{{}"x-queue-type":"stream"}},{{}"name":"federation-queue","vhost":"vhost","durable":true,"auto_delete":false,"arguments":{{}}}],"exchanges":[{{}"name":"events","vhost":"vhost","type":"topic","durable":true,"auto_delete":false,"internal":false,"arguments":{{}"alternate-exchange":"err-events"}},{{}"name":"err-events","vhost":"vhost","type":"fanout","durable":true,"auto_delete":false,"internal":false,"arguments":{{}}},{{}"name":"federation-exchange","vhost":"vhost","type":"topic","durable":true,"auto_delete":false,"internal":false,"arguments":{{}}}],"bindings":[{{}"source":"events","vhost":"vhost","destination":"system-events","destination_type":"queue","routing_key":"#"},{{}"source":"events","vhost":"vhost","destination":"stream-events","destination_type":"queue","routing_key":"#"},{{}"source":"events","vhost":"vhost","destination":"federation-queue","destination_type":"queue","routing_key":"#"}]}'
     )
     cy.get('#importRmqBtn').click()
-    cy.window().its('scene.actors.length').should('equal', 3)
+    cy.window().then((w) => {
+      const actors = w.scene.actors
+      expect(actors.length).to.equal(7)
+      const exchange = actors.find(
+        (a) => a.constructor.name === 'Exchange' && a.name === 'events'
+      )
+      const altExchange = actors.find(
+        (a) => a.constructor.name === 'Exchange' && a.name === 'err-events'
+      )
+      expect(exchange.alternate).to.equal(altExchange)
+      const quorum = actors.find(
+        (a) => a.constructor.name === 'Queue' && a.name === 'system-events'
+      )
+      expect(quorum.type).to.equal('quorum')
+      expect(quorum.msgTtl).to.equal(30000)
+      expect(quorum.dlx).to.equal(altExchange)
+      expect(quorum.dlxrk).to.equal('err')
+      expect(quorum.maxLength).to.equal(5)
+      const classic = actors.find(
+        (a) => a.constructor.name === 'Queue' && a.name === 'classic-queue'
+      )
+      expect(classic.type).to.equal('classic')
+      const stream = actors.find(
+        (a) => a.constructor.name === 'Queue' && a.name === 'stream-events'
+      )
+      expect(stream.type).to.equal('stream')
+    })
   })
 })
