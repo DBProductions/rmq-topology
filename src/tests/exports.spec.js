@@ -380,6 +380,24 @@ describe('exportTerraform', () => {
     expect(out).not.toContain('"x-max-length"')
   })
 
+  it('adds alternate exchange arguments to exchange resources', () => {
+    fullTopology()
+    exportTerraform(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('resource "rabbitmq_exchange" "Orders"')
+    expect(out).toContain('arguments_json')
+    expect(out).toContain('"alternate-exchange": "Orders-alt"')
+    expect(out).not.toContain('alternate-exchange": "Orders"')
+  })
+
+  it('omits arguments_json for exchanges without an alternate exchange', () => {
+    const exchange = factory.exchange()
+    const queue = factory.queue()
+    setScene({ exchanges: [exchange], queues: [queue] })
+    exportTerraform(evt)
+    expect(dom.ImExport.value).not.toContain('alternate-exchange')
+  })
+
   it('keeps a custom vhost unchanged', () => {
     setSettings({ ...brokerDefaultSettings, vhost: 'production' })
     setScene()
@@ -413,6 +431,49 @@ describe('exportAsyncApi', () => {
     expect(out).toContain('components:')
     expect(out).toContain('EventName')
     expect(out).not.toContain('Exchange_')
+  })
+
+  it('adds x-arguments with the alternate exchange to a direct exchange', () => {
+    fullTopology()
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('x-arguments:')
+    expect(out).toContain('alternate-exchange: Orders-alt')
+  })
+
+  it('adds x-arguments to topic exchange channels', () => {
+    const alternate = factory.exchange({ id: 'e2', name: 'Alt', type: 'fanout' })
+    const exchange = factory.exchange({
+      id: 'e1',
+      name: 'Exchange',
+      type: 'topic',
+      alternate
+    })
+    const queue = factory.queue()
+    const binding = factory.binding({
+      source: exchange,
+      destination: queue,
+      routingKey: 'x.y'
+    })
+    exchange.bindings = [binding]
+    setScene({ exchanges: [exchange, alternate], queues: [queue], bindings: [binding] })
+    exportAsyncApi(evt)
+    expect(dom.ImExport.value).toContain('alternate-exchange: Alt')
+  })
+
+  it('omits x-arguments for exchanges without an alternate exchange', () => {
+    const exchange = factory.exchange({ name: 'Exchange', type: 'direct' })
+    const queue = factory.queue({ name: 'Queue' })
+    const binding = factory.binding({
+      source: exchange,
+      destination: queue,
+      routingKey: ''
+    })
+    exchange.bindings = [binding]
+    setScene({ exchanges: [exchange], queues: [queue], bindings: [binding] })
+    exportAsyncApi(evt)
+    expect(dom.ImExport.value).not.toContain('x-arguments')
+    expect(dom.ImExport.value).not.toContain('alternate-exchange')
   })
 
   it('emits a single send operation for a fanout exchange with many bindings', () => {

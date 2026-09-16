@@ -284,7 +284,16 @@ resource "rabbitmq_vhost" "vhost" {
   settings {
     type        = "${val.type}"
     durable     = true
-    auto_delete = false
+    auto_delete = false`;
+    if (val.alternate !== null) {
+      generatedString += `
+    arguments_json = <<EOF
+{
+  "alternate-exchange": "${val.alternate.name}"
+}
+EOF`;
+    }
+    generatedString += `
   }
 }
 `;
@@ -415,7 +424,13 @@ channels:
           type: 'topic'
           durable: true
           autoDelete: false
-          vhost: ${vhost}
+          vhost: ${vhost}`;
+          if (val.alternate !== null) {
+            generatedString += `
+          x-arguments:
+            alternate-exchange: ${val.alternate.name}`;
+          }
+          generatedString += `
 `;
         }
       });
@@ -432,7 +447,13 @@ channels:
           type: '${val.type}'
           durable: true
           autoDelete: false
-          vhost: ${vhost}
+          vhost: ${vhost}`;
+      if (val.alternate !== null) {
+        generatedString += `
+          x-arguments:
+            alternate-exchange: ${val.alternate.name}`;
+      }
+      generatedString += `
 `;
     }
   });
