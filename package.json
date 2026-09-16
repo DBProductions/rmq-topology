@@ -31,15 +31,15 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "@vitest/coverage-istanbul": "^5.0.0",
+    "@vitest/coverage-istanbul": "^5.0.1",
     "clean-jsdoc-theme": "^5.1.1",
-    "cypress": "^16.0.0",
+    "cypress": "^16.1.0",
     "eslint": "^10.9.1",
     "jsdom": "^30.0.1",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.7",
     "rollup-plugin-jsdoc": "^0.1.2",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.1"
   }
 }
