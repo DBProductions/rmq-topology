@@ -3,3 +3,7 @@ node_modules/
 public/doc/
 public/scripts/script.min.js
 public/scripts/script.min.js.map
+coverage/
+output/
+context.md
+CONTEXT.md
