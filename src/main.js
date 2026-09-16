@@ -1,3 +1,13 @@
+/**
+ * Main entry point of the RMQ Topology app.
+ *
+ * Initializes the canvas and the initial empty scene, wires up the canvas
+ * mouse events and the DOM controls for examples, animation start/stop,
+ * settings, clipboard copy and the JSON / RabbitMQ schema import. Imports the
+ * declarative event listener registration from {@link ./listener}.
+ *
+ * @module main
+ */
 import { createTopology, displayForm } from './utils/common'
 
 import {

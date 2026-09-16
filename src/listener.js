@@ -1,3 +1,11 @@
+/**
+ * Declarative DOM event listener registration.
+ *
+ * Maps visible form and button selectors to their handler functions from the
+ * utils modules. On import it registers a single event listener per entry.
+ *
+ * @module listener
+ */
 import { addNewComponent } from './utils/common'
 
 import {

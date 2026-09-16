@@ -1,3 +1,12 @@
+/**
+ * Pre-built topology examples shown in the example selector.
+ *
+ * Each entry is a full topology config object with a description,
+ * producers, consumers, exchanges, queues and bindings. The objects can be
+ * passed directly to {@link createTopology}.
+ *
+ * @type {Object<string, {description: string, producers: Array<Object>, consumers: Array<Object>, exchanges: Array<Object>, queues: Array<Object>, bindings: Array<Object>}>}
+ */
 const Examples = {
   'direct exchange': {
     description:
