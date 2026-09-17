@@ -78,4 +78,43 @@ describe('Topologies', () => {
 
     cy.window().its('timer.running').should('equal', false)
   })
+
+  it('Add exchange-to-exchange binding', () => {
+    // exchange 1
+    cy.get('#newComponent').select('Exchange')
+
+    cy.get('#exchangeNameField')
+      .type('E2ESource')
+      .should('have.value', 'E2ESource')
+
+    cy.get('#sendExchangeForm').click()
+
+    // exchange 2
+    cy.get('#newComponent').select('Exchange')
+
+    cy.get('#exchangeNameField').type('E2EDest').should('have.value', 'E2EDest')
+
+    cy.get('#sendExchangeForm').click()
+
+    // binding from E2ESource to E2EDest
+    cy.get('#newComponent').select('Binding')
+
+    cy.get('#bindingSource').select('E2ESource')
+    cy.get('#bindingDestinationType').select('exchange')
+    cy.get('#bindingDestination').select('E2EDest')
+    cy.get('#bindingRoutingKeyField').type('#').should('have.value', '#')
+
+    cy.get('#sendBindingForm').click()
+
+    cy.window().its('scene.actors.length').should('equal', 3)
+
+    cy.window()
+      .its('scene.actors')
+      .then((actors) => {
+        const binding = actors.find((a) => a.routingKey === '#')
+        expect(binding.source.name).to.equal('E2ESource')
+        expect(binding.destination.name).to.equal('E2EDest')
+        expect(binding.destination.radius).to.equal(15)
+      })
+  })
 })

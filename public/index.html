@@ -43,6 +43,7 @@
           <optgroup label="Advanced">
             <option>Dlx</option>
             <option>Retry</option>
+            <option>Exchange-To-Exchange</option>
           </optgroup>
         </select>
         <button id="animate" class="myButton">
@@ -269,10 +270,17 @@
               </select>
             </div>
             <div>
+              <select id="bindingDestinationType">
+                <option>queue</option>
+                <option>exchange</option>
+              </select>
+            </div>
+            <div>
               <select id="bindingDestination">
                 <option>---</option>
               </select>
             </div>
+            <div id="bindingErr" class="error"></div>
             <div class="btnFooter">
               <button id="sendBindingForm" class="myButton">
                 <i class="fa fa-save"></i> Save

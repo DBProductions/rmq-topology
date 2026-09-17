@@ -7,6 +7,9 @@ import {
   exportTopology
 } from '../utils/exports'
 import { brokerDefaultSettings, setSettings } from '../utils/settings'
+import Exchange from '../exchange'
+import Queue from '../queue'
+import Binding from '../binding'
 
 const evt = { preventDefault: () => {}, stopPropagation: () => {} }
 
@@ -205,6 +208,18 @@ describe('exportTopology', () => {
     const out = JSON.parse(dom.ImExport.value)
     expect(out.queues[0]).not.toHaveProperty('dlx')
   })
+
+  it('exports an exchange-to-exchange binding with destinationType', () => {
+    const source = new Exchange(0, 0, 'Main', 'topic')
+    const destination = new Exchange(0, 0, 'Events', 'fanout')
+    const e2e = new Binding(source, destination, '#')
+    setScene({ exchanges: [source, destination], bindings: [e2e] })
+    exportTopology(evt)
+    const out = JSON.parse(dom.ImExport.value)
+    expect(out.bindings).toEqual([
+      { exchange: 0, queue: 1, destinationType: 'exchange', routingKey: '#' }
+    ])
+  })
 })
 
 describe('exportCurl', () => {
@@ -265,6 +280,15 @@ describe('exportCurl', () => {
     expect(out).toContain(
       `bindings/%2f/e/${encodeURIComponent('Orders & More')}/q/${encodeURIComponent('Incoming/Queue')}`
     )
+  })
+
+  it('uses the exchange destination for an exchange-to-exchange binding', () => {
+    const source = new Exchange(0, 0, 'Main', 'topic')
+    const destination = new Exchange(0, 0, 'Events', 'fanout')
+    const e2e = new Binding(source, destination, '#')
+    setScene({ exchanges: [source, destination], bindings: [e2e] })
+    exportCurl(evt)
+    expect(dom.ImExport.value).toContain('/bindings/%2f/e/Main/e/Events')
   })
 })
 
@@ -330,6 +354,17 @@ describe('exportRabbitmqadmin', () => {
     setScene({ exchanges: [exchange], bindings: [binding] })
     exportRabbitmqadmin(evt)
     expect(dom.ImExport.value).not.toContain('declare binding')
+  })
+
+  it('declares an exchange as destination for an exchange-to-exchange binding', () => {
+    const source = new Exchange(0, 0, 'Main', 'topic')
+    const destination = new Exchange(0, 0, 'Events', 'fanout')
+    const e2e = new Binding(source, destination, '#')
+    setScene({ exchanges: [source, destination], bindings: [e2e] })
+    exportRabbitmqadmin(evt)
+    expect(dom.ImExport.value).toContain(
+      'declare binding source="Main" destination_type="exchange" destination="Events" routing_key="#"'
+    )
   })
 })
 
@@ -404,6 +439,19 @@ describe('exportTerraform', () => {
     exportTerraform(evt)
     expect(dom.ImExport.value).toContain('name = "production"')
   })
+
+  it('references an exchange resource for an exchange-to-exchange binding', () => {
+    const source = new Exchange(0, 0, 'Main', 'topic')
+    const destination = new Exchange(0, 0, 'Events', 'fanout')
+    const e2e = new Binding(source, destination, '#')
+    setScene({ exchanges: [source, destination], bindings: [e2e] })
+    exportTerraform(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain(
+      'destination      = "${rabbitmq_exchange.Events.name}"'
+    )
+    expect(out).toContain('destination_type = "exchange"')
+  })
 })
 
 describe('exportAsyncApi', () => {
@@ -442,7 +490,11 @@ describe('exportAsyncApi', () => {
   })
 
   it('adds x-arguments to topic exchange channels', () => {
-    const alternate = factory.exchange({ id: 'e2', name: 'Alt', type: 'fanout' })
+    const alternate = factory.exchange({
+      id: 'e2',
+      name: 'Alt',
+      type: 'fanout'
+    })
     const exchange = factory.exchange({
       id: 'e1',
       name: 'Exchange',
@@ -456,7 +508,11 @@ describe('exportAsyncApi', () => {
       routingKey: 'x.y'
     })
     exchange.bindings = [binding]
-    setScene({ exchanges: [exchange, alternate], queues: [queue], bindings: [binding] })
+    setScene({
+      exchanges: [exchange, alternate],
+      queues: [queue],
+      bindings: [binding]
+    })
     exportAsyncApi(evt)
     expect(dom.ImExport.value).toContain('alternate-exchange: Alt')
   })
@@ -621,5 +677,58 @@ describe('exportAsyncApi', () => {
     setScene({ exchanges: [exchange], queues: [queue], bindings: [binding] })
     exportAsyncApi(evt)
     expect(dom.ImExport.value).toContain('asyncapi: 3.0.0')
+  })
+
+  it('adds a receive operation for an exchange-to-exchange destination', () => {
+    const source = new Exchange(0, 0, 'Main', 'topic')
+    const destination = new Exchange(0, 0, 'Events', 'fanout')
+    const queue = new Queue(0, 0, 'Queue', 'quorum')
+    const e2e = new Binding(source, destination, '#')
+    new Binding(destination, queue, '')
+    setScene({
+      exchanges: [source, destination],
+      queues: [queue],
+      bindings: [e2e]
+    })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('#/channels/Events')
+    expect(out).toContain('receiveEvents:')
+    expect(out).toContain('action: receive')
+  })
+
+  it('creates a base topic channel for a topic exchange-to-exchange destination', () => {
+    const source = new Exchange(0, 0, 'Source', 'direct')
+    const destination = new Exchange(0, 0, 'Dest', 'topic')
+    const queue = new Queue(0, 0, 'Queue', 'quorum')
+    const e2e = new Binding(source, destination, 'x.y')
+    new Binding(destination, queue, 'a.b')
+    setScene({
+      exchanges: [source, destination],
+      queues: [queue],
+      bindings: [e2e]
+    })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('#/channels/Dest')
+    expect(out).toContain('receiveDest:')
+    expect(out).toContain("address: '#'")
+  })
+
+  it('does not emit operations for an incoming exchange-to-exchange binding', () => {
+    const source = new Exchange(0, 0, 'Source', 'direct')
+    const destination = new Exchange(0, 0, 'Dest', 'topic')
+    const queue = new Queue(0, 0, 'Queue', 'quorum')
+    const e2e = new Binding(source, destination, 'x.y')
+    new Binding(destination, queue, 'a.b')
+    setScene({
+      exchanges: [source, destination],
+      queues: [queue],
+      bindings: [e2e]
+    })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).not.toContain('sendDest/x.y:')
+    expect(out).not.toContain('#/channels/Dest_x.y')
   })
 })

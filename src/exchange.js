@@ -72,36 +72,64 @@ class Exchange extends BaseComponent {
   /**
    * Handler for arriving messages.
    *
-   * @param {ExchangeMessage} msg
+   * Routes only over outbound bindings so an exchange-to-exchange binding is
+   * not echoed back to its source. Incoming messages carry their routing key
+   * and accumulate depth per exchange hop; the chain is aborted once the
+   * maximum depth is exceeded to guard against binding cycles.
+   *
+   * @param {ExchangeMessage|BindingMessage} msg
    */
   messageArrived(msg) {
     const { routingKey, fillStyle } = msg
+    const depth = (msg.depth || 0) + 1
     let sendMsg = false
-    this.bindings.forEach((val) => {
+    // exchange-to-exchange bindings are only routed from their source
+    const outbound = this.bindings.filter((val) => val.source === this)
+    if (depth > 10) {
+      this.scene.lostMessages += 1
+      this.scene.removeActor(msg)
+      return
+    }
+    outbound.forEach((val) => {
       if (this.type === 'topic') {
         if (topicMatch(val.routingKey, routingKey)) {
-          new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-            this.scene
-          )
+          new BindingMessage(
+            this.x,
+            this.y,
+            val,
+            fillStyle,
+            routingKey,
+            depth
+          ).addToScene(this.scene)
           sendMsg = true
         }
       } else if (this.type === 'direct') {
         if (val.destination.name === routingKey) {
-          new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-            this.scene
-          )
+          new BindingMessage(
+            this.x,
+            this.y,
+            val,
+            fillStyle,
+            routingKey,
+            depth
+          ).addToScene(this.scene)
           sendMsg = true
         }
         // fanout
       } else {
-        new BindingMessage(this.x, this.y, val, fillStyle).addToScene(
-          this.scene
-        )
+        new BindingMessage(
+          this.x,
+          this.y,
+          val,
+          fillStyle,
+          routingKey,
+          depth
+        ).addToScene(this.scene)
         sendMsg = true
       }
     })
     // no bindings, no sending
-    if (this.bindings.length === 0) {
+    if (outbound.length === 0) {
       sendMsg = false
     }
     if (this.alternate && !sendMsg) {

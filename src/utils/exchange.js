@@ -149,7 +149,11 @@ const deleteExchangeForm = (e) => {
   })
   const bindings = globalThis.scene.getObjectsInScene('Binding')
   bindings.forEach((binding) => {
-    if (exchangeId === binding.source.id) {
+    if (
+      exchangeId === binding.source.id ||
+      exchangeId === binding.destination.id
+    ) {
+      binding.source.removeBinding(binding)
       globalThis.scene.removeActor(binding)
     }
   })

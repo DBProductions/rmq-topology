@@ -206,19 +206,36 @@ document.querySelector('#importRmqBtn').addEventListener('click', (e) => {
     })
 
     jsonStr.bindings.forEach((v) => {
-      if (v.destination_type === 'queue' && !v.source.includes('federation')) {
-        const exchange = topologyStr.exchanges.findIndex(
-          (o) => o.name === v.source
-        )
-        const queue = topologyStr.queues.findIndex(
-          (o) => o.name === v.destination
-        )
-        if (exchange !== -1 && queue !== -1) {
-          topologyStr.bindings.push({
-            exchange: exchange,
-            queue: queue,
-            routingKey: v.routing_key
-          })
+      if (!v.source.includes('federation')) {
+        if (v.destination_type === 'queue') {
+          const exchange = topologyStr.exchanges.findIndex(
+            (o) => o.name === v.source
+          )
+          const queue = topologyStr.queues.findIndex(
+            (o) => o.name === v.destination
+          )
+          if (exchange !== -1 && queue !== -1) {
+            topologyStr.bindings.push({
+              exchange: exchange,
+              queue: queue,
+              routingKey: v.routing_key
+            })
+          }
+        } else if (v.destination_type === 'exchange') {
+          const exchange = topologyStr.exchanges.findIndex(
+            (o) => o.name === v.source
+          )
+          const destinationExchange = topologyStr.exchanges.findIndex(
+            (o) => o.name === v.destination
+          )
+          if (exchange !== -1 && destinationExchange !== -1) {
+            topologyStr.bindings.push({
+              exchange: exchange,
+              queue: destinationExchange,
+              destinationType: 'exchange',
+              routingKey: v.routing_key
+            })
+          }
         }
       }
     })

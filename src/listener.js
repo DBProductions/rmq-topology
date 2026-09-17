@@ -43,6 +43,7 @@ import {
 import { deleteQueueForm, hideQueue, sendQueueForm } from './utils/queue'
 
 import {
+  changeBindingDestinationType,
   deleteBindingForm,
   hideBinding,
   sendBindingForm
@@ -171,6 +172,11 @@ eventListener.push(
     selector: '#deleteBindingForm',
     event: 'click',
     handler: deleteBindingForm
+  },
+  {
+    selector: '#bindingDestinationType',
+    event: 'change',
+    handler: changeBindingDestinationType
   }
 )
 // --- Settings ---

@@ -426,4 +426,60 @@ describe('Test examples', () => {
       )
     })
   })
+
+  describe('Exchange to Exchange example', () => {
+    it('Rendered like expected', () => {
+      cy.get('#exampleTopology').select('Exchange-To-Exchange')
+
+      // producer
+      cy.get('#canvas').trigger('click', 203, 133)
+      cy.get('#producerNameField').should('have.value', 'Producer')
+      cy.get('#cancelProducerForm').click()
+
+      // source exchange
+      cy.get('#canvas').trigger('click', 390, 130)
+      cy.get('#exchangeNameField').should('have.value', 'Main')
+      cy.get('#cancelExchangeForm').click()
+
+      // destination exchange
+      cy.get('#canvas').trigger('click', 433, 283)
+      cy.get('#exchangeNameField').should('have.value', 'Events')
+      cy.get('#cancelExchangeForm').click()
+
+      // queue 1
+      cy.get('#canvas').trigger('click', 653, 93)
+      cy.get('#queueNameField').should('have.value', 'Queue 1')
+      cy.get('#cancelQueueForm').click()
+
+      // queue 2
+      cy.get('#canvas').trigger('click', 653, 253)
+      cy.get('#queueNameField').should('have.value', 'Queue 2')
+      cy.get('#cancelQueueForm').click()
+
+      // exchange-to-exchange binding
+      cy.get('#canvas').trigger('click', 415, 205)
+      cy.get('#bindingRoutingKeyField').should('have.value', '#')
+      cy.get('#cancelBindingForm').click()
+
+      cy.window().its('scene.actors.length').should('equal', 10)
+    })
+
+    it('Export defintion', () => {
+      cy.get('#exampleTopology').select('Exchange-To-Exchange')
+      cy.get('#export').click()
+      cy.get('#ImExport').should(
+        'have.value',
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Main","routingKey":"orders.created","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":90,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":250,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":130,"name":"Main","type":"topic","alternate":null},{"x":430,"y":280,"name":"Events","type":"fanout","alternate":null}],"queues":[{"x":650,"y":90,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":250,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":1,"routingKey":"#","destinationType":"exchange"},{"exchange":1,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+      )
+    })
+
+    it('Generate curl definition', () => {
+      cy.get('#exampleTopology').select('Exchange-To-Exchange')
+      cy.get('#generateCurl').click({ force: true })
+      cy.get('#ImExport').should(
+        'have.value',
+        'curl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Main -d \'{"type": "topic", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/exchanges/%2f/Events -d \'{"type": "fanout", "auto_delete": false, "durable": true, "internal": false, "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%201 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPUT http://localhost:15672/api/queues/%2f/Queue%202 -d \'{"auto_delete": false, "durable": true, "arguments": {"x-queue-type":"quorum"}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Main/e/Events -d \'{"routing_key": "#", "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Events/q/Queue%201 -d \'{"routing_key": "", "arguments": {}}\'\n\ncurl -u guest:guest -i -H "content-type:application/json" -XPOST http://localhost:15672/api/bindings/%2f/e/Events/q/Queue%202 -d \'{"routing_key": "", "arguments": {}}\'\n\n'
+      )
+    })
+  })
 })

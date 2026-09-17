@@ -121,11 +121,12 @@ const createTopology = (ctx, conf) => {
   }
   if (conf.bindings) {
     conf.bindings.forEach((binding) => {
-      const newBinding = new Binding(
-        exchanges[binding.exchange],
-        queues[binding.queue],
-        binding.routingKey
-      )
+      const source = exchanges[binding.exchange]
+      const destination =
+        binding.destinationType === 'exchange'
+          ? exchanges[binding.queue]
+          : queues[binding.queue]
+      const newBinding = new Binding(source, destination, binding.routingKey)
       newBinding.addToScene(globalThis.scene)
     })
   }

@@ -2,6 +2,7 @@ import Exchange, { topicMatch } from '../exchange'
 import Queue from '../queue'
 import Binding from '../binding'
 import ExchangeMessage from '../messages/exchangemessage'
+import BindingMessage from '../messages/bindingmessage'
 
 describe('Exchange', () => {
   let exchange
@@ -156,6 +157,100 @@ describe('Exchange', () => {
     exchange.removeBinding(binding)
     expect(exchange.bindings).toContainEqual(binding2)
     expect(exchange.bindings).not.toContainEqual(binding)
+  })
+})
+
+describe('Exchange-to-exchange bindings', () => {
+  let scene
+
+  beforeEach(() => {
+    scene = { lostMessages: 0, addActor: vi.fn(), removeActor: vi.fn() }
+  })
+
+  it('should forward messages from one exchange to another', () => {
+    const source = new Exchange(0, 0, 'source', 'topic')
+    const destination = new Exchange(0, 0, 'destination', 'fanout')
+    const queue = new Queue(0, 0, 'q')
+    const e2eBinding = new Binding(source, destination, '#')
+    new Binding(destination, queue, '')
+    source.addToScene(scene)
+    destination.addToScene(scene)
+    scene.addActor.mockClear()
+
+    source.messageArrived(
+      new ExchangeMessage(0, 0, source, 'orders.created', {}, false)
+    )
+    expect(scene.addActor).toHaveBeenCalledTimes(1)
+    destination.messageArrived(
+      new BindingMessage(0, 0, e2eBinding, '#ccc', 'orders.created', 1)
+    )
+    expect(scene.lostMessages).toEqual(0)
+    expect(scene.removeActor).toHaveBeenCalledTimes(2)
+  })
+
+  it('should not re-route an incoming exchange binding back to its source', () => {
+    const source = new Exchange(0, 0, 'source', 'topic')
+    const destination = new Exchange(0, 0, 'destination', 'fanout')
+    const e2eBinding = new Binding(source, destination, '#')
+    destination.addToScene(scene)
+    scene.addActor.mockClear()
+
+    destination.messageArrived(
+      new BindingMessage(0, 0, e2eBinding, '#ccc', 'orders.created', 1)
+    )
+    expect(scene.addActor).not.toHaveBeenCalled()
+    expect(scene.lostMessages).toEqual(1)
+  })
+
+  it('should forward a direct exchange binding when the routing key matches the destination exchange', () => {
+    const source = new Exchange(0, 0, 'source', 'direct')
+    const destination = new Exchange(0, 0, 'destination', 'fanout')
+    const queue = new Queue(0, 0, 'q')
+    const e2eBinding = new Binding(source, destination, '')
+    new Binding(destination, queue, '')
+    source.addToScene(scene)
+    destination.addToScene(scene)
+    scene.addActor.mockClear()
+
+    source.messageArrived(
+      new ExchangeMessage(0, 0, source, 'destination', {}, false)
+    )
+    expect(scene.addActor).toHaveBeenCalledTimes(1)
+    destination.messageArrived(
+      new BindingMessage(0, 0, e2eBinding, '#ccc', 'destination', 1)
+    )
+    expect(scene.lostMessages).toEqual(0)
+  })
+
+  it('should drop messages after the maximum number of exchange hops', () => {
+    const source = new Exchange(0, 0, 'source', 'fanout')
+    const destination = new Exchange(0, 0, 'destination', 'fanout')
+    const e2eBinding = new Binding(source, destination, '')
+    source.addToScene(scene)
+    scene.addActor.mockClear()
+
+    source.messageArrived(new BindingMessage(0, 0, e2eBinding, '#ccc', 'x', 10))
+    expect(scene.lostMessages).toEqual(1)
+    expect(scene.addActor).not.toHaveBeenCalled()
+    expect(scene.removeActor).toHaveBeenCalledTimes(1)
+  })
+
+  it('should send a message to the alternate exchange when an exchange-to-exchange chain cannot route onward', () => {
+    const source = new Exchange(0, 0, 'source', 'fanout')
+    const destination = new Exchange(0, 0, 'destination', 'direct')
+    const alternate = new Exchange(25, 25, 'alternate', 'fanout')
+    const queue = new Queue(0, 0, 'q')
+    const e2eBinding = new Binding(source, destination, '')
+    destination.setAlternate(alternate)
+    new Binding(alternate, queue, '')
+    destination.addToScene(scene)
+    scene.addActor.mockClear()
+
+    destination.messageArrived(
+      new BindingMessage(0, 0, e2eBinding, '#ccc', 'missing', 1)
+    )
+    expect(scene.lostMessages).toEqual(0)
+    expect(scene.addActor).toHaveBeenCalledTimes(1)
   })
 })
 

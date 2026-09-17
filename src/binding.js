@@ -1,8 +1,10 @@
 import BaseComponent from './basecomponent'
+import Exchange from './exchange'
 
 class Binding extends BaseComponent {
   /**
-   * Binging class represents the binding between an exchange and a queue.
+   * Binging class represents the binding between an exchange and a queue,
+   * or between two exchanges.
    *
    * @param {object} source
    * @param {object} destination
@@ -54,11 +56,12 @@ class Binding extends BaseComponent {
 
   /**
    * Renders the line between bind components.
+   * Exchange-to-exchange bindings are rendered dashed to distinguish them.
    */
   render() {
     this.ctx.beginPath()
     this.ctx.strokeStyle = '#000'
-    this.ctx.setLineDash([])
+    this.ctx.setLineDash(this.destination instanceof Exchange ? [3, 3] : [])
     this.ctx.lineWidth = 1
     if (this.hover) {
       this.ctx.lineWidth = 2

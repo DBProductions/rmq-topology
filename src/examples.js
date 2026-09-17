@@ -594,6 +594,66 @@ const Examples = {
       { exchange: 0, queue: 0, routingKey: '' },
       { exchange: 1, queue: 1, routingKey: '' }
     ]
+  },
+  'exchange-to-exchange': {
+    description:
+      'An exchange can be bound to another exchange, the destination exchange then reroutes the message to its queues.',
+    producers: [
+      {
+        x: 200,
+        y: 130,
+        name: 'Producer',
+        publishes: {
+          0: {
+            exchange: 'Main',
+            routingKey: 'orders.created',
+            message: {
+              headers: {},
+              body: {}
+            }
+          }
+        }
+      }
+    ],
+    consumers: [
+      {
+        x: 800,
+        y: 90,
+        name: 'Consumer 1',
+        consumes: [0],
+        mode: 'ack'
+      },
+      {
+        x: 800,
+        y: 250,
+        name: 'Consumer 2',
+        consumes: [1],
+        mode: 'ack'
+      }
+    ],
+    exchanges: [
+      {
+        x: 400,
+        y: 130,
+        name: 'Main',
+        type: 'topic'
+      },
+      {
+        x: 430,
+        y: 280,
+        name: 'Events',
+        type: 'fanout'
+      }
+    ],
+    queues: [
+      { x: 650, y: 90, name: 'Queue 1' },
+      { x: 650, y: 250, name: 'Queue 2' }
+    ],
+    bindings: [
+      { exchange: 0, queue: 1, destinationType: 'exchange', routingKey: '#' },
+      { exchange: 1, queue: 0, routingKey: '' },
+      { exchange: 1, queue: 1, routingKey: '' }
+    ]
   }
 }
 

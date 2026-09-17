@@ -1,5 +1,20 @@
 import { displayForm } from "./common";
 import { getSettings } from "./settings";
+import Exchange from "../exchange";
+
+/**
+ * Resolves the index of a binding destination, looking it up in the list of
+ * exchanges when the binding targets an exchange, otherwise in the queues.
+ *
+ * @param {object[]} exchanges - actors of type Exchange
+ * @param {object[]} queues - actors of type Queue
+ * @param {object} val - Binding actor
+ * @returns {number} - index of the destination or -1
+ */
+const findDestinationIndex = (exchanges, queues, val) =>
+  val.destination instanceof Exchange
+    ? exchanges.findIndex((e) => e.id === val.destination.id)
+    : queues.findIndex((q) => q.id === val.destination.id);
 
 /**
  * Export topology as config.
@@ -53,13 +68,17 @@ const exportTopology = (e) => {
   const bindings = globalThis.scene.getObjectsInScene("Binding");
   bindings.forEach((val) => {
     const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id);
-    const queueIndex = queues.findIndex((q) => q.id === val.destination.id);
-    if (exchangeIndex !== -1 && queueIndex !== -1) {
-      exports.bindings.push({
+    const destinationIndex = findDestinationIndex(exchanges, queues, val);
+    if (exchangeIndex !== -1 && destinationIndex !== -1) {
+      const entry = {
         exchange: exchangeIndex,
-        queue: queueIndex,
+        queue: destinationIndex,
         routingKey: val.routingKey
-      });
+      };
+      if (val.destination instanceof Exchange) {
+        entry.destinationType = "exchange";
+      }
+      exports.bindings.push(entry);
     }
   });
   const consumers = globalThis.scene.getObjectsInScene("Consumer");
@@ -153,17 +172,20 @@ const exportCurl = (e) => {
   const bindings = globalThis.scene.getObjectsInScene("Binding");
   bindings.forEach((val) => {
     const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id);
-    const queueIndex = queues.findIndex((q) => q.id === val.destination.id);
-    if (exchangeIndex !== -1 && queueIndex !== -1) {
+    const destinationIndex = findDestinationIndex(exchanges, queues, val);
+    if (exchangeIndex !== -1 && destinationIndex !== -1) {
       const exchange = exchanges[exchangeIndex];
-      const queue = queues[queueIndex];
+      const destination = val.destination instanceof Exchange
+        ? exchanges[destinationIndex]
+        : queues[destinationIndex];
+      const destinationType = val.destination instanceof Exchange ? "e" : "q";
       generatedString +=
         `curl -u ${username}:${password} -i -H "content-type:application/json" -XPOST ${management}/bindings/${vhost}/e/${
           encodeURIComponent(
             exchange.name
           )
-        }/q/${
-          encodeURIComponent(queue.name)
+        }/${destinationType}/${
+          encodeURIComponent(destination.name)
         } -d '{"routing_key": ${JSON.stringify(val.routingKey)}, "arguments": {}}'\n\n`;
     }
   });
@@ -226,12 +248,16 @@ const exportRabbitmqadmin = (e) => {
   const bindings = globalThis.scene.getObjectsInScene("Binding");
   bindings.forEach((val) => {
     const exchangeIndex = exchanges.findIndex((e) => e.id === val.source.id);
-    const queueIndex = queues.findIndex((q) => q.id === val.destination.id);
-    if (exchangeIndex !== -1 && queueIndex !== -1) {
+    const destinationIndex = findDestinationIndex(exchanges, queues, val);
+    if (exchangeIndex !== -1 && destinationIndex !== -1) {
       const exchange = exchanges[exchangeIndex];
-      const queue = queues[queueIndex];
+      const destination = val.destination instanceof Exchange
+        ? exchanges[destinationIndex]
+        : queues[destinationIndex];
       generatedString +=
-        `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare binding source="${exchange.name}" destination_type="queue" destination="${queue.name}" routing_key="${val.routingKey}"\n\n`;
+        `rabbitmqadmin -H ${url.hostname} -u ${username} -p ${password} -V ${vhost} declare binding source="${exchange.name}" destination_type="${
+          val.destination instanceof Exchange ? "exchange" : "queue"
+        }" destination="${destination.name}" routing_key="${val.routingKey}"\n\n`;
     }
   });
   document.querySelector("#ImExport").value = generatedString;
@@ -341,11 +367,15 @@ EOF`;
   bindings.forEach((val) => {
     const srcName = val.source.name.replace(/ /g, "-");
     const destName = val.destination.name.replace(/ /g, "-");
+    const destinationIsExchange = val.destination instanceof Exchange;
+    const destinationRef = destinationIsExchange
+      ? `rabbitmq_exchange.${destName}.name`
+      : `rabbitmq_queue.${destName}.name`;
     generatedString += `resource "rabbitmq_binding" "${srcName}${destName}" {
   source           = "\${rabbitmq_exchange.${srcName}.name}"
   vhost            = "\${rabbitmq_vhost.vhost.name}"
-  destination      = "\${rabbitmq_queue.${destName}.name}"
-  destination_type = "queue"
+  destination      = "\${${destinationRef}}"
+  destination_type = "${destinationIsExchange ? "exchange" : "queue"}"
   routing_key      = "${val.routingKey}"
 }
 `;
@@ -376,6 +406,18 @@ const exportAsyncApi = (e) => {
   }
   const exchanges = globalThis.scene.getObjectsInScene("Exchange");
   const queues = globalThis.scene.getObjectsInScene("Queue");
+  const bindings = globalThis.scene.getObjectsInScene("Binding");
+  const e2eDestinations = [
+    ...new Set(
+      bindings
+        .filter(
+          (v) =>
+            v.source instanceof Exchange &&
+            v.destination instanceof Exchange
+        )
+        .map((v) => v.destination)
+    )
+  ];
 
   generatedString += `asyncapi: 3.0.0
 info:
@@ -403,15 +445,17 @@ channels:
 `;
   exchanges.forEach((val) => {
     if (val.type === "topic") {
-      val.bindings.forEach((v) => {
-        if (v.routingKey !== "#") {
-          let nameAddition = "";
-          if (v.routingKey) {
-            nameAddition = "_" + v.routingKey;
-          }
-          generatedString += `  ${
-            val.name.replaceAll(" ", "_")
-          }${nameAddition}          
+      val.bindings
+        .filter((v) => v.source === val)
+        .forEach((v) => {
+          if (v.routingKey !== "#") {
+            let nameAddition = "";
+            if (v.routingKey) {
+              nameAddition = "_" + v.routingKey;
+            }
+            generatedString += `  ${
+              val.name.replaceAll(" ", "_")
+            }${nameAddition}          
     address: '${v.routingKey}'
     messages:
       event:
@@ -425,15 +469,15 @@ channels:
           durable: true
           autoDelete: false
           vhost: ${vhost}`;
-          if (val.alternate !== null) {
-            generatedString += `
+            if (val.alternate !== null) {
+              generatedString += `
           x-arguments:
             alternate-exchange: ${val.alternate.name}`;
-          }
-          generatedString += `
+            }
+            generatedString += `
 `;
-        }
-      });
+          }
+        });
     } else {
       generatedString += `  ${val.name.replaceAll(" ", "_")}:
     messages:
@@ -445,6 +489,32 @@ channels:
         exchange:
           name: ${val.name}
           type: '${val.type}'
+          durable: true
+          autoDelete: false
+          vhost: ${vhost}`;
+      if (val.alternate !== null) {
+        generatedString += `
+          x-arguments:
+            alternate-exchange: ${val.alternate.name}`;
+      }
+      generatedString += `
+`;
+    }
+  });
+
+  e2eDestinations.forEach((val) => {
+    if (val.type === "topic") {
+      generatedString += `  ${val.name.replaceAll(" ", "_")}:
+    address: '#'
+    messages:
+      event:
+        $ref: '#/components/messages/Event'
+    bindings:
+      amqp:
+        is: routingKey
+        exchange:
+          name: ${val.name}
+          type: 'topic'
           durable: true
           autoDelete: false
           vhost: ${vhost}`;
@@ -478,26 +548,38 @@ channels:
   generatedString += `operations:`;
   exchanges.forEach((val) => {
     if (val.type === "topic") {
-      val.bindings.forEach((v) => {
-        if (v.routingKey !== "#") {
-          let nameAddition = "";
-          if (v.routingKey) {
-            nameAddition = "_" + v.routingKey;
-          }
-          generatedString += `
+      val.bindings
+        .filter((v) => v.source === val)
+        .forEach((v) => {
+          if (v.routingKey !== "#") {
+            let nameAddition = "";
+            if (v.routingKey) {
+              nameAddition = "_" + v.routingKey;
+            }
+            generatedString += `
   send${val.name}/${v.routingKey}:
     channel:
       $ref: '#/channels/${val.name.replaceAll(" ", "_")}${nameAddition}'
     action: send`;
-        }
-      });
-    } else if (val.bindings.some((v) => v.routingKey !== "#")) {
+          }
+        });
+    } else if (
+      val.bindings.filter((v) => v.source === val).some((v) => v.routingKey !== "#")
+    ) {
       generatedString += `
   send${val.name}/:
     channel:
       $ref: '#/channels/${val.name.replaceAll(" ", "_")}'
     action: send`;
     }
+  });
+
+  e2eDestinations.forEach((val) => {
+    generatedString += `
+  receive${val.name.replaceAll(" ", "_")}:
+    channel:
+      $ref: '#/channels/${val.name.replaceAll(" ", "_")}'
+    action: receive`;
   });
 
   queues.forEach((val) => {
