@@ -171,11 +171,17 @@ class Queue extends BaseComponent {
         }
       })
       msgToRemove.forEach((val) => {
-        //console.log(val)
         if (this.dlx) {
-          new ExchangeMessage(this.x, this.y, this.dlx, this.dlxrk).addToScene(
-            this.scene
-          )
+          new ExchangeMessage(
+            this.x,
+            this.y,
+            this.dlx,
+            this.dlxrk,
+            this.messages[val].msg.message,
+            undefined,
+            undefined,
+            this.messages[val].msg.fillStyle
+          ).addToScene(this.scene)
         } else {
           this.scene.lostMessages += 1
         }

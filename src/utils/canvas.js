@@ -81,19 +81,8 @@ const mouseMoveOnCanvas = (e) => {
         actor.x = mx
         actor.y = my
       }
-      if (actor.binding) {
-        if (actor.binding.source === actor) {
-          actor.bindings.forEach((binding) => {
-            binding.x1 = mx
-            binding.y1 = my
-          })
-        }
-        if (actor.binding.destination === actor) {
-          actor.bindings.forEach((binding) => {
-            binding.x2 = mx
-            binding.y2 = my
-          })
-        }
+      if (actor.bindings) {
+        actor.bindings.forEach((binding) => binding.setCoords())
       }
     } else {
       globalThis.scene.actors.forEach((val) => {

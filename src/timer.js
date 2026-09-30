@@ -22,9 +22,7 @@ class Timer {
    * Stop the timer.
    */
   stop() {
-    if (this.running) {
-      this.running = false
-    }
+    this.running = false
   }
 
   /**

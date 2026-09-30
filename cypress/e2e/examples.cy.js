@@ -464,6 +464,38 @@ describe('Test examples', () => {
       cy.window().its('scene.actors.length').should('equal', 10)
     })
 
+    it('Binding lines follow a dragged exchange', () => {
+      cy.get('#exampleTopology').select('Exchange-To-Exchange')
+
+      // drag the Events exchange, which is both a binding destination (Main -> Events)
+      // and a binding source (Events -> Queue 1 / Queue 2)
+      cy.moveOnCanvas(433, 430, 283, 400)
+
+      cy.window().then((win) => {
+        const { scene } = win
+        const events = scene
+          .getObjectsInScene('Exchange')
+          .find((e) => e.name === 'Events')
+        const mainToEvents = scene
+          .getObjectsInScene('Binding')
+          .find((b) => b.source.name === 'Main')
+        const eventsToQueue1 = scene
+          .getObjectsInScene('Binding')
+          .find((b) => b.destination.name === 'Queue 1')
+        const eventsToQueue2 = scene
+          .getObjectsInScene('Binding')
+          .find((b) => b.destination.name === 'Queue 2')
+        expect(events.x).to.eq(430)
+        expect(events.y).to.eq(400)
+        expect(mainToEvents.x2).to.eq(430)
+        expect(mainToEvents.y2).to.eq(400)
+        expect(eventsToQueue1.x1).to.eq(430)
+        expect(eventsToQueue1.y1).to.eq(400)
+        expect(eventsToQueue2.x1).to.eq(430)
+        expect(eventsToQueue2.y1).to.eq(400)
+      })
+    })
+
     it('Export defintion', () => {
       cy.get('#exampleTopology').select('Exchange-To-Exchange')
       cy.get('#export').click()

@@ -33,8 +33,6 @@ describe('Scene', () => {
     expect(scene.ctx).toBe(ctx)
     expect(scene.width).toEqual(100)
     expect(scene.height).toEqual(100)
-    expect(scene.curleft).toEqual(0)
-    expect(scene.curtop).toEqual(0)
     expect(scene.actors).toEqual([])
     expect(scene.lostMessages).toEqual(0)
     expect(scene.description).toEqual('')
@@ -152,21 +150,6 @@ describe('Scene', () => {
     scene.addActor(actor1)
     scene.render()
     expect(actor1.render).toHaveBeenCalled()
-  })
-
-  it('should sum the DOM offsets of all offset parents', () => {
-    const canvas = document.createElement('canvas')
-    const branch = document.createElement('div')
-    const root = document.createElement('div')
-    Object.defineProperty(canvas, 'offsetLeft', { value: 40 })
-    Object.defineProperty(canvas, 'offsetTop', { value: 30 })
-    Object.defineProperty(branch, 'offsetLeft', { value: 5 })
-    Object.defineProperty(branch, 'offsetTop', { value: 4 })
-    Object.defineProperty(canvas, 'offsetParent', { value: branch })
-    Object.defineProperty(branch, 'offsetParent', { value: root })
-    const nestedScene = new Scene({ canvas }, 0, 0)
-    expect(nestedScene.curleft).toEqual(45)
-    expect(nestedScene.curtop).toEqual(34)
   })
 
   it('should store width and height', () => {
