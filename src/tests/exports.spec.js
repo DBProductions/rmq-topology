@@ -731,4 +731,80 @@ describe('exportAsyncApi', () => {
     expect(out).not.toContain('sendDest/x.y:')
     expect(out).not.toContain('#/channels/Dest_x.y')
   })
+
+  it('adds x-arguments with alternate exchange to exchange-to-exchange destination', () => {
+    const source = new Exchange(0, 0, 'Source', 'direct')
+    const alt = new Exchange(0, 0, 'Alt', 'fanout')
+    const destination = new Exchange(0, 0, 'Dest', 'topic')
+    destination.alternate = alt
+    const queue = new Queue(0, 0, 'Queue', 'quorum')
+    const e2e = new Binding(source, destination, 'x.y')
+    new Binding(destination, queue, 'a.b')
+    setScene({
+      exchanges: [source, destination, alt],
+      queues: [queue],
+      bindings: [e2e]
+    })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('alternate-exchange: Alt')
+    expect(out).toContain('x-arguments:')
+  })
+
+  it('adds queue arguments to asyncapi for dlx ttl and max length', () => {
+    const exchange = factory.exchange({ name: 'Orders', type: 'direct' })
+    const dlx = factory.exchange({ id: 'e2', name: 'DLX', type: 'fanout' })
+    const queue = factory.queue({
+      name: 'OrderQueue',
+      type: 'quorum',
+      msgTtl: '60000',
+      maxLength: '10'
+    })
+    queue.dlx = dlx
+    queue.dlxrk = 'dead'
+    const binding = factory.binding({
+      source: exchange,
+      destination: queue,
+      routingKey: 'order.created'
+    })
+    exchange.bindings = [binding]
+    setScene({
+      exchanges: [exchange, dlx],
+      queues: [queue],
+      bindings: [binding]
+    })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('x-arguments:')
+    expect(out).toContain('x-dead-letter-exchange: DLX')
+    expect(out).toContain('x-dead-letter-routing-key: dead')
+    expect(out).toContain('x-message-ttl: 60000')
+    expect(out).toContain('x-max-length: 10')
+  })
+
+  it('adds only dlx exchange when dlxrk missing for queue', () => {
+    const exchange = factory.exchange({ name: 'Orders', type: 'direct' })
+    const dlx = factory.exchange({ id: 'e2', name: 'DLX', type: 'fanout' })
+    const queue = factory.queue({
+      name: 'OrderQueue',
+      type: 'quorum'
+    })
+    queue.dlx = dlx
+    queue.dlxrk = ''
+    const binding = factory.binding({
+      source: exchange,
+      destination: queue,
+      routingKey: 'order.created'
+    })
+    exchange.bindings = [binding]
+    setScene({
+      exchanges: [exchange, dlx],
+      queues: [queue],
+      bindings: [binding]
+    })
+    exportAsyncApi(evt)
+    const out = dom.ImExport.value
+    expect(out).toContain('x-dead-letter-exchange: DLX')
+    expect(out).not.toContain('x-dead-letter-routing-key')
+  })
 })

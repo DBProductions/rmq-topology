@@ -40,7 +40,7 @@ const config = {
   bindings: []
 }
 
-document.querySelector('#docLink').href = `${globalThis.location.href}doc`
+// docLink href is set in HTML with relative path for multi-deployment support
 
 const canvas = document.querySelector('#canvas')
 canvas.width = globalThis.innerWidth

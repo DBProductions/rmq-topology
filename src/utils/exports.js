@@ -541,7 +541,32 @@ channels:
           type: ${val.type}
           durable: true
           exclusive: false
-          autoDelete: false
+          autoDelete: false`;
+    const args = {};
+    if (val.dlx) {
+      args["x-dead-letter-exchange"] = val.dlx.name;
+      if (val.dlxrk) {
+        args["x-dead-letter-routing-key"] = val.dlxrk;
+      }
+    }
+    if (val.msgTtl) {
+      args["x-message-ttl"] = val.msgTtl;
+    }
+    if (val.maxLength) {
+      args["x-max-length"] = val.maxLength;
+    }
+    if (Object.keys(args).length > 0) {
+      generatedString += `
+          x-arguments:`;
+      Object.keys(args).forEach((key, idx) => {
+        generatedString += `
+            ${key}: ${typeof args[key] === "number" ? args[key] : args[key]}`;
+        if (idx < Object.keys(args).length - 1) {
+          // no trailing comma needed in YAML style like this
+        }
+      });
+    }
+    generatedString += `
 `;
   });
 
