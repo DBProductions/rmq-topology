@@ -19,13 +19,22 @@ const MIME = {
 
 http
   .createServer((req, res) => {
-    let filePath = path.join(ROOT, req.url === '/' ? 'index.html' : req.url)
+    let urlPath = decodeURIComponent(req.url.split('?')[0])
+    let filePath = path.join(ROOT, urlPath === '/' ? 'index.html' : urlPath)
     filePath = path.normalize(filePath)
 
     if (!filePath.startsWith(ROOT)) {
       res.writeHead(403)
       res.end()
       return
+    }
+
+    // If path is a directory, serve index.html
+    if (fs.existsSync(filePath)) {
+      const stats = fs.statSync(filePath)
+      if (stats.isDirectory()) {
+        filePath = path.join(filePath, 'index.html')
+      }
     }
 
     const ext = path.extname(filePath)
