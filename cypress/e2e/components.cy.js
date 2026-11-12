@@ -65,7 +65,14 @@ describe('Test components', () => {
 
       cy.get('#canvas').trigger('click', 203, 33)
       cy.get('#producerNameField').should('have.value', 'CypressProducer')
-      cy.get('#producerPublishTo').should('have.text', 'e1×e2×')
+      cy.get('#producerPublishTo .flex-left').should('have.length', 2)
+      cy.get('#producerPublishTo .flex-left')
+        .eq(0)
+        .should('contain.text', 'e1')
+      cy.get('#producerPublishTo .flex-left')
+        .eq(1)
+        .should('contain.text', 'e2')
+      cy.get('#producerPublishTo .msg-preview').should('have.length', 2)
 
       cy.get('#cancelProducerForm').click()
     })

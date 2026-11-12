@@ -26,15 +26,15 @@ const formatLog = (log) => {
     const ts = entry.ts ? new Date(entry.ts).toLocaleTimeString() : ''
     const route = []
     if (entry.exchange) {
-      route.push(`exchange ${entry.exchange}`)
+      route.push(entry.exchange)
     }
     if (entry.routingKey) {
-      route.push(`rk ${entry.routingKey}`)
+      route.push(`rk:${entry.routingKey}`)
     }
     if (entry.queue) {
-      route.push(`queue ${entry.queue}`)
+      route.push(entry.queue)
     }
-    out += `[${ts}]${route.length ? ' ' + route.join(' · ') : ''}\n`
+    out += `[${ts}]${route.length ? ' ' + route.join(' -> ') : ''}\n`
     try {
       out += JSON.stringify(entry.message, null, 2) + '\n\n'
     } catch (e) {

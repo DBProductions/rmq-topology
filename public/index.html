@@ -114,8 +114,9 @@
                 Set custom message properties
               </label>
             </div>
-            <div id="producerCustomMsgSection" class="hidden">
+            <div id="producerCustomMsgSection" class="is-hidden">
               <div>
+                <label for="producerMsgHeaders">Headers (JSON)</label>
                 <textarea
                   id="producerMsgHeaders"
                   placeholder='{"content-type": "application/json"}'
@@ -123,6 +124,7 @@
                 ></textarea>
               </div>
               <div>
+                <label for="producerMsgBody">Body (JSON)</label>
                 <textarea
                   id="producerMsgBody"
                   placeholder='{"hello": "world"}'
@@ -130,6 +132,7 @@
                 ></textarea>
               </div>
               <small>Headers and body must be valid JSON.</small>
+              <div id="producerMsgNote" class="msg-note is-hidden"></div>
             </div>
             <div class="btnFooter">
               <button id="sendProducerForm" class="myButton">

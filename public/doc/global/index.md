@@ -382,9 +382,94 @@ Export topology as AsyncApi.
 
 - `e` (object) — Event object
 
+<MemberHeading id="stripautoheaders" depth="3" name="stripAutoHeaders" sig="stripAutoHeaders(headers: Object): Object" />
+
+<MemberMeta sourceHref="/source/utils/producer-js/#L11" sourceLabel="producer.js:11" />
+
+Removes the headers that the producer generates on every publish.
+
+**Parameters**
+
+- `headers` (Object) — message headers
+
+**Returns**
+
+- `Object` — headers without the auto-generated values
+
+<MemberHeading id="isemptybody" depth="3" name="isEmptyBody" sig="isEmptyBody(body: *): boolean" />
+
+<MemberMeta sourceHref="/source/utils/producer-js/#L30" sourceLabel="producer.js:30" />
+
+Checks whether a message body is empty.
+
+**Parameters**
+
+- `body` (\*) — message body
+
+**Returns**
+
+- `boolean`
+
+<MemberHeading id="normalizemessage" depth="3" name="normalizeMessage" sig="normalizeMessage(message: Object): Object" />
+
+<MemberMeta sourceHref="/source/utils/producer-js/#L43" sourceLabel="producer.js:43" />
+
+Normalizes a message so auto-generated headers are ignored.
+
+**Parameters**
+
+- `message` (Object) — message with headers and body
+
+**Returns**
+
+- `Object`
+
+<MemberHeading id="hascustommessage" depth="3" name="hasCustomMessage" sig="hasCustomMessage(message: Object): boolean" />
+
+<MemberMeta sourceHref="/source/utils/producer-js/#L70" sourceLabel="producer.js:70" />
+
+Checks whether a message contains custom headers or a non-empty body.
+
+**Parameters**
+
+- `message` (Object) — message with headers and body
+
+**Returns**
+
+- `boolean`
+
+<MemberHeading id="messagesmatch" depth="3" name="messagesMatch" sig="messagesMatch(a: Object, b: Object): boolean" />
+
+<MemberMeta sourceHref="/source/utils/producer-js/#L85" sourceLabel="producer.js:85" />
+
+Compares two messages ignoring auto-generated headers.
+
+**Parameters**
+
+- `a` (Object) — first message
+- `b` (Object) — second message
+
+**Returns**
+
+- `boolean`
+
+<MemberHeading id="formatmessagepreview" depth="3" name="formatMessagePreview" sig="formatMessagePreview(message: Object): string" />
+
+<MemberMeta sourceHref="/source/utils/producer-js/#L94" sourceLabel="producer.js:94" />
+
+Builds the short message preview shown in the publish list.
+
+**Parameters**
+
+- `message` (Object) — message with headers and body
+
+**Returns**
+
+- `string`
+
 <MemberHeading id="displayproducer" depth="3" name="displayProducer" sig="displayProducer(producer: Producer)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L8" sourceLabel="producer.js:8" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L121" sourceLabel="producer.js:121" />
 
 Display the form to create or edit a producer component.
 
@@ -394,7 +479,7 @@ Display the form to create or edit a producer component.
 
 <MemberHeading id="sendproducerform" depth="3" name="sendProducerForm" sig="sendProducerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L120" sourceLabel="producer.js:120" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L279" sourceLabel="producer.js:279" />
 
 Sends the form to create or edit a producer component.
 
@@ -404,7 +489,7 @@ Sends the form to create or edit a producer component.
 
 <MemberHeading id="hideproducer" depth="3" name="hideProducer" sig="hideProducer(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L281" sourceLabel="producer.js:281" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L444" sourceLabel="producer.js:444" />
 
 Reset form values and remove CSS class from the producer panel.
 
@@ -414,7 +499,7 @@ Reset form values and remove CSS class from the producer panel.
 
 <MemberHeading id="deleteproducerform" depth="3" name="deleteProducerForm" sig="deleteProducerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L302" sourceLabel="producer.js:302" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L465" sourceLabel="producer.js:465" />
 
 Remove producer from the scene, render and remove CSS class from the producer panel.
 

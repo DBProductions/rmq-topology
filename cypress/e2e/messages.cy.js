@@ -40,7 +40,7 @@ describe('message customisation and display', () => {
       .should('match', /"headers"/)
     cy.get('#consumerMsgInline')
       .invoke('val')
-      .should('match', /exchange Exchange · rk Queue · queue Queue/)
+      .should('match', /Exchange -> rk:Queue -> Queue/)
   })
 
   it('applies a custom body when editing an existing producer', () => {
@@ -75,6 +75,44 @@ describe('message customisation and display', () => {
       const bodies = consumer.messageLog.map((entry) => entry.message.body)
       expect(bodies.some((body) => body && body.hello === 'world')).to.eq(true)
     })
+
+    // Reopening the producer shows the message that is actually set.
+    clickCanvas(210, 140)
+    cy.wait(300)
+    cy.get('#producerCustomMsgToggle').should('be.checked')
+    cy.get('#producerCustomMsgSection').should('be.visible')
+    cy.get('#producerMsgHeaders')
+      .invoke('val')
+      .should('contain', '"content-type": "application/json"')
+    cy.get('#producerMsgBody')
+      .invoke('val')
+      .should('contain', '"hello": "world"')
+    cy.get('#producerPublishTo .msg-preview').should(
+      'contain',
+      'body {"hello":"world"}'
+    )
+
+    // Unchecking and saving resets the publish to the default message.
+    cy.get('#producerCustomMsgToggle').uncheck()
+    cy.get('#producerCustomMsgSection').should('not.be.visible')
+    cy.get('#sendProducerForm').click()
+    cy.wait(300)
+
+    cy.window().then((win) => {
+      const producer = win.scene.actors.find(
+        (a) => a.constructor.name === 'Producer'
+      )
+      const publishes = Object.values(producer.publishes)
+      expect(publishes[0].message).to.deep.eq({ headers: {}, body: {} })
+    })
+
+    clickCanvas(210, 140)
+    cy.wait(300)
+    cy.get('#producerCustomMsgToggle').should('not.be.checked')
+    cy.get('#producerPublishTo .msg-preview').should(
+      'contain',
+      'default message'
+    )
   })
 
   it('applies a custom body when creating a new producer', () => {

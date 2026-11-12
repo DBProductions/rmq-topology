@@ -59,8 +59,6 @@ describe('consumer display repro', () => {
     )
     const value = document.querySelector('#consumerMsgInline').value
     expect(value).toContain('hello')
-    expect(value).toContain('exchange ex')
-    expect(value).toContain('rk rk')
-    expect(value).toContain('queue q')
+    expect(value).toContain('ex -> rk:rk -> q')
   })
 })

@@ -115,6 +115,23 @@ h3 {
   visibility: hidden;
 }
 
+.is-hidden {
+  display: none;
+}
+
+.msg-preview {
+  color: #666;
+  display: block;
+  margin-top: 2px;
+  word-break: break-all;
+}
+
+.msg-note {
+  margin-top: 4px;
+  color: #a15c00;
+  font-size: 12px;
+}
+
 .panel-wrap {
   position: fixed;
   top: 55px;
