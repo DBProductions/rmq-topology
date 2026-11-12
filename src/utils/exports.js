@@ -93,7 +93,8 @@ const exportTopology = (e) => {
       y: val.y,
       name: val.name,
       consumes,
-      mode: val.mode
+      mode: val.mode,
+      displayMessages: !!val.displayMessages
     });
   });
   const producers = globalThis.scene.getObjectsInScene("Producer");

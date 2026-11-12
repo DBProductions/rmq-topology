@@ -180,7 +180,14 @@ describe('exportTopology', () => {
       { exchange: 0, queue: 0, routingKey: 'order.created' }
     ])
     expect(out.consumers).toEqual([
-      { x: 800, y: 150, name: 'Consumer', consumes: [0], mode: 'reject' }
+      {
+        x: 800,
+        y: 150,
+        name: 'Consumer',
+        consumes: [0],
+        mode: 'reject',
+        displayMessages: false
+      }
     ])
     expect(out.producers[0].name).toBe('Producer')
     expect(out.producers[0].publishes['0']).toEqual({
@@ -188,6 +195,14 @@ describe('exportTopology', () => {
       routingKey: 'order.created',
       message: { headers: {}, body: {} }
     })
+  })
+
+  it('exports the consumer message display setting', () => {
+    const { consumer } = fullTopology()
+    consumer.displayMessages = true
+    exportTopology(evt)
+    const out = JSON.parse(dom.ImExport.value)
+    expect(out.consumers[0].displayMessages).toBe(true)
   })
 
   it('skips bindings that reference actors missing from the scene', () => {

@@ -1,6 +1,26 @@
 import BaseComponent from './basecomponent'
 import ExchangeMessage from './messages/exchangemessage'
 
+/**
+ * Creates an independent copy of a message so in-flight messages are not
+ * affected by later publishes.
+ *
+ * @param {Object} message - message with headers and body
+ * @returns {Object} cloned message
+ */
+const cloneMessage = (message) => {
+  if (typeof structuredClone === 'function') {
+    try {
+      return structuredClone(message)
+    } catch (e) {}
+  }
+  try {
+    return JSON.parse(JSON.stringify(message))
+  } catch (e) {
+    return { headers: {}, body: {} }
+  }
+}
+
 class Producer extends BaseComponent {
   /**
    * Producer class represents a component that publishs against exchanges.
@@ -132,15 +152,16 @@ class Producer extends BaseComponent {
         ) {
           this.publishes[key].message.headers = {}
         }
-        this.publishes[key].message.headers['app-id'] = this.name
-        this.publishes[key].message.headers['message-id'] = this.createUUID()
+        const message = cloneMessage(this.publishes[key].message)
+        message.headers['app-id'] = this.name
+        message.headers['message-id'] = this.createUUID()
 
         new ExchangeMessage(
           this.x + this.width / 2,
           this.y + this.height / 2,
           this.publishes[key].exchange,
           this.publishes[key].routingKey,
-          this.publishes[key].message,
+          message,
           undefined,
           undefined,
           this.color

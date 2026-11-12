@@ -9,7 +9,7 @@ description: Producer class represents a component that publishs against exchang
 
 **Extends:&#x20;**[`BaseComponent`](/basecomponent)
 
-<SourceLink href="/source/producer-js/#L16" label="producer.js:16" />
+<SourceLink href="/source/producer-js/#L36" label="producer.js:36" />
 
 Producer class represents a component that publishs against exchanges.
 
@@ -44,7 +44,7 @@ Producer class represents a component that publishs against exchanges.
 
 <MemberHeading id="removeexchange" depth="3" name="removeExchange" sig="removeExchange(exchange: Exchange)" />
 
-<MemberMeta sourceHref="/source/producer-js/#L37" sourceLabel="producer.js:37" />
+<MemberMeta sourceHref="/source/producer-js/#L57" sourceLabel="producer.js:57" />
 
 Removes the exchange from the list.
 
@@ -63,7 +63,7 @@ Removes the exchange from the list.
 )"
 />
 
-<MemberMeta sourceHref="/source/producer-js/#L52" sourceLabel="producer.js:52" />
+<MemberMeta sourceHref="/source/producer-js/#L72" sourceLabel="producer.js:72" />
 
 Adds a message to an exchange.
 
@@ -83,7 +83,7 @@ Adds a message to an exchange.
 )"
 />
 
-<MemberMeta sourceHref="/source/producer-js/#L101" sourceLabel="producer.js:101" />
+<MemberMeta sourceHref="/source/producer-js/#L121" sourceLabel="producer.js:121" />
 
 Checks for exchange in combination with routing key to exists.
 
@@ -94,7 +94,7 @@ Checks for exchange in combination with routing key to exists.
 
 <MemberHeading id="update" depth="3" name="update" sig="update(dt: number)" />
 
-<MemberMeta sourceHref="/source/producer-js/#L118" sourceLabel="producer.js:118" />
+<MemberMeta sourceHref="/source/producer-js/#L138" sourceLabel="producer.js:138" />
 
 Determines at which time a new message be published.
 
@@ -104,7 +104,7 @@ Determines at which time a new message be published.
 
 <MemberHeading id="render" depth="3" name="render" sig="render()" />
 
-<MemberMeta sourceHref="/source/producer-js/#L157" sourceLabel="producer.js:157" />
+<MemberMeta sourceHref="/source/producer-js/#L178" sourceLabel="producer.js:178" />
 
 Render the producer and draw lines to every exchange from the list.
 

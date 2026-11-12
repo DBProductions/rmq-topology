@@ -141,4 +141,28 @@ describe('message customisation and display', () => {
       expect(publishes[0].message.body).to.deep.eq({ foo: 'bar' })
     })
   })
+
+  it('keeps consumer message display through export and import', () => {
+    cy.visit('/')
+    cy.get('#exampleTopology').select('Direct Exchange')
+    cy.wait(300)
+
+    clickCanvas(815, 145)
+    cy.wait(300)
+    cy.get('#consumerShowMessagesToggle').check()
+    cy.get('#export').click()
+    cy.get('#ImExport')
+      .invoke('val')
+      .should('contain', '"displayMessages":true')
+
+    cy.get('#importBtn').click()
+    cy.wait(300)
+
+    cy.window().then((win) => {
+      const consumer = win.scene.actors.find(
+        (a) => a.constructor.name === 'Consumer'
+      )
+      expect(consumer.displayMessages).to.eq(true)
+    })
+  })
 })

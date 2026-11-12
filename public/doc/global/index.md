@@ -10,6 +10,20 @@ longname: Globals
 
 ## Instance Methods
 
+<MemberHeading id="clonemessage" depth="3" name="cloneMessage" sig="cloneMessage(message: Object): Object" />
+
+<MemberMeta sourceHref="/source/producer-js/#L11" sourceLabel="producer.js:11" />
+
+Creates an independent copy of a message so in-flight messages are not affected by later publishes.
+
+**Parameters**
+
+- `message` (Object) — message with headers and body
+
+**Returns**
+
+- `Object` — cloned message
+
 <MemberHeading id="populatebindingdestination" depth="3" name="populateBindingDestination" sig="populateBindingDestination(selectedId: string)" />
 
 <MemberMeta sourceHref="/source/utils/binding-js/#L11" sourceLabel="binding.js:11" />
@@ -344,7 +358,7 @@ Export topology as config.
 
 <MemberHeading id="exportcurl" depth="3" name="exportCurl" sig="exportCurl(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/exports-js/#L126" sourceLabel="exports.js:126" />
+<MemberMeta sourceHref="/source/utils/exports-js/#L127" sourceLabel="exports.js:127" />
 
 Export topology as curl statements.
 
@@ -354,7 +368,7 @@ Export topology as curl statements.
 
 <MemberHeading id="exportrabbitmqadmin" depth="3" name="exportRabbitmqadmin" sig="exportRabbitmqadmin(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/exports-js/#L201" sourceLabel="exports.js:201" />
+<MemberMeta sourceHref="/source/utils/exports-js/#L202" sourceLabel="exports.js:202" />
 
 Export topology as rabbitmqadmin statements.
 
@@ -364,7 +378,7 @@ Export topology as rabbitmqadmin statements.
 
 <MemberHeading id="exportterraform" depth="3" name="exportTerraform" sig="exportTerraform(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/exports-js/#L272" sourceLabel="exports.js:272" />
+<MemberMeta sourceHref="/source/utils/exports-js/#L273" sourceLabel="exports.js:273" />
 
 Export topology as Terraform.
 
@@ -374,7 +388,7 @@ Export topology as Terraform.
 
 <MemberHeading id="exportasyncapi" depth="3" name="exportAsyncApi" sig="exportAsyncApi(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/exports-js/#L394" sourceLabel="exports.js:394" />
+<MemberMeta sourceHref="/source/utils/exports-js/#L395" sourceLabel="exports.js:395" />
 
 Export topology as AsyncApi.
 

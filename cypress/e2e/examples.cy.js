@@ -40,7 +40,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":150,"name":"Queue","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":150,"name":"Queue","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
       )
     })
 
@@ -116,7 +116,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":50,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":150,"name":"Consumer 2","consumes":[1],"mode":"ack"},{"x":800,"y":250,"name":"Consumer 3","consumes":[2],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"fanout","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""},{"x":650,"y":260,"name":"Queue 3","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":0,"queue":1,"routingKey":""},{"exchange":0,"queue":2,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":50,"name":"Consumer 1","consumes":[0],"mode":"ack","displayMessages":false},{"x":800,"y":150,"name":"Consumer 2","consumes":[1],"mode":"ack","displayMessages":false},{"x":800,"y":250,"name":"Consumer 3","consumes":[2],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"fanout","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""},{"x":650,"y":260,"name":"Queue 3","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":0,"queue":1,"routingKey":""},{"exchange":0,"queue":2,"routingKey":""}]}'
       )
     })
 
@@ -169,7 +169,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":80,"name":"Producer 1","publishes":{"0":{"exchange":"Exchange","routingKey":"x.y.z","message":{"headers":{},"body":{}}}}},{"x":200,"y":170,"name":"Producer 2","publishes":{"0":{"exchange":"Exchange","routingKey":"x.x.x","message":{"headers":{},"body":{}}}}},{"x":200,"y":260,"name":"Producer 3","publishes":{"0":{"exchange":"Exchange","routingKey":"y.y.y","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"},{"x":800,"y":260,"name":"Consumer 3","consumes":[2],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"topic","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""},{"x":650,"y":260,"name":"Queue 3","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":"x.x.x"},{"exchange":0,"queue":1,"routingKey":"#"},{"exchange":0,"queue":2,"routingKey":"x.y.z"}]}'
+        '{"description":"","producers":[{"x":200,"y":80,"name":"Producer 1","publishes":{"0":{"exchange":"Exchange","routingKey":"x.y.z","message":{"headers":{},"body":{}}}}},{"x":200,"y":170,"name":"Producer 2","publishes":{"0":{"exchange":"Exchange","routingKey":"x.x.x","message":{"headers":{},"body":{}}}}},{"x":200,"y":260,"name":"Producer 3","publishes":{"0":{"exchange":"Exchange","routingKey":"y.y.y","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack","displayMessages":false},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack","displayMessages":false},{"x":800,"y":260,"name":"Consumer 3","consumes":[2],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"topic","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""},{"x":650,"y":260,"name":"Queue 3","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":"x.x.x"},{"exchange":0,"queue":1,"routingKey":"#"},{"exchange":0,"queue":2,"routingKey":"x.y.z"}]}'
       )
     })
 
@@ -257,7 +257,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":170,"name":"Consumer 2","consumes":[0],"mode":"ack"},{"x":800,"y":260,"name":"Consumer 3","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":170,"name":"Queue","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack","displayMessages":false},{"x":800,"y":170,"name":"Consumer 2","consumes":[0],"mode":"ack","displayMessages":false},{"x":800,"y":260,"name":"Consumer 3","consumes":[0],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":170,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":170,"name":"Queue","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
       )
     })
 
@@ -283,7 +283,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack"}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":150,"name":"Queue","type":"stream","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange","routingKey":"Queue","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":130,"name":"Consumer","consumes":[0],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":150,"name":"Exchange","type":"direct","alternate":null}],"queues":[{"x":650,"y":150,"name":"Queue","type":"stream","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""}]}'
       )
     })
 
@@ -335,7 +335,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[1],"mode":"reject"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":80,"name":"Exchange 1","type":"direct","alternate":null},{"x":400,"y":170,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":3,"dlx":1},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[1],"mode":"reject","displayMessages":false},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":80,"name":"Exchange 1","type":"direct","alternate":null},{"x":400,"y":170,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":80,"name":"Queue 1","type":"quorum","maxLength":3,"dlx":1},{"x":650,"y":170,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
 
@@ -361,7 +361,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":180,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":80,"name":"Exchange 1","type":"direct","alternate":"Exchange 2"},{"x":450,"y":180,"name":"Exchange 2","type":"topic","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":200,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":80,"name":"Consumer 1","consumes":[0],"mode":"ack","displayMessages":false},{"x":800,"y":180,"name":"Consumer 2","consumes":[1],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":80,"name":"Exchange 1","type":"direct","alternate":"Exchange 2"},{"x":450,"y":180,"name":"Exchange 2","type":"topic","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":200,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
 
@@ -387,7 +387,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":100,"name":"Consumer 1","consumes":[0],"mode":"reject"},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":100,"name":"Exchange 1","type":"direct","alternate":null},{"x":400,"y":200,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":"","dlx":1},{"x":650,"y":200,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":100,"name":"Consumer 1","consumes":[0],"mode":"reject","displayMessages":false},{"x":800,"y":170,"name":"Consumer 2","consumes":[1],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":100,"name":"Exchange 1","type":"direct","alternate":null},{"x":400,"y":200,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":"","dlx":1},{"x":650,"y":200,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
 
@@ -413,7 +413,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":100,"name":"Consumer 1","consumes":[0],"mode":"reject"}],"exchanges":[{"x":400,"y":100,"name":"Exchange 1","type":"direct","alternate":null},{"x":650,"y":200,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":"","dlx":1},{"x":400,"y":300,"name":"Queue 2","type":"quorum","ttl":3000,"maxLength":"","dlx":0}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Exchange 1","routingKey":"Queue 1","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":100,"name":"Consumer 1","consumes":[0],"mode":"reject","displayMessages":false}],"exchanges":[{"x":400,"y":100,"name":"Exchange 1","type":"direct","alternate":null},{"x":650,"y":200,"name":"Exchange 2","type":"direct","alternate":null}],"queues":[{"x":650,"y":100,"name":"Queue 1","type":"quorum","maxLength":"","dlx":1},{"x":400,"y":300,"name":"Queue 2","type":"quorum","ttl":3000,"maxLength":"","dlx":0}],"bindings":[{"exchange":0,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
 
@@ -501,7 +501,7 @@ describe('Test examples', () => {
       cy.get('#export').click()
       cy.get('#ImExport').should(
         'have.value',
-        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Main","routingKey":"orders.created","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":90,"name":"Consumer 1","consumes":[0],"mode":"ack"},{"x":800,"y":250,"name":"Consumer 2","consumes":[1],"mode":"ack"}],"exchanges":[{"x":400,"y":130,"name":"Main","type":"topic","alternate":null},{"x":430,"y":280,"name":"Events","type":"fanout","alternate":null}],"queues":[{"x":650,"y":90,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":250,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":1,"routingKey":"#","destinationType":"exchange"},{"exchange":1,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
+        '{"description":"","producers":[{"x":200,"y":130,"name":"Producer","publishes":{"0":{"exchange":"Main","routingKey":"orders.created","message":{"headers":{},"body":{}}}}}],"consumers":[{"x":800,"y":90,"name":"Consumer 1","consumes":[0],"mode":"ack","displayMessages":false},{"x":800,"y":250,"name":"Consumer 2","consumes":[1],"mode":"ack","displayMessages":false}],"exchanges":[{"x":400,"y":130,"name":"Main","type":"topic","alternate":null},{"x":430,"y":280,"name":"Events","type":"fanout","alternate":null}],"queues":[{"x":650,"y":90,"name":"Queue 1","type":"quorum","maxLength":""},{"x":650,"y":250,"name":"Queue 2","type":"quorum","maxLength":""}],"bindings":[{"exchange":0,"queue":1,"routingKey":"#","destinationType":"exchange"},{"exchange":1,"queue":0,"routingKey":""},{"exchange":1,"queue":1,"routingKey":""}]}'
       )
     })
 

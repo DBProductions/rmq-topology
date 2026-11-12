@@ -77,14 +77,28 @@ describe('Producer', () => {
     expect(producer.publishedMessages).toEqual(0)
   })
 
-  it('should create UUID when creating an ExchangeMessage', () => {
-    producer.addMessageToExchange('test', 'x.y')
-    producer.update(-2)
-    const message = producer.publishes[Object.keys(producer.publishes)[0]]
-    //expect(message.headers['message-id']).toMatch(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/);
-    expect(message.exchange).toEqual('test')
-    expect(message.routingKey).toEqual('x.y')
-    expect(message.message).toEqual({ headers: {}, body: {} })
+  it('creates an independent message snapshot for every publish', () => {
+    producer.addToScene(scene)
+    producer.addMessageToExchange(exchange, 'x.y')
+
+    const firstStart = scene.addActor.mock.calls.length
+    producer.update(2)
+    const first = scene.addActor.mock.calls[firstStart][0]
+    expect(first.constructor.name).toEqual('ExchangeMessage')
+    expect(first.message.headers['app-id']).toEqual('producer')
+    expect(first.message.headers['message-id']).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+    )
+    const firstId = first.message.headers['message-id']
+
+    const secondStart = scene.addActor.mock.calls.length
+    producer.update(2)
+    const second = scene.addActor.mock.calls[secondStart][0]
+    expect(second.message.headers['message-id']).not.toEqual(firstId)
+    expect(first.message.headers['message-id']).toEqual(firstId)
+
+    const stored = producer.publishes[Object.keys(producer.publishes)[0]]
+    expect(stored.message).toEqual({ headers: {}, body: {} })
   })
 
   it('should remove the specified exchange from the object', () => {
