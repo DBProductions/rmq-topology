@@ -78,7 +78,7 @@ Routes only over outbound bindings so an exchange-to-exchange binding is not ech
 
 <MemberHeading id="render" depth="3" name="render" sig="render()" />
 
-<MemberMeta sourceHref="/source/exchange-js/#L155" sourceLabel="exchange.js:155" />
+<MemberMeta sourceHref="/source/exchange-js/#L159" sourceLabel="exchange.js:159" />
 
 Render the exchange.
 

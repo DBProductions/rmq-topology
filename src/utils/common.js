@@ -113,6 +113,10 @@ const createTopology = (ctx, conf) => {
         consumer.consumes,
         consumer.mode
       )
+      if (consumer.displayMessages) {
+        newConsumer.displayMessages = true
+        newConsumer.messageLog = []
+      }
       consumer.consumes.forEach((val) => {
         newConsumer.addQueue(queues[val])
       })

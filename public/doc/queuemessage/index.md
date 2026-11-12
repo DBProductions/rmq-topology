@@ -9,7 +9,7 @@ description: Message object between queue and consumer.
 
 **Extends:&#x20;**[`BaseMessage`](/basemessage)
 
-<SourceLink href="/source/messages/queuemessage-js/#L16" label="queuemessage.js:16" />
+<SourceLink href="/source/messages/queuemessage-js/#L19" label="queuemessage.js:19" />
 
 Message object between queue and consumer.
 
@@ -29,6 +29,9 @@ Message object between queue and consumer.
 	queue: Queue,
 	consumer: Consumer,
 	fillStyle: string,
+	message: Object,
+	routingKey: string,
+	exchange: Exchange,
 ): QueueMessage"
 />
 
@@ -39,6 +42,9 @@ Message object between queue and consumer.
 - `queue` ([Queue](/queue)) — Queue object
 - `consumer` ([Consumer](/consumer)) — Consumer object
 - `fillStyle` (string)
+- `message` (Object) — message object with headers and body
+- `routingKey` (string) — routing key used to deliver the message
+- `exchange` ([Exchange](/exchange)) — exchange that routed the message
 
 ---
 
@@ -46,7 +52,7 @@ Message object between queue and consumer.
 
 <MemberHeading id="setconsumer" depth="3" name="setConsumer" sig="setConsumer(consumer: Consumer)" />
 
-<MemberMeta sourceHref="/source/messages/queuemessage-js/#L31" sourceLabel="queuemessage.js:31" />
+<MemberMeta sourceHref="/source/messages/queuemessage-js/#L53" sourceLabel="queuemessage.js:53" />
 
 Sets the consumer with coordinates.
 

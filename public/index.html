@@ -108,6 +108,29 @@
               >
             </div>
             <div id="producerPublishTo"></div>
+            <div>
+              <label>
+                <input type="checkbox" id="producerCustomMsgToggle">
+                Set custom message properties
+              </label>
+            </div>
+            <div id="producerCustomMsgSection" class="hidden">
+              <div>
+                <textarea
+                  id="producerMsgHeaders"
+                  placeholder='{"content-type": "application/json"}'
+                  style="height: 10em;"
+                ></textarea>
+              </div>
+              <div>
+                <textarea
+                  id="producerMsgBody"
+                  placeholder='{"hello": "world"}'
+                  style="height: 10em;"
+                ></textarea>
+              </div>
+              <small>Headers and body must be valid JSON.</small>
+            </div>
             <div class="btnFooter">
               <button id="sendProducerForm" class="myButton">
                 <i class="fa fa-save"></i> Save
@@ -145,6 +168,20 @@
               </select>
             </div>
             <div id="consumerConsumesFrom"></div>
+            <div>
+              <label>
+                <input type="checkbox" id="consumerShowMessagesToggle">
+                Show arriving messages
+              </label>
+            </div>
+            <div id="consumerMsgInlineWrap" style="display: none;">
+              <textarea
+                id="consumerMsgInline"
+                readonly
+                placeholder="Waiting for messages..."
+                style="width: 100%; height: 10em; font-family: monospace; font-size: 11px; box-sizing: border-box;"
+              ></textarea>
+            </div>
             <div class="btnFooter">
               <button id="sendConsumerForm" class="myButton">
                 <i class="fa fa-save"></i> Save

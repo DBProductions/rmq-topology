@@ -9,7 +9,7 @@ description: Message object between exchange and queue.
 
 **Extends:&#x20;**[`BaseMessage`](/basemessage)
 
-<SourceLink href="/source/messages/bindingmessage-js/#L17" label="bindingmessage.js:17" />
+<SourceLink href="/source/messages/bindingmessage-js/#L18" label="bindingmessage.js:18" />
 
 Message object between exchange and queue.
 
@@ -30,6 +30,7 @@ Message object between exchange and queue.
 	fillColor: string,
 	routingKey: string,
 	depth: number,
+	message: Object,
 ): BindingMessage"
 />
 
@@ -41,6 +42,7 @@ Message object between exchange and queue.
 - `fillColor` (string) — hex color code to fill the circle
 - `routingKey` (string) — routing key forwarded along the binding
 - `depth` (number) — number of exchange hops already done
+- `message` (Object) — message object with headers and body
 
 ---
 

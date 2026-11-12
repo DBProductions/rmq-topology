@@ -27,6 +27,7 @@ kind: guide
 - [utils/canvas.js](/source/utils/canvas-js/)
 - [utils/common.js](/source/utils/common-js/)
 - [utils/consumer.js](/source/utils/consumer-js/)
+- [utils/consumerDisplay.js](/source/utils/consumerdisplay-js/)
 - [utils/exchange.js](/source/utils/exchange-js/)
 - [utils/exports.js](/source/utils/exports-js/)
 - [utils/producer.js](/source/utils/producer-js/)

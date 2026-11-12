@@ -12,6 +12,10 @@ const displayConsumer = (consumer) => {
   document.querySelector('#consumerIdField').value = ''
   document.querySelector('#consumerNameField').value = ''
   document.querySelector('#consumerConsumesFrom').innerHTML = ''
+  const displayToggle = document.querySelector('#consumerShowMessagesToggle')
+  if (displayToggle) {
+    displayToggle.checked = false
+  }
 
   const queues = globalThis.scene.getObjectsInScene('Queue')
   const selectSource = document.querySelector('#consumerConsumesFromSelect')
@@ -47,6 +51,11 @@ const displayConsumer = (consumer) => {
         val.checked = true
       }
     })
+
+    const displayToggle = document.querySelector('#consumerShowMessagesToggle')
+    if (displayToggle) {
+      displayToggle.checked = !!consumer.displayMessages
+    }
 
     let queuesDom = ''
     consumer.queues.forEach((queue) => {
@@ -103,8 +112,13 @@ const sendConsumerForm = (e) => {
     }
   })
 
+  const displayToggle = document.querySelector('#consumerShowMessagesToggle')
+  const showMessages = displayToggle ? displayToggle.checked : false
+
+  let consumer
+
   if (id) {
-    const consumer = globalThis.scene.getIdInScene(id)
+    consumer = globalThis.scene.getIdInScene(id)
 
     const queues = document.getElementsByName('consumerQueues[]')
     const idsToKeep = []
@@ -123,18 +137,30 @@ const sendConsumerForm = (e) => {
     })
 
     consumer.name = name
-    consumer.mode = mode
+    consumer.mode = mode || consumer.mode || 'ack'
     consumer.queues = restQueues
+    consumer.displayMessages = showMessages
+    if (showMessages && !consumer.messageLog) {
+      consumer.messageLog = []
+    }
 
     if (consumesFrom !== '0') {
       consumer.addQueue(globalThis.scene.getIdInScene(consumesFrom))
     }
   } else {
-    const Consumer1 = new Consumer(800, 30, name, [])
-    Consumer1.addToScene(globalThis.scene)
-    if (consumesFrom !== '0') {
-      Consumer1.addQueue(globalThis.scene.getIdInScene(consumesFrom))
+    consumer = new Consumer(800, 30, name, [], mode || 'ack')
+    consumer.displayMessages = showMessages
+    if (showMessages) {
+      consumer.messageLog = []
     }
+    consumer.addToScene(globalThis.scene)
+    if (consumesFrom !== '0') {
+      consumer.addQueue(globalThis.scene.getIdInScene(consumesFrom))
+    }
+  }
+
+  if (typeof globalThis.updateConsumerMessageDisplay === 'function') {
+    globalThis.updateConsumerMessageDisplay(consumer)
   }
 
   globalThis.scene.render()

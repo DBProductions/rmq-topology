@@ -52,15 +52,25 @@ Removes the exchange from the list.
 
 - `exchange` ([Exchange](/exchange)) — Exchange object
 
-<MemberHeading id="addmessagetoexchange" depth="3" name="addMessageToExchange" sig="addMessageToExchange(exchange: Exchange, message: Object)" />
+<MemberHeading
+  id="addmessagetoexchange"
+  depth="3"
+  name="addMessageToExchange"
+  sig="addMessageToExchange(
+	exchange: Exchange,
+	routingKey: string,
+	message: Object,
+)"
+/>
 
-<MemberMeta sourceHref="/source/producer-js/#L51" sourceLabel="producer.js:51" />
+<MemberMeta sourceHref="/source/producer-js/#L52" sourceLabel="producer.js:52" />
 
 Adds a message to an exchange.
 
 **Parameters**
 
 - `exchange` ([Exchange](/exchange)) — Exchange object
+- `routingKey` (string) — routing key
 - `message` (Object) — JSON message with headers and body
 
 <MemberHeading
@@ -73,7 +83,7 @@ Adds a message to an exchange.
 )"
 />
 
-<MemberMeta sourceHref="/source/producer-js/#L77" sourceLabel="producer.js:77" />
+<MemberMeta sourceHref="/source/producer-js/#L101" sourceLabel="producer.js:101" />
 
 Checks for exchange in combination with routing key to exists.
 
@@ -84,7 +94,7 @@ Checks for exchange in combination with routing key to exists.
 
 <MemberHeading id="update" depth="3" name="update" sig="update(dt: number)" />
 
-<MemberMeta sourceHref="/source/producer-js/#L94" sourceLabel="producer.js:94" />
+<MemberMeta sourceHref="/source/producer-js/#L118" sourceLabel="producer.js:118" />
 
 Determines at which time a new message be published.
 
@@ -94,7 +104,7 @@ Determines at which time a new message be published.
 
 <MemberHeading id="render" depth="3" name="render" sig="render()" />
 
-<MemberMeta sourceHref="/source/producer-js/#L126" sourceLabel="producer.js:126" />
+<MemberMeta sourceHref="/source/producer-js/#L157" sourceLabel="producer.js:157" />
 
 Render the producer and draw lines to every exchange from the list.
 

@@ -26,6 +26,7 @@ import {
 
 import { Examples } from './examples'
 import {} from './listener'
+import './utils/consumerDisplay.js'
 
 if (getSettings() === null) {
   setSettings(brokerDefaultSettings)

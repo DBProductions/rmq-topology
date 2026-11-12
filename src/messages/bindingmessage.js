@@ -10,15 +10,24 @@ class BindingMessage extends BaseMessage {
    * @param {string} fillColor - hex color code to fill the circle
    * @param {string} routingKey - routing key forwarded along the binding
    * @param {number} depth - number of exchange hops already done
+   * @param {Object} message - message object with headers and body
    * @property {number} targetX - x of the binding destination
    * @property {number} targetY - y of the binding destination
    * @extends BaseMessage
    */
-  constructor(x, y, binding, fillColor, routingKey, depth) {
+  constructor(x, y, binding, fillColor, routingKey, depth, message) {
     super(x, y, 5, fillColor)
     this.binding = binding
     this.routingKey = routingKey || ''
     this.depth = depth || 0
+    if (message) {
+      this.message = message
+    } else if (!this.message) {
+      this.message = {
+        headers: {},
+        body: {}
+      }
+    }
     this.targetX = this.binding.destination.x
     this.targetY = this.binding.destination.y
   }

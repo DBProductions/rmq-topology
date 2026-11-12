@@ -25,6 +25,8 @@ class Consumer extends BaseComponent {
     this.width = 30
     this.height = 30
     this.queues = []
+    this.displayMessages = false
+    this.messageLog = []
   }
 
   /**
@@ -62,11 +64,44 @@ class Consumer extends BaseComponent {
    * @param {QueueMessage} msg - message object
    */
   messageArrived(msg) {
+    if (this.displayMessages) {
+      if (!this.messageLog) {
+        this.messageLog = []
+      }
+      let payload = { headers: {}, body: {} }
+      if (msg && msg.message) {
+        try {
+          payload = JSON.parse(JSON.stringify(msg.message))
+        } catch (e) {
+          payload = msg.message
+        }
+      }
+      this.messageLog.push({
+        ts: Date.now(),
+        exchange:
+          msg && msg.exchange && msg.exchange.name ? msg.exchange.name : null,
+        routingKey: msg && msg.routingKey ? msg.routingKey : '',
+        queue: msg && msg.queue && msg.queue.name ? msg.queue.name : null,
+        message: payload
+      })
+      if (this.messageLog.length > 200) {
+        this.messageLog.shift()
+      }
+      if (
+        typeof globalThis !== 'undefined' &&
+        typeof globalThis.updateConsumerMessageDisplay === 'function'
+      ) {
+        try {
+          globalThis.updateConsumerMessageDisplay(this)
+        } catch (e) {}
+      }
+    }
     if (this.mode === 'reject') {
       new RejectMessage(
         this.x + this.width / 2,
         this.y + this.height / 2,
-        msg.queue
+        msg.queue,
+        msg && msg.message ? msg.message : undefined
       ).addToScene(this.scene)
     } else {
       this.arrivedMessages += 1

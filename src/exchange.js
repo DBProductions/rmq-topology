@@ -99,7 +99,8 @@ class Exchange extends BaseComponent {
             val,
             fillStyle,
             routingKey,
-            depth
+            depth,
+            msg && msg.message ? msg.message : undefined
           ).addToScene(this.scene)
           sendMsg = true
         }
@@ -111,7 +112,8 @@ class Exchange extends BaseComponent {
             val,
             fillStyle,
             routingKey,
-            depth
+            depth,
+            msg && msg.message ? msg.message : undefined
           ).addToScene(this.scene)
           sendMsg = true
         }
@@ -123,7 +125,8 @@ class Exchange extends BaseComponent {
           val,
           fillStyle,
           routingKey,
-          depth
+          depth,
+          msg && msg.message ? msg.message : undefined
         ).addToScene(this.scene)
         sendMsg = true
       }
@@ -138,7 +141,8 @@ class Exchange extends BaseComponent {
         this.y,
         this.alternate,
         routingKey,
-        fillStyle
+        fillStyle,
+        msg && msg.message ? msg.message : undefined
       ).addToScene(this.scene)
       sendMsg = true
     }

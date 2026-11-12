@@ -58,7 +58,10 @@ class Queue extends BaseComponent {
             this.y,
             this,
             consumer,
-            val.msg.fillStyle
+            val.msg.fillStyle,
+            val.msg.message,
+            val.msg.routingKey,
+            val.msg.exchange
           ).addToScene(this.scene)
         })
       }
@@ -104,13 +107,22 @@ class Queue extends BaseComponent {
         this.scene.lostMessages += 1
       }
     } else {
+      const routingKey = msg.routingKey || ''
+      const exchange = (msg.binding && msg.binding.source) || msg.exchange || null
       // stream or no consumer, message stays in the queue
       if (this.type === 'stream') {
         // deliver message to all consumer
         this.consumers.forEach((v) => {
-          new QueueMessage(this.x, this.y, this, v, fillStyle).addToScene(
-            this.scene
-          )
+          new QueueMessage(
+            this.x,
+            this.y,
+            this,
+            v,
+            fillStyle,
+            msg.message,
+            routingKey,
+            exchange
+          ).addToScene(this.scene)
         })
         this.messages.push({
           ts: Date.now(),
@@ -119,7 +131,10 @@ class Queue extends BaseComponent {
             this.y,
             this,
             null,
-            fillStyle
+            fillStyle,
+            msg.message,
+            routingKey,
+            exchange
           ).addToScene(this.scene)
         })
       } else if (this.consumers.length === 0) {
@@ -130,7 +145,10 @@ class Queue extends BaseComponent {
             this.y,
             this,
             null,
-            fillStyle
+            fillStyle,
+            msg.message,
+            routingKey,
+            exchange
           ).addToScene(this.scene)
         })
       } else {
@@ -140,7 +158,10 @@ class Queue extends BaseComponent {
           this.y,
           this,
           this.consumers[Math.floor(Math.random() * this.consumers.length)],
-          fillStyle
+          fillStyle,
+          msg.message,
+          routingKey,
+          exchange
         ).addToScene(this.scene)
       }
       // max-length

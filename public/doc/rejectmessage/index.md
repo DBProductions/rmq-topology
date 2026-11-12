@@ -9,7 +9,7 @@ description: Message object when a message gets rejected from consumer.
 
 **Extends:&#x20;**[`BaseMessage`](/basemessage)
 
-<SourceLink href="/source/messages/rejectmessage-js/#L14" label="rejectmessage.js:14" />
+<SourceLink href="/source/messages/rejectmessage-js/#L15" label="rejectmessage.js:15" />
 
 Message object when a message gets rejected from consumer.
 
@@ -27,6 +27,7 @@ Message object when a message gets rejected from consumer.
 	x: number,
 	y: number,
 	queue: Queue,
+	message: Object,
 ): RejectMessage"
 />
 
@@ -35,6 +36,7 @@ Message object when a message gets rejected from consumer.
 - `x` (number) — x position of the message
 - `y` (number) — y position of the message
 - `queue` ([Queue](/queue)) — Queue object
+- `message` (Object) — message object with headers and body
 
 ---
 

@@ -20,6 +20,30 @@ const displayProducer = (producer) => {
   document.querySelector('#producerPublishTo').innerHTML = ''
   document.querySelector('#producerErr').innerHTML = ''
 
+  const customMsgToggle = document.querySelector('#producerCustomMsgToggle')
+  const customMsgSection = document.querySelector('#producerCustomMsgSection')
+  if (customMsgToggle) {
+    customMsgToggle.checked = false
+    customMsgToggle.onchange = () => {
+      if (customMsgToggle.checked) {
+        customMsgSection.classList.remove('hidden')
+      } else {
+        customMsgSection.classList.add('hidden')
+      }
+    }
+  }
+  if (customMsgSection) {
+    customMsgSection.classList.add('hidden')
+  }
+  const headersInput = document.querySelector('#producerMsgHeaders')
+  const bodyInput = document.querySelector('#producerMsgBody')
+  if (headersInput) {
+    headersInput.value = ''
+  }
+  if (bodyInput) {
+    bodyInput.value = ''
+  }
+
   const exchanges = globalThis.scene.getObjectsInScene('Exchange')
 
   const selectSource = document.getElementById('producerPublishToSelect')
@@ -77,6 +101,17 @@ const displayProducer = (producer) => {
   }
 }
 
+const cloneMessage = (msg) => {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(msg)
+  }
+  try {
+    return JSON.parse(JSON.stringify(msg))
+  } catch (err) {
+    return { headers: {}, body: {} }
+  }
+}
+
 /**
  * Sends the form to create or edit a producer component.
  *
@@ -92,9 +127,61 @@ const sendProducerForm = (e) => {
 
   const exchange = globalThis.scene.getIdInScene(publishTo)
 
-  const message = {
+  const errEl = document.querySelector('#producerErr')
+  if (errEl) {
+    errEl.innerHTML = ''
+  }
+
+  let message = {
     headers: {},
     body: {}
+  }
+
+  const useCustomMsg = document.querySelector('#producerCustomMsgToggle')
+  if (useCustomMsg && useCustomMsg.checked) {
+    const headersInput = document.querySelector('#producerMsgHeaders')
+    const bodyInput = document.querySelector('#producerMsgBody')
+    const headersStr = headersInput ? headersInput.value.trim() : ''
+    const bodyStr = bodyInput ? bodyInput.value.trim() : ''
+
+    let parsedHeaders = {}
+    if (headersStr !== '') {
+      try {
+        parsedHeaders = JSON.parse(headersStr)
+        if (
+          typeof parsedHeaders !== 'object' ||
+          parsedHeaders === null ||
+          Array.isArray(parsedHeaders)
+        ) {
+          if (errEl) {
+            errEl.innerHTML = 'Headers must be a JSON object.'
+          }
+          return
+        }
+      } catch (err) {
+        if (errEl) {
+          errEl.innerHTML = 'Headers must be valid JSON.'
+        }
+        return
+      }
+    }
+
+    let parsedBody = {}
+    if (bodyStr !== '') {
+      try {
+        parsedBody = JSON.parse(bodyStr)
+      } catch (err) {
+        if (errEl) {
+          errEl.innerHTML = 'Body must be valid JSON.'
+        }
+        return
+      }
+    }
+
+    message = {
+      headers: parsedHeaders,
+      body: parsedBody
+    }
   }
 
   let producer
@@ -107,10 +194,10 @@ const sendProducerForm = (e) => {
 
     const keepExchanges = {}
     for (const key in producer.publishes) {
-      exchanges.forEach((exchange) => {
+      exchanges.forEach((exchangeEl) => {
         if (
-          exchange.value === producer.publishes[key].exchange.id &&
-          producer.publishes[key].routingKey === exchange.dataset.routingKey
+          exchangeEl.value === producer.publishes[key].exchange.id &&
+          producer.publishes[key].routingKey === exchangeEl.dataset.routingKey
         ) {
           keepExchanges[key] = producer.publishes[key]
         }
@@ -119,12 +206,22 @@ const sendProducerForm = (e) => {
     producer.name = name
     producer.publishes = keepExchanges
 
+    if (useCustomMsg && useCustomMsg.checked) {
+      // The custom message is producer-level, so it replaces the message of
+      // every publish that is kept on this producer.
+      for (const key in producer.publishes) {
+        producer.publishes[key].message = cloneMessage(message)
+      }
+    }
+
     if (exchange) {
       if (!producer.exchangeWithRoutingKeyExists(exchange, routingKey)) {
         producer.addMessageToExchange(exchange, routingKey, message)
-      } else {
+      } else if (!(useCustomMsg && useCustomMsg.checked)) {
         error = 'Already exists.'
-        document.querySelector('#producerErr').innerHTML = error
+        if (errEl) {
+          errEl.innerHTML = error
+        }
       }
     }
   } else {
@@ -134,7 +231,9 @@ const sendProducerForm = (e) => {
         producer.addMessageToExchange(exchange, routingKey, message)
       } else {
         error = 'Already exists.'
-        document.querySelector('#producerErr').innerHTML = error
+        if (errEl) {
+          errEl.innerHTML = error
+        }
       }
     }
     producer.addToScene(globalThis.scene)
@@ -152,7 +251,24 @@ const sendProducerForm = (e) => {
       document.querySelector(p).value = ''
     })
     document.querySelector('#producerPublishTo').innerHTML = ''
-    document.querySelector('#producerErr').innerHTML = ''
+    if (errEl) {
+      errEl.innerHTML = ''
+    }
+    if (useCustomMsg) {
+      useCustomMsg.checked = false
+    }
+    const customMsgSection = document.querySelector('#producerCustomMsgSection')
+    if (customMsgSection) {
+      customMsgSection.classList.add('hidden')
+    }
+    const headersInput = document.querySelector('#producerMsgHeaders')
+    const bodyInput = document.querySelector('#producerMsgBody')
+    if (headersInput) {
+      headersInput.value = ''
+    }
+    if (bodyInput) {
+      bodyInput.value = ''
+    }
     document.querySelector('#producerPanel').classList.remove('panel-wrap-out')
   }
 }

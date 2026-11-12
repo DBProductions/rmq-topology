@@ -9,7 +9,7 @@ description: Message object between exchange and exchange.
 
 **Extends:&#x20;**[`BaseMessage`](/basemessage)
 
-<SourceLink href="/source/messages/alternatemessage-js/#L15" label="alternatemessage.js:15" />
+<SourceLink href="/source/messages/alternatemessage-js/#L17" label="alternatemessage.js:17" />
 
 Message object between exchange and exchange.
 
@@ -27,7 +27,9 @@ Message object between exchange and exchange.
 	x: number,
 	y: number,
 	exchange: Exchange,
+	routingKey: string,
 	fillColor: string,
+	message: Object,
 ): AlternateMessage"
 />
 
@@ -36,7 +38,9 @@ Message object between exchange and exchange.
 - `x` (number) — x position of the message
 - `y` (number) — y position of the message
 - `exchange` ([Exchange](/exchange)) — Binding object
+- `routingKey` (string) — routing key
 - `fillColor` (string) — hex color code to fill the circle
+- `message` (Object) — message object with headers and body
 
 ---
 

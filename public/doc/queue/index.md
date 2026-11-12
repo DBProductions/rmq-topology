@@ -63,7 +63,7 @@ Adds a consumer to the queue.
 
 <MemberHeading id="removeconsumer" depth="3" name="removeConsumer" sig="removeConsumer(consumer: Consumer)" />
 
-<MemberMeta sourceHref="/source/queue-js/#L73" sourceLabel="queue.js:73" />
+<MemberMeta sourceHref="/source/queue-js/#L76" sourceLabel="queue.js:76" />
 
 Removes a consumer from the queue.
 
@@ -73,7 +73,7 @@ Removes a consumer from the queue.
 
 <MemberHeading id="messagearrived" depth="3" name="messageArrived" sig="messageArrived(msg: QueueMessage)" />
 
-<MemberMeta sourceHref="/source/queue-js/#L89" sourceLabel="queue.js:89" />
+<MemberMeta sourceHref="/source/queue-js/#L92" sourceLabel="queue.js:92" />
 
 Handler for arriving messages.
 

@@ -146,7 +146,7 @@ Creates the topology shown on the canvas. A new scene with timer plus the parts 
 
 <MemberHeading id="displayform" depth="3" name="displayForm" sig="displayForm(form: string)" />
 
-<MemberMeta sourceHref="/source/utils/common-js/#L142" sourceLabel="common.js:142" />
+<MemberMeta sourceHref="/source/utils/common-js/#L146" sourceLabel="common.js:146" />
 
 Adds the CSS class to the selected one and remove it from all other ones.
 
@@ -156,7 +156,7 @@ Adds the CSS class to the selected one and remove it from all other ones.
 
 <MemberHeading id="addnewcomponent" depth="3" name="addNewComponent" sig="addNewComponent(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/common-js/#L161" sourceLabel="common.js:161" />
+<MemberMeta sourceHref="/source/utils/common-js/#L165" sourceLabel="common.js:165" />
 
 Decides which component have to be displayed to get created.
 
@@ -166,7 +166,7 @@ Decides which component have to be displayed to get created.
 
 <MemberHeading id="findcircle" depth="3" name="findCircle" sig="findCircle(val: object, mx: number, my: number): object" />
 
-<MemberMeta sourceHref="/source/utils/common-js/#L194" sourceLabel="common.js:194" />
+<MemberMeta sourceHref="/source/utils/common-js/#L198" sourceLabel="common.js:198" />
 
 Current mouse position inside of a cirle.
 
@@ -182,7 +182,7 @@ Current mouse position inside of a cirle.
 
 <MemberHeading id="findsquare" depth="3" name="findSquare" sig="findSquare(val: object, mx: number, my: number): object" />
 
-<MemberMeta sourceHref="/source/utils/common-js/#L212" sourceLabel="common.js:212" />
+<MemberMeta sourceHref="/source/utils/common-js/#L216" sourceLabel="common.js:216" />
 
 Current mouse position inside of a square.
 
@@ -198,7 +198,7 @@ Current mouse position inside of a square.
 
 <MemberHeading id="findline" depth="3" name="findLine" sig="findLine(val: Binding, mx: number, my: number): object" />
 
-<MemberMeta sourceHref="/source/utils/common-js/#L234" sourceLabel="common.js:234" />
+<MemberMeta sourceHref="/source/utils/common-js/#L238" sourceLabel="common.js:238" />
 
 Current mouse position over a line.
 
@@ -214,7 +214,7 @@ Current mouse position over a line.
 
 <MemberHeading id="findposition" depth="3" name="findPosition" sig="findPosition(e: object, line: *): object" />
 
-<MemberMeta sourceHref="/source/utils/common-js/#L273" sourceLabel="common.js:273" />
+<MemberMeta sourceHref="/source/utils/common-js/#L277" sourceLabel="common.js:277" />
 
 Find the actor in the scene from the current mouse position.
 
@@ -239,7 +239,7 @@ Display the form to create or edit consumer component.
 
 <MemberHeading id="hideconsumer" depth="3" name="hideConsumer" sig="hideConsumer(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/consumer-js/#L75" sourceLabel="consumer.js:75" />
+<MemberMeta sourceHref="/source/utils/consumer-js/#L84" sourceLabel="consumer.js:84" />
 
 Reset form values and remove CSS class from the consumer panel.
 
@@ -249,7 +249,7 @@ Reset form values and remove CSS class from the consumer panel.
 
 <MemberHeading id="sendconsumerform" depth="3" name="sendConsumerForm" sig="sendConsumerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/consumer-js/#L89" sourceLabel="consumer.js:89" />
+<MemberMeta sourceHref="/source/utils/consumer-js/#L98" sourceLabel="consumer.js:98" />
 
 Sends the form to create or edit a consumer component.
 
@@ -259,7 +259,7 @@ Sends the form to create or edit a consumer component.
 
 <MemberHeading id="deleteconsumerform" depth="3" name="deleteConsumerForm" sig="deleteConsumerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/consumer-js/#L152" sourceLabel="consumer.js:152" />
+<MemberMeta sourceHref="/source/utils/consumer-js/#L178" sourceLabel="consumer.js:178" />
 
 Remove consumer from the scene, render and remove CSS class from the consumer panel.
 
@@ -394,7 +394,7 @@ Display the form to create or edit a producer component.
 
 <MemberHeading id="sendproducerform" depth="3" name="sendProducerForm" sig="sendProducerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L85" sourceLabel="producer.js:85" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L120" sourceLabel="producer.js:120" />
 
 Sends the form to create or edit a producer component.
 
@@ -404,7 +404,7 @@ Sends the form to create or edit a producer component.
 
 <MemberHeading id="hideproducer" depth="3" name="hideProducer" sig="hideProducer(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L165" sourceLabel="producer.js:165" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L281" sourceLabel="producer.js:281" />
 
 Reset form values and remove CSS class from the producer panel.
 
@@ -414,7 +414,7 @@ Reset form values and remove CSS class from the producer panel.
 
 <MemberHeading id="deleteproducerform" depth="3" name="deleteProducerForm" sig="deleteProducerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L186" sourceLabel="producer.js:186" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L302" sourceLabel="producer.js:302" />
 
 Remove producer from the scene, render and remove CSS class from the producer panel.
 

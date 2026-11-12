@@ -48,7 +48,7 @@ Consumer class represents a component which consumes messages from a queue.
 
 <MemberHeading id="addqueue" depth="3" name="addQueue" sig="addQueue(queue: Queue)" />
 
-<MemberMeta sourceHref="/source/consumer-js/#L35" sourceLabel="consumer.js:35" />
+<MemberMeta sourceHref="/source/consumer-js/#L37" sourceLabel="consumer.js:37" />
 
 Adds a queue to the list.
 
@@ -58,7 +58,7 @@ Adds a queue to the list.
 
 <MemberHeading id="removequeue" depth="3" name="removeQueue" sig="removeQueue(queue: Queue)" />
 
-<MemberMeta sourceHref="/source/consumer-js/#L48" sourceLabel="consumer.js:48" />
+<MemberMeta sourceHref="/source/consumer-js/#L50" sourceLabel="consumer.js:50" />
 
 Removes a queue from the list or empty the list.
 
@@ -68,7 +68,7 @@ Removes a queue from the list or empty the list.
 
 <MemberHeading id="messagearrived" depth="3" name="messageArrived" sig="messageArrived(msg: QueueMessage)" />
 
-<MemberMeta sourceHref="/source/consumer-js/#L64" sourceLabel="consumer.js:64" />
+<MemberMeta sourceHref="/source/consumer-js/#L66" sourceLabel="consumer.js:66" />
 
 Handler for arriving messages. Checks the mode and reject or count the arrived messages and remove it from the scene.
 
@@ -78,7 +78,7 @@ Handler for arriving messages. Checks the mode and reject or count the arrived m
 
 <MemberHeading id="render" depth="3" name="render" sig="render()" />
 
-<MemberMeta sourceHref="/source/consumer-js/#L80" sourceLabel="consumer.js:80" />
+<MemberMeta sourceHref="/source/consumer-js/#L115" sourceLabel="consumer.js:115" />
 
 Render the consumer and draw lines to every queue from the list.
 

@@ -46,14 +46,38 @@ class Producer extends BaseComponent {
    * Adds a message to an exchange.
    *
    * @param {Exchange} exchange - Exchange object
+   * @param {string} routingKey - routing key
    * @param {Object} message - JSON message with headers and body
    */
   addMessageToExchange(exchange, routingKey, message) {
-    if (!message) {
-      message = {
+    let msg = message
+    if (!msg) {
+      msg = {
         headers: {},
         body: {}
       }
+    }
+    if (typeof structuredClone === 'function') {
+      msg = structuredClone(msg)
+    } else {
+      try {
+        msg = JSON.parse(JSON.stringify(msg))
+      } catch (e) {
+        msg = {
+          headers: {},
+          body: {}
+        }
+      }
+    }
+    if (
+      !msg.headers ||
+      typeof msg.headers !== 'object' ||
+      Array.isArray(msg.headers)
+    ) {
+      msg.headers = {}
+    }
+    if (msg.body === undefined || msg.body === null) {
+      msg.body = {}
     }
     if (!this.exchangeWithRoutingKeyExists(exchange, routingKey)) {
       let index = 0
@@ -63,7 +87,7 @@ class Producer extends BaseComponent {
       this.publishes[index] = {
         exchange,
         routingKey,
-        message
+        message: msg
       }
     }
   }
@@ -100,6 +124,13 @@ class Producer extends BaseComponent {
             headers: {},
             body: {}
           }
+        }
+        if (
+          !this.publishes[key].message.headers ||
+          typeof this.publishes[key].message.headers !== 'object' ||
+          Array.isArray(this.publishes[key].message.headers)
+        ) {
+          this.publishes[key].message.headers = {}
         }
         this.publishes[key].message.headers['app-id'] = this.name
         this.publishes[key].message.headers['message-id'] = this.createUUID()
