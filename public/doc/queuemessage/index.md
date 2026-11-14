@@ -52,7 +52,7 @@ Message object between queue and consumer.
 
 <MemberHeading id="setconsumer" depth="3" name="setConsumer" sig="setConsumer(consumer: Consumer)" />
 
-<MemberMeta sourceHref="/source/messages/queuemessage-js/#L53" sourceLabel="queuemessage.js:53" />
+<MemberMeta sourceHref="/source/messages/queuemessage-js/#L44" sourceLabel="queuemessage.js:44" />
 
 Sets the consumer with coordinates.
 

@@ -108,7 +108,8 @@ class Queue extends BaseComponent {
       }
     } else {
       const routingKey = msg.routingKey || ''
-      const exchange = (msg.binding && msg.binding.source) || msg.exchange || null
+      const exchange =
+        (msg.binding && msg.binding.source) || msg.exchange || null
       // stream or no consumer, message stays in the queue
       if (this.type === 'stream') {
         // deliver message to all consumer

@@ -70,8 +70,7 @@ const stableStringify = (value) => {
 const hasCustomMessage = (message) => {
   const normalized = normalizeMessage(message)
   return (
-    Object.keys(normalized.headers).length > 0 ||
-    !isEmptyBody(normalized.body)
+    Object.keys(normalized.headers).length > 0 || !isEmptyBody(normalized.body)
   )
 }
 

@@ -454,7 +454,7 @@ Checks whether a message contains custom headers or a non-empty body.
 
 <MemberHeading id="messagesmatch" depth="3" name="messagesMatch" sig="messagesMatch(a: Object, b: Object): boolean" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L85" sourceLabel="producer.js:85" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L84" sourceLabel="producer.js:84" />
 
 Compares two messages ignoring auto-generated headers.
 
@@ -469,7 +469,7 @@ Compares two messages ignoring auto-generated headers.
 
 <MemberHeading id="formatmessagepreview" depth="3" name="formatMessagePreview" sig="formatMessagePreview(message: Object): string" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L94" sourceLabel="producer.js:94" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L93" sourceLabel="producer.js:93" />
 
 Builds the short message preview shown in the publish list.
 
@@ -483,7 +483,7 @@ Builds the short message preview shown in the publish list.
 
 <MemberHeading id="displayproducer" depth="3" name="displayProducer" sig="displayProducer(producer: Producer)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L121" sourceLabel="producer.js:121" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L120" sourceLabel="producer.js:120" />
 
 Display the form to create or edit a producer component.
 
@@ -493,7 +493,7 @@ Display the form to create or edit a producer component.
 
 <MemberHeading id="sendproducerform" depth="3" name="sendProducerForm" sig="sendProducerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L279" sourceLabel="producer.js:279" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L278" sourceLabel="producer.js:278" />
 
 Sends the form to create or edit a producer component.
 
@@ -503,7 +503,7 @@ Sends the form to create or edit a producer component.
 
 <MemberHeading id="hideproducer" depth="3" name="hideProducer" sig="hideProducer(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L444" sourceLabel="producer.js:444" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L443" sourceLabel="producer.js:443" />
 
 Reset form values and remove CSS class from the producer panel.
 
@@ -513,7 +513,7 @@ Reset form values and remove CSS class from the producer panel.
 
 <MemberHeading id="deleteproducerform" depth="3" name="deleteProducerForm" sig="deleteProducerForm(e: object)" />
 
-<MemberMeta sourceHref="/source/utils/producer-js/#L465" sourceLabel="producer.js:465" />
+<MemberMeta sourceHref="/source/utils/producer-js/#L464" sourceLabel="producer.js:464" />
 
 Remove producer from the scene, render and remove CSS class from the producer panel.
 

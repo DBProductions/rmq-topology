@@ -16,16 +16,7 @@ class QueueMessage extends BaseMessage {
    * @property {number} targetY - y of the consumer
    * @extends BaseMessage
    */
-  constructor(
-    x,
-    y,
-    queue,
-    consumer,
-    fillStyle,
-    message,
-    routingKey,
-    exchange
-  ) {
+  constructor(x, y, queue, consumer, fillStyle, message, routingKey, exchange) {
     super(x, y, 3, fillStyle)
     this.queue = queue
     this.consumer = consumer
