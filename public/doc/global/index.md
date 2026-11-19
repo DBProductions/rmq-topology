@@ -235,7 +235,7 @@ Find the actor in the scene from the current mouse position.
 **Parameters**
 
 - `e` (object) — Event object
-- `line` (\*, default: false)
+- `line` (\*, default: `false`)
 
 **Returns**
 

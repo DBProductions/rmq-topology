@@ -10,11 +10,7 @@
     "template": "node_modules/clean-jsdoc-theme/dist",
     "encoding": "utf8",
     "destination": "./public/doc/",
-    "theme_opts": {
-      "default_theme": "light",
-      "title": "rmq-topology",
-      "homepageTitle": "JSDoc"
-    }
+    "siteName": "rmq-topology"
   },
   "templates": {
     "cleverLinks": false,
